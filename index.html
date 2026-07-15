@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>APEI CRO — A/B Test Report Hub</title>
+<style>
+:root{
+  --bg:#f1f3f0; --card:#fff; --text:#3c4043; --soft:#80868b; --border:#e4e7e2;
+  --dark:#1a1a1a; --pos:#1e8e3e; --neg:#d93025;
+  --ras:#004712; --ras-acc:#a6ce39; --amu:#1a1a1a; --amu-acc:#ffc600; --apu:#0d0d0d; --apu-acc:#00e5e5;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.banner{background:var(--dark);color:#fff;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-bottom:5px solid var(--amu-acc)}
+.banner h1{font-size:22px;font-style:italic}
+.banner .sub{font-size:12px;color:#cfcfcf;margin-top:3px}
+.wrap{max-width:1150px;margin:26px auto;padding:0 20px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;align-items:center}
+.fgroup{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 12px;display:flex;gap:6px;align-items:center;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.fgroup .lbl{font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--soft);text-transform:uppercase;margin-right:2px}
+.chip{appearance:none;border:1px solid var(--border);background:#fff;border-radius:16px;padding:4px 12px;font-size:12.5px;font-weight:600;color:var(--text);cursor:pointer}
+.chip.on{background:var(--dark);border-color:var(--dark);color:#fff}
+.search{flex:1;min-width:180px}
+.search input{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;background:#fff}
+.count{font-size:12px;color:var(--soft);margin:4px 2px 10px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.card:hover{box-shadow:0 3px 10px rgba(0,0,0,.09)}
+.card a.title{font-size:16px;font-weight:700;color:var(--text);text-decoration:none}
+.card a.title:hover{text-decoration:underline}
+.meta{font-size:12px;color:var(--soft);margin-top:5px;display:flex;gap:14px;flex-wrap:wrap}
+.badges{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.badge{font-size:10.5px;font-weight:800;letter-spacing:.6px;border-radius:4px;padding:2px 8px}
+.b-RAS{background:var(--ras);color:var(--ras-acc)} .b-AMU{background:var(--amu);color:var(--amu-acc)} .b-APU{background:var(--apu);color:var(--apu-acc)}
+.b-chan{background:#e8eaed;color:#3c4043} .b-year{background:#e8eaed;color:#3c4043}
+.b-status-Running{background:#e6f4ea;color:var(--pos)} .b-status-Complete{background:#e8eaed;color:#5f6368} .b-status-Winner{background:#fef7e0;color:#b06000}
+.stats{text-align:right;min-width:200px}
+.stats .rev{font-size:20px;font-weight:800}
+.stats .rev.pos{color:var(--pos)} .stats .rev.neg{color:var(--neg)}
+.stats .lift{font-size:12.5px;color:var(--soft);margin-top:4px}
+.stats .lead{font-size:11px;margin-top:6px}
+.stats .lead span{background:#fef7e0;border-radius:4px;padding:1px 7px;font-weight:700;color:#5b4a12}
+.empty{background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:40px;text-align:center;color:var(--soft);font-size:13.5px}
+footer{max-width:1150px;margin:30px auto 40px;padding:0 20px;font-size:11px;color:var(--soft)}
+</style>
+</head>
+<body>
+<div class="banner">
+  <div>
+    <h1>/ APEI CRO — A/B Test Report Hub /</h1>
+    <div class="sub">Interactive per-test dashboards · RAS · AMU · APU · maintained in GitHub</div>
+  </div>
+  <div class="sub" id="stamp"></div>
+</div>
+
+<div class="wrap">
+  <div class="filters">
+    <div class="fgroup"><span class="lbl">School</span><span id="fSchool"></span></div>
+    <div class="fgroup"><span class="lbl">Channel</span><span id="fChannel"></span></div>
+    <div class="fgroup"><span class="lbl">Year</span><span id="fYear"></span></div>
+    <div class="search"><input id="fSearch" type="search" placeholder="Search test name, RH#, page…"></div>
+  </div>
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+</div>
+<footer>Reports are self-contained snapshots (GA4 pull baked in at build time). Revenue projections use the CRO Incremental Calculator methodology. Add new reports by committing the HTML to <code>reports/&lt;year&gt;/</code> and appending an entry to <code>reports.json</code>.</footer>
+
+<script>
+const F={school:"All",channel:"All",year:"All",q:""};
+let R=[];
+const money=x=>(x<0?"-$":"$")+Math.abs(Math.round(x)).toLocaleString();
+
+function chips(el,key,values){
+  const box=document.getElementById(el);
+  box.innerHTML=["All",...values].map(v=>`<button class="chip ${F[key]===v?'on':''}" data-k="${key}" data-v="${v}">${v}</button>`).join("");
+}
+function rebuildChips(){
+  chips("fSchool","school",["RAS","AMU","APU"]);
+  chips("fChannel","channel",["LP","PW"]);
+  const years=[...new Set(R.map(r=>String(r.year)))].sort().reverse();
+  chips("fYear","year",years);
+  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{F[c.dataset.k]=c.dataset.v;render();});
+}
+function render(){
+  rebuildChips();
+  const q=F.q.toLowerCase();
+  const rows=R.filter(r=>
+    (F.school==="All"||r.school===F.school)&&
+    (F.channel==="All"||r.channel===F.channel)&&
+    (F.year==="All"||String(r.year)===F.year)&&
+    (!q||`${r.title} ${r.testId} ${r.file} ${r.leading||""}`.toLowerCase().includes(q))
+  ).sort((a,b)=>(b.added||"").localeCompare(a.added||""));
+  document.getElementById("count").textContent=`${rows.length} report${rows.length===1?"":"s"}`;
+  document.getElementById("list").innerHTML = rows.length? rows.map(r=>`
+    <div class="card">
+      <div>
+        <a class="title" href="${r.file}">${r.title}</a>
+        <div class="meta"><span>RH# ${r.testId}</span><span>${r.window||""}</span><span>added ${r.added||""}</span></div>
+        <div class="badges">
+          <span class="badge b-${r.school}">${r.school}</span>
+          <span class="badge b-chan">${r.channel}</span>
+          <span class="badge b-year">${r.year}</span>
+          ${r.status?`<span class="badge b-status-${r.status}">${r.status.toUpperCase()}</span>`:""}
+        </div>
+      </div>
+      <div class="stats">
+        ${r.revenue!=null?`<div class="rev ${r.revenue>=0?'pos':'neg'}">${money(r.revenue)}</div><div class="lift">1-yr revenue · RFI ${r.rfiLift||"–"} @ ${r.sig||"–"} sig</div>`:""}
+        ${r.leading?`<div class="lead"><span>★ ${r.leading}</span></div>`:""}
+      </div>
+    </div>`).join("") : `<div class="empty">No reports match these filters.</div>`;
+}
+document.getElementById("fSearch").addEventListener("input",e=>{F.q=e.target.value;render();});
+fetch("reports.json").then(r=>r.json()).then(d=>{
+  R=d.reports||[];
+  document.getElementById("stamp").textContent=`${R.length} reports · manifest updated ${R.map(r=>r.added).sort().pop()||""}`;
+  render();
+}).catch(()=>{
+  document.getElementById("list").innerHTML='<div class="empty">Could not load reports.json — if you opened this file directly from disk, that\'s expected; it works once served from GitHub Pages.</div>';
+});
+</script>
+</body>
+</html>
