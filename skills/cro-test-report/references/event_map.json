@@ -1,0 +1,26 @@
+{
+  "_comment": "Per-school GA4 conversion event mapping. VERIFIED = confirmed against live data. On first run for an unverified school, run the event-discovery query (ga4_queries.md) and confirm with the user before building the report.",
+  "RAS": {
+    "property": "253925809",
+    "hostname": "info.rasmussen.edu",
+    "rfiEvent": "landing_page_inquiry",
+    "appEvent": "lp_application_complete",
+    "status": "VERIFIED 2026-07-15 (test 10464: RFI ctrl 142 / V1 273 matched DS-order magnitudes); re-confirmed 2026-07-15 (both events firing property-wide)"
+  },
+  "AMU": {
+    "property": "249537963",
+    "hostname": "start.amu.apus.edu",
+    "rfiEvent": "rfi_short_thankyou_amu",
+    "appEvent": "amu_application_completed",
+    "status": "VERIFIED 2026-07-15 (test 10989: ctrl 442 RFI / 196 App; mapping cross-checked against cro-incremental-calculator Optimizely metric names 'Visit Page: RFI for AMU' / 'Event | AMU Application Complete')",
+    "notes": "App completes fire on apply.apus.edu, NOT the LP hostname - DROP the hostName filter on the abConv query (audience filter alone scopes it). Audience names may lack the (RH#) suffix; match on the page-path fragment, e.g. 'Hero Image | /military-degrees/overview'."
+  },
+  "APU": {
+    "property": "249537963",
+    "hostname": "start.apu.apus.edu",
+    "rfiEvent": "rfi_short_thankyou_apu",
+    "appEvent": "apu_application_completed",
+    "status": "VERIFIED 2026-07-15 (event discovery on start.apu.apus.edu: rfi_short_thankyou_apu 3,650/30d; apu_application_completed 709 on apply.apus.edu)",
+    "notes": "Same two caveats as AMU: app completes fire on apply.apus.edu (drop hostName filter on abConv), and audience names may lack the (RH#) suffix."
+  }
+}

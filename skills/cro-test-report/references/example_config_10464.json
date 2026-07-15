@@ -1,0 +1,15 @@
+{
+  "title": "ECE Redesign A/B Test Report",
+  "testId": "10464",
+  "school": "RAS",
+  "property": "253925809",
+  "hostname": "info.rasmussen.edu",
+  "dateStart": "2026-05-28",
+  "dateEnd": "2026-06-11",
+  "dateSource": "Asana: Live Date -> End Date",
+  "rfiEvent": "landing_page_inquiry",
+  "appEvent": "lp_application_complete",
+  "controlToken": "Control",
+  "campaignMinSessions": 20,
+  "channel": "LP"
+}
