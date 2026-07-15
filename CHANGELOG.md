@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-07-15 — v2026.07.15b
+- report_template.html: <title> and footer now stamped from DATA.meta (school, testId, title) instead of the hardcoded "Test 10464 - Rasmussen University (RAS)" leftovers; stale source comment above the data block genericized.
+- amu_10989_hero_image_report.html: rebuilt with the fixed template (data unchanged).
+- .nojekyll added (skip Jekyll on Pages deploys).
+    
 ## 2026-07-15 — v2026.07.15
 - event_map.json: all three schools VERIFIED (AMU + APU discovered and confirmed;
   RAS re-confirmed). AMU/APU caveats documented: app completes fire on apply.apus.edu
