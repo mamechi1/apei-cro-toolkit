@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEI – RAS – (10464) Paid CRO ECE Redesign</title>
+<style>
+:root{
+  --green-dark:#1c4325;
+  --green-deep:#153019;
+  --green-mid:#3a7a3f;
+  --lime:#a8c545;
+  --lime-soft:#c3d47a;
+  --sage:#a9bfa4;
+  --sage-bg:#9db898;
+  --gold:#e8a33d;
+  --gold-soft:#f3d089;
+  --yellow-spark:#f5c518;
+  --bar-green:#8fae3e;
+  --bar-green-dark:#5c7d2e;
+  --bg-page:#f1f3f0;
+  --bg-card:#ffffff;
+  --text:#3c4043;
+  --text-soft:#80868b;
+  --border:#e4e7e2;
+  --radius:10px;
+  --shadow:0 1px 3px rgba(28,67,37,.10),0 1px 2px rgba(0,0,0,.05);
+  --pos:#1e8e3e;
+  --neg:#d93025;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg-page);color:var(--text);font-size:13px}
+
+/* ============ Top banner ============ */
+
+/* ---- per-school branding; html[data-school] is set from DATA.meta.school ---- */
+html[data-school="RAS"]{
+  --green-dark:#004712; --green-deep:#00330d; --green-mid:#2e6b3e;
+  --lime:#a6ce39; --lime-soft:#c7df86; --sage:#a9bfa4; --sage-bg:#9db898;
+  --gold:#eeb111; --gold-soft:#f3d089; --yellow-spark:#eeb111;
+  --bar-green:#8fae3e; --bar-green-dark:#5c7d2e;
+}
+html[data-school="AMU"]{
+  --green-dark:#1a1a1a; --green-deep:#000000; --green-mid:#4d4d4d;
+  --lime:#ffc600; --lime-soft:#ffdb66; --sage:#bdbdbd; --sage-bg:#4a4a4a;
+  --gold:#ffc600; --gold-soft:#ffe699; --yellow-spark:#ffc600;
+  --bar-green:#d9a800; --bar-green-dark:#8f6f00;
+}
+html[data-school="APU"]{
+  --green-dark:#0d0d0d; --green-deep:#000000; --green-mid:#3f3f3f;
+  --lime:#00e5e5; --lime-soft:#8ff2f2; --sage:#bdbdbd; --sage-bg:#454545;
+  --gold:#f5e400; --gold-soft:#faf3a0; --yellow-spark:#f5e400;
+  --bar-green:#00b8b8; --bar-green-dark:#007a7a;
+}
+.banner{background:var(--green-dark);color:#fff;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:5px solid var(--lime)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .shield{width:38px;height:44px;background:var(--lime);clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%);display:flex;align-items:center;justify-content:center;color:var(--green-dark);font-weight:800;font-size:20px}
+.brand .name{line-height:1.05}
+.brand .name b{font-size:19px;letter-spacing:.5px;font-weight:800;display:block}
+.brand .name span{font-size:10px;letter-spacing:3.5px;font-weight:600;color:#dfe8d8}
+.title-block{text-align:center;flex:1;min-width:260px}
+.title-block h1{font-size:24px;font-style:italic;font-weight:800;letter-spacing:.3px}
+.title-block h1::before,.title-block h1::after{content:"";display:inline-block;width:5px;height:22px;background:var(--lime);transform:skewX(-18deg);margin:0 14px;vertical-align:-3px}
+.title-block .sub{font-size:11.5px;font-style:italic;color:#cfdcc7;margin-top:2px}
+.daterange{background:#e8ebe6;color:#333;border-radius:8px;padding:9px 16px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:inset 0 0 0 1px #cdd4c9}
+.daterange::after{content:"▾";color:#666}
+
+/* ============ Nav tabs ============ */
+.nav{background:#fff;display:flex;justify-content:center;gap:6px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.nav button{appearance:none;border:none;background:none;cursor:pointer;padding:13px 20px 11px;font-size:12.5px;font-weight:600;color:var(--text-soft);border-bottom:3px solid transparent;display:flex;align-items:center;gap:7px;transition:color .15s}
+.nav button .ic{font-size:14px}
+.nav button:hover{color:var(--green-dark)}
+.nav button.active{color:#1a73e8;border-bottom-color:#1a73e8}
+
+/* ============ Page shell ============ */
+.page{display:none;max-width:1240px;margin:0 auto;padding:22px 24px 48px}
+.page.active{display:block}
+.filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.filters .spacer{flex:1}
+.filter{background:#fff;border:1px solid #d7dbd4;border-radius:8px;padding:9px 14px;font-size:12px;color:#555;min-width:200px;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:default}
+.filter::after{content:"▾";color:#999;font-size:10px}
+.filter.small{min-width:150px}
+
+/* ============ Cards & DS-style section tabs ============ */
+.card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px;position:relative}
+.card .cardtab{display:inline-block;background:#fff;border-radius:8px 8px 0 0;padding:9px 18px 7px;font-size:12.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#2d2d2d;position:relative;top:-1px;box-shadow:0 -2px 4px rgba(0,0,0,.04)}
+.card .cardtab::before{content:"";position:absolute;left:14px;bottom:5px;width:26px;height:3px;background:var(--lime)}
+.card .cardbody{padding:14px 20px 20px;border-top:1px solid var(--border)}
+.section-green{background:var(--sage-bg);border-radius:var(--radius);padding:20px 18px;margin-bottom:20px}
+.section-green .card{margin-bottom:0}
+.section-green .divider{display:flex;align-items:center;margin:20px 40px}
+.section-green .divider::before,.section-green .divider::after{content:"";width:9px;height:9px;background:#fff;border-radius:50%}
+.section-green .divider .line{flex:1;height:2px;background:rgba(255,255,255,.75)}
+
+/* audience selector bars */
+.aud-bar{background:#fff;border-radius:8px 8px 0 0;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;max-width:100%;box-shadow:0 -1px 3px rgba(0,0,0,.05);border-left:4px solid var(--lime)}
+.aud-bar b{font-weight:700}
+.aud-bar select{border:none;background:none;font-size:13px;font-family:inherit;color:var(--text);max-width:560px;cursor:pointer;font-weight:500}
+.aud-bar select:focus{outline:none}
+
+/* ============ Scorecard rows ============ */
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:6px;background:#fff;border-radius:0 10px 10px 10px;padding:18px 14px 12px;box-shadow:var(--shadow)}
+.score{text-align:center;padding:4px 6px}
+.score .lbl{font-size:11.5px;color:var(--text-soft);margin-bottom:6px;white-space:nowrap}
+.score .val{font-size:24px;font-weight:600;color:#202124;letter-spacing:-.3px}
+.score .delta{font-size:11px;font-weight:700;margin-top:2px}
+.score .delta.up{color:var(--pos)}
+.score .delta.down{color:var(--neg)}
+.score .note{font-size:8.5px;color:#b0b4ae;margin-top:4px;line-height:1.25}
+.score svg.spark{display:block;margin:8px auto 0;width:86px;height:22px}
+.spark polyline{fill:none;stroke:var(--yellow-spark);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+
+/* ============ Tables ============ */
+table.ds{width:100%;border-collapse:collapse;font-size:12.5px}
+table.ds thead th{text-align:left;font-weight:700;color:#202124;padding:9px 10px;border-bottom:2px solid #e0e0e0;white-space:nowrap;cursor:pointer;user-select:none}
+table.ds thead th.num{text-align:right}
+table.ds thead th .arrow{color:#1a73e8;font-size:10px;margin-left:3px}
+table.ds tbody td{padding:8px 10px;border-bottom:1px solid #f1f1f1;vertical-align:middle}
+table.ds tbody tr:nth-child(even){background:#fafbf9}
+table.ds tbody tr:hover{background:#f2f6ee}
+table.ds td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.ds tfoot td{padding:10px;font-weight:700;border-top:2px solid #e0e0e0}
+table.ds tfoot td.num{text-align:right}
+.cellbar{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end;width:100%}
+.cellbar .bar{height:11px;background:var(--bar-green);border-radius:1px;display:inline-block}
+.cellbar .bar.gold{background:var(--gold)}
+.cellbar .bar.pale{background:var(--gold-soft)}
+.cellbar .bar.limegrad{background:linear-gradient(90deg,var(--bar-green),var(--lime-soft))}
+.pager{display:flex;justify-content:flex-end;align-items:center;gap:14px;color:var(--text-soft);font-size:11.5px;padding-top:10px}
+.pager span.btn{cursor:pointer;font-size:14px}
+
+/* ============ Layout grids ============ */
+.grid{display:grid;gap:20px;margin-bottom:20px}
+.grid.c2{grid-template-columns:1fr 1fr}
+.grid.c3{grid-template-columns:1fr 1fr 1fr}
+.grid.c2-1{grid-template-columns:1.1fr 1fr}
+.grid .card{margin-bottom:0}
+@media(max-width:960px){.grid.c2,.grid.c3,.grid.c2-1{grid-template-columns:1fr}.scores{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:640px){.scores{grid-template-columns:repeat(2,1fr)}.title-block h1{font-size:18px}}
+
+/* donut legend */
+.donut-wrap{display:flex;align-items:center;gap:22px;justify-content:center;padding:8px 0}
+.legend{font-size:12px;display:flex;flex-direction:column;gap:7px}
+.legend .li{display:flex;align-items:center;gap:8px}
+.legend .sw{width:11px;height:11px;border-radius:2px;display:inline-block}
+
+/* significance box */
+.sigbox{margin-top:14px;border-radius:8px;padding:12px 16px;font-size:12.5px;line-height:1.5;background:#f4f8ee;border:1px solid #dbe7c8}
+.sigbox b.win{color:var(--pos)}
+.sigbox b.flat{color:#b06000}
+.sigbox .small{color:var(--text-soft);font-size:11px;display:block;margin-top:4px}
+
+/* bar chart (horizontal + vertical) */
+.hbar-row{display:grid;grid-template-columns:110px 1fr 54px;align-items:center;gap:10px;padding:5px 0;font-size:12px}
+.hbar-row .track{background:#f0f2ee;border-radius:2px;height:16px;position:relative}
+.hbar-row .fill{background:var(--bar-green);height:100%;border-radius:2px;display:flex;align-items:center;justify-content:flex-end;color:#fff;font-size:10.5px;font-weight:600;padding-right:5px;min-width:2px}
+.hbar-row .v{text-align:right;font-variant-numeric:tabular-nums;color:#555}
+
+.footerbar{max-width:1240px;margin:0 auto;padding:0 24px 30px;color:var(--text-soft);font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.footerbar a{color:var(--text-soft)}
+
+.filter.fsel{cursor:pointer;gap:8px;font-weight:600;color:#444}
+.filter.fsel::after{content:""}
+.filter.fsel select{border:none;background:none;font-family:inherit;font-size:12px;color:#1a73e8;font-weight:700;cursor:pointer;max-width:220px}
+.filter.fsel select:focus{outline:none}
+.segbadge{display:inline-block;background:#fdf3dc;border:1px solid #eeda9e;color:#7a5d0e;font-size:10.5px;font-weight:600;border-radius:5px;padding:3px 8px;margin-left:10px;text-transform:none;letter-spacing:0;vertical-align:middle}
+.nodata-note{background:#fff7f0;border:1px solid #f3d9bd;color:#8a5a1d;border-radius:8px;padding:10px 14px;font-size:12px;margin-top:12px}
+.score .val.nd{color:#c2c6c0;font-size:20px}
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <div class="brand">
+    <div class="shield" id="brandShield">R</div>
+    <div class="name"><b id="brandName">RASMUSSEN</b><span id="brandSub">UNIVERSITY</span></div>
+  </div>
+  <div class="title-block">
+    <h1 id="reportTitle">ECE Redesign A/B Test Report</h1>
+    <div class="sub" id="hostNote">Data below is from info.rasmussen.edu only.</div>
+  </div>
+  <div class="daterange" id="dateRange">May 29, 2026 – Jul 14, 2026</div>
+</div>
+
+<nav class="nav">
+  <button data-page="abtests" class="active"><span class="ic">★</span>A/B Tests</button>
+</nav>
+
+<!-- pages injected by JS -->
+<div class="page active" id="page-abtests"></div>
+
+<div class="footerbar">
+  <span>Data Last Updated: <span id="lastUpdated"></span></span>
+  <span>Generated by Claude · Test 10464 · Rasmussen University (RAS)</span>
+</div>
+
+<script>
+/* =====================================================================
+   DATA BLOCK — this is the only section a skill needs to regenerate.
+   Source: Data Studio report "APEI – RAS – (10464) Paid CRO ECE Redesign"
+   Date range: May 29, 2026 – Jul 14, 2026
+   ===================================================================== */
+/*__DATA_START__*/
+const DATA = {
+  meta: {
+    title: "ECE Redesign A/B Test Report",
+    testId: "10464",
+    school: "RAS",
+    dateRange: "May 28 – Jun 11, 2026 · Asana test window",
+    dateSource: "Asana: Live Date → End Date (fallback: live → yesterday)",
+    lastUpdated: "7/15/2026 · GA4 direct pull (property 253925809)",
+    dailySessions: [370, 485, 492, 544, 640, 682, 694, 584, 581, 366, 456, 577, 693, 752, 577],
+    dailyLabels: ["May 28", "May 31", "Jun 3", "Jun 6", "Jun 9", "Jun 11"],
+    dailyStart: "2026-05-28"
+  },
+
+  overview: {
+    kpis: { sessions:8486, views:11477, avgSessionDuration:null, totalUsers:0 },
+    newVsReturning: [{"label": "new", "pct": 73.0, "color": "#1c4325"}, {"label": "returning", "pct": 24.7, "color": "#a8c545"}, {"label": "(not set)", "pct": 2.3, "color": "#c9d3c4"}],
+    deviceSplit: [{"label": "mobile", "pct": 64.1, "color": "#e8a33d"}, {"label": "desktop", "pct": 33.5, "color": "#1c4325"}, {"label": "tablet", "pct": 2.4, "color": "#a8c545"}],
+    mostViewedPages: [
+      ["/early-childhood-education/overview-10464",3969],
+      ["/early-childhood-education/overview",3713],
+      ["/overview-batch-two",1343],
+      ["/",570],
+      ["/appstart",477],
+      ["/practical-nursing/diploma-minnesota",325],
+      ["/appstart-2",150],
+      ["/practical-nursing/diploma-florida",120]
+    ],
+    mostViewedTotal:11615, mostViewedCount:85,
+    topSources: [
+      ["google / cpc",3302],["facebook.com / banner",1913],["bing / cpc",1564],
+      ["(direct) / (none)",1062],["I-XYZMedia / affiliate",256],["(not set) / affiliate",78],
+      ["statics.teams.cdn.office.net / referral",48],["google / organic",40],["(data not available)",28]
+    ],
+    topSourcesTotal:8408, topSourcesCount:33,
+    usersByCountry: [
+      ["Florida (United States)",1180,1746],["Illinois (United States)",761,1102],
+      ["Texas (United States)",436,547],["Minnesota (United States)",405,762],
+      ["(not set) (Singapore)",273,273],["Georgia (United States)",233,265],
+      ["Wisconsin (United States)",212,307],["North Carolina (United States)",212,230]
+    ],
+    usersByCountryTotals:[6278,8408], usersByCountryCount:116,
+    browsers: [
+      ["Safari",2399],["Chrome",2366],["Edge",974],["Android Webview",440],["Safari (in-app)",59],
+      ["Samsung Internet",33],["Firefox",18],["Opera",8],["Mozilla Compatible Agent",7]
+    ],
+    deviceBrands: [
+      ["Apple",2811],["Google",1118],["Microsoft",968],["Samsung",930],["Motorola",238],
+      ["(not set)",74],["T-Mobile",32],["TCL",19],["Mozilla",18]
+    ],
+    browsersTotal:6278,
+    gender: [ {label:"unknown",pct:79.1,color:"#1c4325"}, {label:"female",pct:14.1,color:"#e8a33d"}, {label:"male",pct:6.8,color:"#a8c545"} ],
+    interests: [
+      ["News & Politics/Avid News Readers",158],
+      ["Food & Dining/Cooking Enthusiasts/Aspiring Chefs",113],
+      ["News & Politics/Avid News Readers/Entertainment News Enthusiasts",112],
+      ["Travel/Travel Buffs",97],["Shoppers/Shopping Enthusiasts",88],
+      ["Technology/Technophiles",87],
+      ["News & Politics/Avid News Readers/Avid Local News Readers",67],
+      ["Lifestyles & Hobbies/Shutterbugs",66],["Sports & Fitness/Sports Fans",61]
+    ],
+    interestsTotal:622, interestsCount:62,
+    age: [
+      ["unknown",5222,6918],["35-44",306,396],["25-34",295,384],["18-24",194,246],
+      ["45-54",174,223],["55-64",133,183],["65+",69,86]
+    ],
+    ageTotals:[6278,8408]
+  },
+
+  acquisition: {
+    landingPages: [
+      ["/early-childhood-education/overview-10464",3183,232,"7.29%",60,"1.89%"],
+      ["/early-childhood-education/overview",2934,102,"3.48%",65,"2.22%"],
+      ["/overview-batch-two",868,21,"2.42%",7,"0.81%"],
+      ["(not set)",617,0,"0%",0,"0%"],
+      ["/practical-nursing/diploma-minnesota",159,0,"0%",0,"0%"],
+      ["/practical-nursing/diploma-florida",70,0,"0%",0,"0%"],
+      ["/degrees/overview",69,5,"7.25%",0,"0%"],
+      ["/",57,33,"57.89%",12,"21.05%"],
+      ["/schools/nursing",50,0,"0%",0,"0%"],
+      ["/schools/health-sciences",42,0,"0%",0,"0%"],
+      ["/campus/florida",35,6,"17.14%",1,"2.86%"]
+    ],
+    landingTotals:[8408,418,"4.97%",150,"1.78%"], landingCount:60,
+    channels: [
+      ["Paid Search",4842],["Display",1913],["Direct",1062],["Affiliates",370],["Referral",70],
+      ["Organic Search",45],["Cross-network",34],["Unassigned",28],["Email",6],["Others",9]
+    ],
+    sourcesMediums: [
+      ["google / cpc",3302,221,81],["facebook.com / banner",1913,17,10],["bing / cpc",1564,55,15],
+      ["(direct) / (none)",1062,100,29],["I-XYZMedia / affiliate",256,4,6],["(not set) / affiliate",78,0,0],
+      ["statics.teams.cdn.office.net / referral",48,0,0],["google / organic",40,5,0],
+      ["(data not available)",28,2,2],["(not set)",26,2,0]
+    ],
+    sourcesTotals:[8408,418,150], sourcesCount:33,
+    campaigns: [["SOE-Vertical-ECE-NOL-SEARCH", 2170, 87, 23], ["(direct)", 1216, 113, 31], ["SOE-Vertical-Education-NA-RCC-US-SEARCH", 922, 63, 34], ["Vertical-RCC-SOCIAL-FB-PROSP", 847, 18, 7], ["Generic-RCC-SOCIAL-FB-PROSP", 518, 0, 1], ["(other)", 504, 35, 16], ["Upper-NA-RCC-US-SEARCH", 501, 35, 13], ["SOE-Program-ECE-Cert-RCC-US-SEARCH", 458, 23, 4], ["Upper-NA-NOL-SEARCH", 219, 6, 5], ["SOE-Program-ECE-AS-NOL-SEARCH", 191, 10, 2], ["SON-Vertical-MN-SOCIAL-FB-RMRKT", 143, 0, 0], ["SOE-Program-ECE-CERT-NOL-SEARCH", 109, 7, 1], ["SOE-Program-ECE-BS-NOL-SEARCH", 76, 7, 1], ["SOE-Program-ECE-BS-RCC-All-SEARCH", 68, 7, 6], ["(referral)", 58, 0, 0], ["SOE-Program-ECE-AS-RCC-All-SEARCH", 56, 4, 4], ["SON-Vertical-FL-SOCIAL-FB-RMRKT", 50, 0, 0], ["SON-RCC-SOCIAL-FB-PROSP", 45, 1, 0], ["Brand-NOL-US-SEARCH-GA", 44, 10, 0], ["SoHS-Vertical-RCC-SOCIAL-FB-PROSP", 42, 0, 0], ["(organic)", 41, 0, 0], ["Generic-RCC-SOCIAL-FB-RMRKT", 33, 0, 0], ["(cross-network)", 31, 2, 2], ["Brand-RCC-IL-SEARCH-GA", 28, 6, 1], ["Brand-RCC-FL-SEARCH-GA", 27, 3, 4], ["SON-Program-BSN-RCC-SOCIAL-FB-RMRKT", 24, 0, 0], ["(not set)", 24, 2, 0], ["Brand-RCC-MN-SEARCH-GA", 21, 3, 0], ["Competitor-NA-RCC-All-SEARCH", 20, 1, 0]],
+    campaignsTotals: [8486, 443, 155],
+    campaignsCount: 29
+  },
+
+  abtests: {
+    audiences: [
+      { name:"CRO | RAS | LP | ECE Redesign | /early-childhood-education/overview (10464)-Control_10464", role:"control" },
+      { name:"CRO | RAS | LP | ECE Redesign | /early-childhood-education/overview (10464)-V1_Redesign_10464", role:"variation" },
+      { name:"(PERSONALIZATION) CRO | RAS | LP | ECE Redesign | /early-childhood-education/overview (10464)-PERSONALIZATION_V1_Redesign_10464", role:"variation" }
+    ]
+  },
+
+  clicks: {
+    clickEvents: [
+      ["Next","(not set)","next-fieldset simple-form-button button button-tertiary button-size-large","",958],
+      ["Learn More","(not set)","button button-tertiary simple-form-button submit-button button-size-large","submitButton",409],
+      ["Certificate","(not set)","(not set)","(not set)",241],
+      ["Associate's","(not set)","(not set)","(not set)",220],
+      ["Submit and Continue","(not set)","button button-tertiary simple-form-button submit-button button-size-large","submitButton",212],
+      ["Apply","(not set)","fixed-cta-bar-link fixed-cta-bar-link-apply button button-secondary","",152],
+      ["Submit","(not set)","button button-tertiary simple-form-button submit-button button-size-large","submitButton",139],
+      ["Apply","(not set)","nav-cta button button secondary","lp5_apply_masthead",130]
+    ],
+    clickEventsTotal:3640, clickEventsCount:221,
+    clickToCall: [
+      ["main body","888-765-0241","tel:+18887650241","/thanks",2],
+      ["header","Call Now: 888-727-7715","tel:+18887277715","/early-childhood-education/overview-10464",2],
+      ["main body","888-809-6621","tel:+18888096621","/thanks",1],
+      ["main body","888-840-2136","tel:+18888402136","/thanks",1],
+      ["main body","888-840-5631","tel:+18888405631","/thanks",1],
+      ["main body","888-842-2416","tel:+18888422416","/thanks",1],
+      ["main body","888-852-6963","tel:+18888526963","/thanks",1]
+    ],
+    clickToCallTotal:19, clickToCallCount:17,
+    degreeSearch: [
+      ["(not set)","Bachelor's","Education",14],["(not set)","Associate's","(not set)",12],
+      ["(not set)","Certificates","(not set)",9],["(not set)","Bachelor's","(not set)",8],
+      ["(not set)","Associate's","Education",7],["(not set)","Show All","(not set)",5],
+      ["(not set)","(not set)","Education",4],["(not set)","Diplomas","Business",4]
+    ],
+    degreeSearchTotal:263, degreeSearchCount:162
+  },
+
+  forms: {
+    steps: [
+      ["step7_preferredProgramEntered",2048],["step8_preferredDegreeEntered",1346],
+      ["step5_zipCodeEntered",1023],["step6_preferredSchoolEntered",798],
+      ["step1_firstNameEntered",759],["step2_lastNameEntered",751],
+      ["step3_emailAddressEntered",746],["step4_phoneEntered",736],
+      ["SmsSubscriptionClick",507]
+    ],
+    programs: [
+      ["SoE-ECE",286],["SoE-ECE-ChildDev",54],["SoE-Undecided",20],["SoE-ECE-Lead-ChildDev",11],
+      ["SoE-ECE-SpecNeeds",8],["SoAH-HumServ",4],["SoAH-Undecided",3],["ED-ECE-Lead",2],
+      ["SoAH-MedCoding",2],["SoB-Bus-Cert",2],["SoAH-HIT",1],["SoAH-MLT",1],["SoAH-MedAssist",1],
+      ["SoAH-Pharmacy",1],["SoJS-CrimJustice",1],["SoTd-DataAnalytics",1]
+    ]
+  }
+};
+
+/* =====================================================================
+   FACTS — segmented fact table from GA4 (property 253925809).
+   Grain per row: (a: audience index | -1 = report scope, d: device,
+   u: newVsReturning, c: sessionCampaignName [tail → "(other)"]).
+   Metrics: s sessions, e engagedSessions, n newUsers, us totalUsers,
+   r RFI (landing_page_inquiry), ap App Complete (lp_application_complete).
+   SOURCE OF TRUTH: GA4 via the GA MCP (fallback: direct Data API or
+   Claude in Chrome). Audience names originate from Optimizely naming.
+   Date window: Asana Live Date → End Date. Windsor.ai: RETIRED.
+   The skill regenerates DATA + FACTS only; layout code never changes.
+   ===================================================================== */
+const AUD_CONTROL = DATA.abtests.audiences[0].name;
+const AUD_V1      = DATA.abtests.audiences[1].name;
+const FACTS = {
+  audNames: ["CRO | RAS | LP | ECE Redesign | /early-childhood-education/overview (10464)-Control_10464", "CRO | RAS | LP | ECE Redesign | /early-childhood-education/overview (10464)-V1_Redesign_10464", "(PERSONALIZATION) CRO | RAS | LP | ECE Redesign | /early-childhood-education/overview (10464)-PERSONALIZATION_V1_Redesign_10464"],
+  core: [
+    {a:1,d:"mobile",u:"new",c:"(direct)",s:867,e:613,n:846,us:867,r:83,ap:21},
+    {a:0,d:"mobile",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:613,e:338,n:608,us:612,r:15,ap:14},
+    {a:1,d:"desktop",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:461,e:243,n:460,us:461,r:21,ap:2},
+    {a:0,d:"desktop",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:451,e:225,n:452,us:449,r:11,ap:2},
+    {a:1,d:"mobile",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:272,e:164,n:266,us:270,r:21,ap:2},
+    {a:0,d:"mobile",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:264,e:163,n:259,us:264,r:18,ap:11},
+    {a:0,d:"mobile",u:"new",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:264,e:140,n:265,us:264,r:6,ap:3},
+    {a:0,d:"mobile",u:"returning",c:"Generic-RCC-SOCIAL-FB-PROSP",s:227,e:162,n:0,us:81,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"Generic-RCC-SOCIAL-FB-PROSP",s:222,e:160,n:0,us:79,r:0,ap:1},
+    {a:0,d:"mobile",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:206,e:140,n:204,us:206,r:6,ap:7},
+    {a:1,d:"desktop",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:193,e:106,n:192,us:193,r:17,ap:8},
+    {a:1,d:"mobile",u:"new",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:189,e:94,n:192,us:189,r:10,ap:2},
+    {a:0,d:"desktop",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:179,e:94,n:179,us:177,r:4,ap:1},
+    {a:1,d:"mobile",u:"returning",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:156,e:98,n:0,us:113,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:150,e:109,n:0,us:119,r:0,ap:2},
+    {a:1,d:"desktop",u:"new",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:138,e:65,n:137,us:138,r:7,ap:1},
+    {a:0,d:"desktop",u:"new",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:131,e:64,n:131,us:131,r:6,ap:0},
+    {a:0,d:"mobile",u:"new",c:"Upper-NA-NOL-SEARCH",s:106,e:59,n:106,us:106,r:0,ap:2},
+    {a:1,d:"mobile",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:100,e:48,n:98,us:100,r:5,ap:3},
+    {a:2,d:"mobile",u:"new",c:"(direct)",s:96,e:66,n:94,us:96,r:6,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"(direct)",s:88,e:52,n:0,us:69,r:11,ap:6},
+    {a:1,d:"mobile",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:81,e:54,n:81,us:81,r:5,ap:0},
+    {a:0,d:"mobile",u:"new",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:69,e:42,n:67,us:69,r:1,ap:1},
+    {a:2,d:"desktop",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:68,e:31,n:68,us:68,r:4,ap:0},
+    {a:0,d:"desktop",u:"new",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:60,e:28,n:60,us:60,r:6,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:60,e:24,n:0,us:50,r:3,ap:2},
+    {a:0,d:"desktop",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:56,e:41,n:55,us:56,r:7,ap:1},
+    {a:0,d:"mobile",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:55,e:17,n:1,us:47,r:2,ap:0},
+    {a:1,d:"desktop",u:"new",c:"(direct)",s:55,e:29,n:52,us:55,r:4,ap:2},
+    {a:0,d:"mobile",u:"new",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:54,e:28,n:54,us:54,r:1,ap:0},
+    {a:1,d:"desktop",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:52,e:44,n:52,us:52,r:3,ap:2},
+    {a:1,d:"mobile",u:"returning",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:51,e:30,n:0,us:7,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:50,e:34,n:1,us:12,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:45,e:23,n:2,us:36,r:3,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:43,e:23,n:0,us:36,r:2,ap:1},
+    {a:0,d:"mobile",u:"returning",c:"Upper-NA-RCC-US-SEARCH",s:43,e:24,n:1,us:40,r:6,ap:3},
+    {a:0,d:"mobile",u:"new",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:42,e:24,n:42,us:42,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:42,e:20,n:0,us:38,r:4,ap:3},
+    {a:1,d:"desktop",u:"new",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:41,e:19,n:42,us:41,r:2,ap:2},
+    {a:0,d:"mobile",u:"returning",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:40,e:24,n:0,us:35,r:5,ap:1},
+    {a:1,d:"mobile",u:"new",c:"Upper-NA-NOL-SEARCH",s:37,e:19,n:36,us:37,r:2,ap:0},
+    {a:2,d:"mobile",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:36,e:17,n:36,us:36,r:4,ap:0},
+    {a:1,d:"mobile",u:"new",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:33,e:22,n:34,us:33,r:5,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:32,e:11,n:0,us:29,r:3,ap:1},
+    {a:0,d:"mobile",u:"new",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:31,e:15,n:31,us:31,r:2,ap:1},
+    {a:1,d:"desktop",u:"returning",c:"(referral)",s:31,e:25,n:0,us:5,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:31,e:15,n:0,us:29,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"(direct)",s:30,e:29,n:8,us:30,r:3,ap:2},
+    {a:1,d:"desktop",u:"new",c:"Upper-NA-NOL-SEARCH",s:29,e:21,n:30,us:29,r:4,ap:1},
+    {a:0,d:"mobile",u:"new",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:26,e:13,n:26,us:26,r:0,ap:1},
+    {a:0,d:"tablet",u:"returning",c:"Generic-RCC-SOCIAL-FB-PROSP",s:26,e:17,n:0,us:5,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"Upper-NA-RCC-US-SEARCH",s:26,e:18,n:0,us:24,r:4,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SON-RCC-SOCIAL-FB-PROSP",s:24,e:16,n:0,us:10,r:1,ap:0},
+    {a:1,d:"mobile",u:"new",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:22,e:16,n:22,us:22,r:3,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"(referral)",s:21,e:17,n:0,us:6,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:21,e:11,n:0,us:20,r:0,ap:1},
+    {a:1,d:"mobile",u:"returning",c:"(organic)",s:21,e:15,n:0,us:13,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:21,e:14,n:0,us:17,r:1,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:20,e:2,n:0,us:7,r:0,ap:0},
+    {a:0,d:"desktop",u:"new",c:"Upper-NA-NOL-SEARCH",s:19,e:10,n:19,us:19,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:19,e:12,n:0,us:9,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:18,e:11,n:18,us:18,r:5,ap:0},
+    {a:1,d:"tablet",u:"new",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:17,e:11,n:17,us:17,r:0,ap:0},
+    {a:1,d:"tablet",u:"returning",c:"Generic-RCC-SOCIAL-FB-PROSP",s:17,e:16,n:0,us:6,r:0,ap:0},
+    {a:2,d:"mobile",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:16,e:12,n:15,us:16,r:1,ap:0},
+    {a:0,d:"desktop",u:"new",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:16,e:9,n:16,us:16,r:0,ap:1},
+    {a:0,d:"mobile",u:"returning",c:"SoHS-Vertical-RCC-SOCIAL-FB-PROSP",s:16,e:12,n:0,us:10,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"(direct)",s:16,e:2,n:0,us:12,r:1,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:15,e:4,n:0,us:6,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"Generic-RCC-SOCIAL-FB-RMRKT",s:15,e:10,n:1,us:10,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:14,e:5,n:14,us:14,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:14,e:10,n:14,us:14,r:0,ap:0},
+    {a:1,d:"tablet",u:"returning",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:14,e:8,n:0,us:13,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:13,e:10,n:13,us:13,r:2,ap:3},
+    {a:1,d:"mobile",u:"new",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:13,e:9,n:13,us:13,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SoHS-Vertical-RCC-SOCIAL-FB-PROSP",s:13,e:7,n:0,us:6,r:0,ap:0},
+    {a:2,d:"desktop",u:"new",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:12,e:6,n:12,us:12,r:2,ap:1},
+    {a:2,d:"mobile",u:"returning",c:"(direct)",s:12,e:6,n:0,us:10,r:1,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"Brand-NOL-US-SEARCH-GA",s:12,e:10,n:0,us:7,r:1,ap:0},
+    {a:1,d:"desktop",u:"(not set)",c:"SOE-Vertical-ECE-NOL-SEARCH",s:12,e:0,n:0,us:10,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:12,e:8,n:12,us:12,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"Generic-RCC-SOCIAL-FB-RMRKT",s:12,e:7,n:0,us:10,r:0,ap:0},
+    {a:2,d:"desktop",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:11,e:3,n:0,us:11,r:1,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:11,e:4,n:0,us:6,r:0,ap:0},
+    {a:0,d:"tablet",u:"returning",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:11,e:6,n:0,us:9,r:0,ap:0},
+    {a:1,d:"desktop",u:"new",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:11,e:10,n:11,us:11,r:3,ap:0},
+    {a:1,d:"mobile",u:"new",c:"(cross-network)",s:11,e:9,n:10,us:11,r:2,ap:2},
+    {a:0,d:"mobile",u:"new",c:"(cross-network)",s:10,e:10,n:10,us:10,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"Competitor-NA-RCC-All-SEARCH",s:10,e:10,n:0,us:10,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"Generic-RCC-SOCIAL-FB-PROSP",s:10,e:9,n:0,us:10,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"(direct)",s:10,e:9,n:0,us:5,r:1,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:10,e:5,n:0,us:10,r:1,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"Brand-RCC-IL-SEARCH-GA",s:10,e:7,n:0,us:7,r:1,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"Upper-NA-RCC-US-SEARCH",s:9,e:3,n:0,us:8,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"Brand-RCC-FL-SEARCH-GA",s:9,e:7,n:0,us:8,r:0,ap:3},
+    {a:2,d:"desktop",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:8,e:5,n:8,us:8,r:2,ap:5},
+    {a:2,d:"mobile",u:"new",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:8,e:4,n:8,us:8,r:1,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"(organic)",s:8,e:7,n:0,us:6,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"Upper-NA-NOL-SEARCH",s:8,e:2,n:0,us:7,r:0,ap:0},
+    {a:1,d:"desktop",u:"new",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:8,e:7,n:7,us:8,r:1,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"Upper-NA-RCC-US-SEARCH",s:8,e:7,n:0,us:7,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"SON-Program-BSN-RCC-SOCIAL-FB-RMRKT",s:8,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"Brand-NOL-US-SEARCH-GA",s:8,e:7,n:0,us:6,r:3,ap:0},
+    {a:1,d:"tablet",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:8,e:4,n:8,us:8,r:0,ap:0},
+    {a:2,d:"desktop",u:"new",c:"(direct)",s:7,e:4,n:7,us:7,r:0,ap:0},
+    {a:0,d:"desktop",u:"new",c:"(direct)",s:7,e:7,n:3,us:7,r:1,ap:0},
+    {a:0,d:"desktop",u:"new",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:7,e:4,n:7,us:7,r:2,ap:5},
+    {a:0,d:"desktop",u:"returning",c:"(direct)",s:7,e:4,n:0,us:4,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:7,e:3,n:0,us:7,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:7,e:0,n:0,us:7,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"(other)",s:58,e:53,n:42,us:58,r:8,ap:6},
+    {a:0,d:"tablet",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:7,e:3,n:7,us:7,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"SON-RCC-SOCIAL-FB-PROSP",s:7,e:3,n:0,us:6,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"SoHS-Vertical-RCC-SOCIAL-FB-PROSP",s:7,e:2,n:0,us:7,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"(other)",s:37,e:34,n:20,us:37,r:9,ap:2},
+    {a:1,d:"mobile",u:"new",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:7,e:5,n:7,us:7,r:1,ap:0},
+    {a:1,d:"tablet",u:"new",c:"(direct)",s:7,e:5,n:7,us:7,r:1,ap:0},
+    {a:0,d:"desktop",u:"new",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:6,e:4,n:6,us:6,r:0,ap:1},
+    {a:0,d:"desktop",u:"new",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:6,e:4,n:6,us:6,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:6,e:0,n:0,us:6,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"SON-RCC-SOCIAL-FB-PROSP",s:6,e:0,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"Brand-RCC-FL-SEARCH-GA",s:6,e:6,n:0,us:6,r:2,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"(not set)",s:6,e:1,n:0,us:3,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"SON-Program-BSN-RCC-SOCIAL-FB-RMRKT",s:6,e:6,n:0,us:1,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"(other)",s:34,e:25,n:0,us:25,r:3,ap:1},
+    {a:1,d:"desktop",u:"new",c:"(other)",s:120,e:22,n:104,us:120,r:6,ap:3},
+    {a:1,d:"mobile",u:"returning",c:"SON-Program-BSN-RCC-SOCIAL-FB-RMRKT",s:6,e:3,n:0,us:4,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:6,e:3,n:0,us:4,r:0,ap:0},
+    {a:1,d:"tablet",u:"returning",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:6,e:3,n:0,us:1,r:0,ap:0},
+    {a:2,d:"mobile",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:5,e:2,n:0,us:4,r:0,ap:0},
+    {a:0,d:"desktop",u:"new",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:5,e:1,n:5,us:5,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:5,e:4,n:0,us:4,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"Brand-RCC-MN-SEARCH-GA",s:5,e:5,n:0,us:5,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"Brand-RCC-MN-SEARCH-GA",s:5,e:3,n:0,us:4,r:3,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:5,e:3,n:0,us:5,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:5,e:2,n:0,us:5,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:5,e:3,n:0,us:5,r:1,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:5,e:3,n:0,us:5,r:1,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"SON-RCC-SOCIAL-FB-PROSP",s:5,e:1,n:0,us:4,r:0,ap:0},
+    {a:1,d:"desktop",u:"(not set)",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:5,e:0,n:0,us:5,r:0,ap:0},
+    {a:1,d:"desktop",u:"new",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:5,e:4,n:5,us:5,r:2,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"(direct)",s:5,e:4,n:0,us:5,r:1,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"(organic)",s:5,e:4,n:0,us:5,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"Brand-NOL-US-SEARCH-GA",s:5,e:5,n:0,us:5,r:2,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:5,e:2,n:0,us:5,r:0,ap:0},
+    {a:1,d:"tablet",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:5,e:1,n:5,us:5,r:0,ap:0},
+    {a:2,d:"desktop",u:"returning",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:4,e:2,n:0,us:4,r:0,ap:0},
+    {a:2,d:"mobile",u:"new",c:"Upper-NA-NOL-SEARCH",s:4,e:3,n:4,us:4,r:0,ap:1},
+    {a:0,d:"desktop",u:"(not set)",c:"SOE-Vertical-ECE-NOL-SEARCH",s:4,e:0,n:0,us:4,r:0,ap:0},
+    {a:0,d:"desktop",u:"new",c:"(cross-network)",s:4,e:4,n:4,us:4,r:0,ap:0},
+    {a:0,d:"desktop",u:"new",c:"(not set)",s:4,e:2,n:4,us:4,r:2,ap:0},
+    {a:0,d:"desktop",u:"new",c:"Brand-NOL-US-SEARCH-GA",s:4,e:4,n:0,us:4,r:1,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"Brand-NOL-US-SEARCH-GA",s:4,e:4,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"SON-Program-BSN-RCC-SOCIAL-FB-RMRKT",s:4,e:1,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"(other)",s:8,e:2,n:0,us:5,r:0,ap:3},
+    {a:0,d:"mobile",u:"new",c:"Brand-NOL-US-SEARCH-GA",s:4,e:4,n:0,us:4,r:1,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"Brand-RCC-IL-SEARCH-GA",s:4,e:3,n:0,us:4,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:4,e:4,n:4,us:4,r:1,ap:0},
+    {a:1,d:"desktop",u:"new",c:"(not set)",s:4,e:2,n:4,us:4,r:0,ap:0},
+    {a:1,d:"desktop",u:"new",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:4,e:2,n:4,us:4,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"(other)",s:31,e:23,n:0,us:28,r:2,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"Generic-RCC-SOCIAL-FB-PROSP",s:4,e:0,n:0,us:3,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:4,e:0,n:0,us:4,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"Brand-RCC-IL-SEARCH-GA",s:4,e:4,n:0,us:4,r:1,ap:1},
+    {a:1,d:"mobile",u:"new",c:"Generic-RCC-SOCIAL-FB-PROSP",s:4,e:4,n:0,us:4,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"(other)",s:32,e:25,n:0,us:25,r:2,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:4,e:3,n:0,us:2,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:4,e:1,n:0,us:3,r:0,ap:0},
+    {a:1,d:"tablet",u:"(not set)",c:"SOE-Vertical-ECE-NOL-SEARCH",s:4,e:0,n:0,us:1,r:0,ap:0},
+    {a:2,d:"desktop",u:"new",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:3,e:2,n:3,us:3,r:0,ap:0},
+    {a:2,d:"desktop",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:3,e:1,n:3,us:3,r:1,ap:0},
+    {a:2,d:"desktop",u:"returning",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:3,e:1,n:0,us:3,r:0,ap:0},
+    {a:2,d:"mobile",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:3,e:2,n:3,us:3,r:2,ap:0},
+    {a:2,d:"mobile",u:"returning",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:3,e:3,n:0,us:3,r:2,ap:1},
+    {a:2,d:"mobile",u:"returning",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:3,e:1,n:0,us:2,r:0,ap:0},
+    {a:0,d:"desktop",u:"(not set)",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:3,e:0,n:0,us:3,r:0,ap:0},
+    {a:0,d:"desktop",u:"new",c:"(referral)",s:3,e:3,n:3,us:3,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"(organic)",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:3,e:1,n:0,us:3,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"Generic-RCC-SOCIAL-FB-PROSP",s:3,e:0,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"SoHS-Vertical-RCC-SOCIAL-FB-PROSP",s:3,e:2,n:0,us:3,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"Brand-RCC-IL-SEARCH-GA",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"Generic-RCC-SOCIAL-FB-RMRKT",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:3,e:2,n:0,us:3,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:3,e:3,n:3,us:3,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"Upper-NA-NOL-SEARCH",s:3,e:1,n:3,us:3,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:3,e:2,n:3,us:3,r:0,ap:0},
+    {a:0,d:"tablet",u:"returning",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:3,e:0,n:0,us:2,r:0,ap:0},
+    {a:1,d:"desktop",u:"new",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:3,e:2,n:3,us:3,r:1,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:3,e:2,n:0,us:3,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"Upper-NA-NOL-SEARCH",s:3,e:2,n:0,us:3,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"(not set)",s:3,e:3,n:3,us:3,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"Competitor-NA-RCC-All-SEARCH",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"Brand-RCC-FL-SEARCH-GA",s:3,e:2,n:0,us:2,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"Brand-RCC-MN-SEARCH-GA",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:3,e:2,n:0,us:3,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:3,e:2,n:0,us:3,r:1,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"Upper-NA-NOL-SEARCH",s:3,e:1,n:0,us:3,r:0,ap:1},
+    {a:1,d:"tablet",u:"(not set)",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:3,e:1,n:0,us:2,r:0,ap:0},
+    {a:1,d:"tablet",u:"new",c:"Upper-NA-NOL-SEARCH",s:3,e:1,n:3,us:2,r:0,ap:0},
+    {a:2,d:"mobile",u:"new",c:"Brand-NOL-US-SEARCH-GA",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:2,d:"mobile",u:"new",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:2,e:1,n:2,us:2,r:0,ap:0},
+    {a:2,d:"mobile",u:"returning",c:"Brand-NOL-US-SEARCH-GA",s:2,e:1,n:0,us:1,r:0,ap:0},
+    {a:2,d:"tablet",u:"new",c:"(direct)",s:2,e:2,n:2,us:2,r:0,ap:0},
+    {a:2,d:"tablet",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:2,e:1,n:2,us:2,r:0,ap:0},
+    {a:0,d:"desktop",u:"new",c:"Brand-RCC-FL-SEARCH-GA",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:0,d:"desktop",u:"new",c:"(other)",s:153,e:21,n:141,us:153,r:3,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"(not set)",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"(other)",s:19,e:15,n:0,us:16,r:2,ap:1},
+    {a:0,d:"desktop",u:"returning",c:"Brand-RCC-FL-SEARCH-GA",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"Brand-RCC-IL-SEARCH-GA",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"Upper-NA-NOL-SEARCH",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"(direct)",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"SOE-Vertical-ECE-NOL-SEARCH",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"Upper-NA-RCC-US-SEARCH",s:2,e:1,n:0,us:2,r:1,ap:0},
+    {a:0,d:"mobile",u:"new",c:"(not set)",s:2,e:1,n:1,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"(organic)",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"SoHS-Vertical-RCC-SOCIAL-FB-PROSP",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"Competitor-NA-RCC-All-SEARCH",s:2,e:2,n:1,us:2,r:1,ap:0},
+    {a:0,d:"mobile",u:"returning",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"(direct)",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:2,e:2,n:2,us:2,r:0,ap:0},
+    {a:1,d:"desktop",u:"(not set)",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:1,d:"desktop",u:"new",c:"(cross-network)",s:2,e:2,n:2,us:2,r:0,ap:0},
+    {a:1,d:"desktop",u:"new",c:"Brand-NOL-US-SEARCH-GA",s:2,e:2,n:0,us:2,r:1,ap:0},
+    {a:1,d:"desktop",u:"new",c:"Brand-RCC-MN-SEARCH-GA",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:1,d:"desktop",u:"new",c:"Competitor-NA-RCC-All-SEARCH",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"(not set)",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"Brand-RCC-FL-SEARCH-GA",s:2,e:2,n:0,us:1,r:1,ap:1},
+    {a:1,d:"desktop",u:"returning",c:"Brand-RCC-MN-SEARCH-GA",s:2,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"Generic-RCC-SOCIAL-FB-PROSP",s:2,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"Upper-NA-RCC-US-SEARCH",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"Brand-RCC-FL-SEARCH-GA",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"Brand-RCC-MN-SEARCH-GA",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"(referral)",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:1,d:"tablet",u:"returning",c:"Generic-RCC-SOCIAL-FB-RMRKT",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:1,d:"tablet",u:"returning",c:"SON-RCC-SOCIAL-FB-PROSP",s:2,e:2,n:0,us:1,r:0,ap:0},
+    {a:2,d:"desktop",u:"(not set)",c:"SOE-Vertical-ECE-NOL-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:2,d:"desktop",u:"new",c:"(cross-network)",s:1,e:1,n:1,us:1,r:0,ap:0},
+    {a:2,d:"desktop",u:"new",c:"(other)",s:2,e:1,n:1,us:2,r:0,ap:0},
+    {a:2,d:"desktop",u:"new",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:1,e:0,n:1,us:1,r:0,ap:0},
+    {a:2,d:"desktop",u:"new",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:1,e:0,n:1,us:1,r:0,ap:0},
+    {a:2,d:"desktop",u:"new",c:"Upper-NA-NOL-SEARCH",s:1,e:1,n:1,us:1,r:0,ap:0},
+    {a:2,d:"desktop",u:"returning",c:"(referral)",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:2,d:"desktop",u:"returning",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:2,d:"desktop",u:"returning",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:2,d:"desktop",u:"returning",c:"Upper-NA-RCC-US-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:2,d:"mobile",u:"(not set)",c:"(direct)",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:2,d:"mobile",u:"new",c:"(cross-network)",s:1,e:1,n:1,us:1,r:0,ap:0},
+    {a:2,d:"mobile",u:"new",c:"Brand-RCC-IL-SEARCH-GA",s:1,e:1,n:1,us:1,r:0,ap:0},
+    {a:2,d:"mobile",u:"new",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:1,e:0,n:1,us:1,r:0,ap:0},
+    {a:2,d:"mobile",u:"new",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:1,e:0,n:1,us:1,r:0,ap:0},
+    {a:2,d:"mobile",u:"new",c:"(other)",s:1,e:1,n:1,us:1,r:0,ap:0},
+    {a:2,d:"mobile",u:"returning",c:"(organic)",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:2,d:"mobile",u:"returning",c:"Competitor-NA-RCC-All-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:2,d:"mobile",u:"returning",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:1,e:1,n:0,us:1,r:1,ap:0},
+    {a:2,d:"mobile",u:"returning",c:"Upper-NA-NOL-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:2,d:"tablet",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:1,e:0,n:1,us:1,r:0,ap:0},
+    {a:0,d:"desktop",u:"(not set)",c:"(direct)",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:0,d:"desktop",u:"(not set)",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:1,e:1,n:0,us:1,r:1,ap:0},
+    {a:0,d:"desktop",u:"new",c:"Brand-RCC-IL-SEARCH-GA",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"desktop",u:"new",c:"Brand-RCC-MN-SEARCH-GA",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"desktop",u:"new",c:"Competitor-NA-RCC-All-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"Brand-RCC-MN-SEARCH-GA",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:0,d:"desktop",u:"returning",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"Brand-RCC-IL-SEARCH-GA",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"mobile",u:"(not set)",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"SON-RCC-SOCIAL-FB-PROSP",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"mobile",u:"new",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"(cross-network)",s:1,e:1,n:1,us:1,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"Generic-RCC-SOCIAL-FB-PROSP",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"tablet",u:"new",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:1,e:1,n:1,us:1,r:0,ap:0},
+    {a:0,d:"tablet",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:0,d:"tablet",u:"returning",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"tablet",u:"returning",c:"(other)",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:0,d:"tablet",u:"returning",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"desktop",u:"(not set)",c:"(direct)",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"desktop",u:"(not set)",c:"(not set)",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"desktop",u:"(not set)",c:"Brand-RCC-IL-SEARCH-GA",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"desktop",u:"(not set)",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"desktop",u:"new",c:"Brand-RCC-FL-SEARCH-GA",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"desktop",u:"new",c:"Generic-RCC-SOCIAL-FB-PROSP",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"Brand-NOL-US-SEARCH-GA",s:1,e:1,n:0,us:1,r:1,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"Brand-RCC-IL-SEARCH-GA",s:1,e:1,n:0,us:1,r:4,ap:0},
+    {a:1,d:"desktop",u:"returning",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"(cross-network)",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"(other)",s:4,e:0,n:0,us:4,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"SOE-Vertical-ECE-NOL-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"mobile",u:"(not set)",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"(organic)",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"Generic-RCC-SOCIAL-FB-RMRKT",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"mobile",u:"new",c:"SoHS-Vertical-RCC-SOCIAL-FB-PROSP",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"Competitor-NA-RCC-All-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"mobile",u:"returning",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"tablet",u:"(not set)",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"tablet",u:"new",c:"(other)",s:3,e:2,n:2,us:3,r:0,ap:0},
+    {a:1,d:"tablet",u:"new",c:"Generic-RCC-SOCIAL-FB-PROSP",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"tablet",u:"new",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"tablet",u:"returning",c:"(other)",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:1,d:"tablet",u:"returning",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:1,e:1,n:0,us:1,r:1,ap:0},
+    {a:1,d:"tablet",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:1,d:"tablet",u:"returning",c:"Upper-NA-RCC-US-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"(direct)",s:993,e:708,n:948,us:993,r:92,ap:23},
+    {a:-1,d:"mobile",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:921,e:519,n:910,us:918,r:40,ap:16},
+    {a:-1,d:"desktop",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:980,e:499,n:980,us:978,r:36,ap:4},
+    {a:-1,d:"mobile",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:380,e:223,n:372,us:380,r:24,ap:14},
+    {a:-1,d:"mobile",u:"new",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:461,e:238,n:465,us:461,r:17,ap:5},
+    {a:-1,d:"mobile",u:"returning",c:"Generic-RCC-SOCIAL-FB-PROSP",s:449,e:322,n:0,us:160,r:0,ap:1},
+    {a:-1,d:"mobile",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:290,e:196,n:288,us:290,r:13,ap:7},
+    {a:-1,d:"desktop",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:380,e:205,n:379,us:378,r:23,ap:14},
+    {a:-1,d:"mobile",u:"returning",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:309,e:208,n:0,us:234,r:0,ap:2},
+    {a:-1,d:"desktop",u:"new",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:281,e:135,n:280,us:281,r:15,ap:2},
+    {a:-1,d:"mobile",u:"new",c:"Upper-NA-NOL-SEARCH",s:147,e:81,n:146,us:147,r:2,ap:3},
+    {a:-1,d:"mobile",u:"returning",c:"(direct)",s:110,e:67,n:0,us:84,r:13,ap:6},
+    {a:-1,d:"mobile",u:"new",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:103,e:64,n:102,us:103,r:6,ap:1},
+    {a:-1,d:"desktop",u:"new",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:104,e:49,n:105,us:104,r:8,ap:2},
+    {a:-1,d:"desktop",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:114,e:50,n:0,us:97,r:6,ap:3},
+    {a:-1,d:"desktop",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:111,e:86,n:110,us:111,r:11,ap:3},
+    {a:-1,d:"mobile",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:105,e:42,n:3,us:87,r:5,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"(direct)",s:69,e:40,n:62,us:69,r:5,ap:2},
+    {a:-1,d:"mobile",u:"new",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:76,e:44,n:76,us:76,r:4,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:101,e:64,n:1,us:19,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"Upper-NA-RCC-US-SEARCH",s:69,e:42,n:1,us:64,r:10,ap:3},
+    {a:-1,d:"mobile",u:"new",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:55,e:32,n:55,us:55,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:77,e:32,n:0,us:70,r:7,ap:4},
+    {a:-1,d:"mobile",u:"returning",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:64,e:41,n:0,us:55,r:8,ap:2},
+    {a:-1,d:"mobile",u:"new",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:51,e:27,n:51,us:51,r:7,ap:1},
+    {a:-1,d:"desktop",u:"returning",c:"(referral)",s:53,e:42,n:0,us:12,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:56,e:28,n:0,us:53,r:0,ap:1},
+    {a:-1,d:"desktop",u:"new",c:"Upper-NA-NOL-SEARCH",s:49,e:32,n:50,us:49,r:4,ap:1},
+    {a:-1,d:"mobile",u:"new",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:33,e:18,n:33,us:33,r:1,ap:1},
+    {a:-1,d:"tablet",u:"returning",c:"Generic-RCC-SOCIAL-FB-PROSP",s:43,e:33,n:0,us:11,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"SON-RCC-SOCIAL-FB-PROSP",s:29,e:17,n:0,us:14,r:1,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"(organic)",s:30,e:23,n:0,us:20,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:35,e:6,n:0,us:13,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:25,e:15,n:0,us:13,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:31,e:21,n:31,us:31,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:21,e:13,n:21,us:21,r:2,ap:1},
+    {a:-1,d:"mobile",u:"returning",c:"SoHS-Vertical-RCC-SOCIAL-FB-PROSP",s:29,e:19,n:0,us:16,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"(direct)",s:19,e:2,n:0,us:15,r:1,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"Generic-RCC-SOCIAL-FB-RMRKT",s:27,e:17,n:1,us:20,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"SOE-Vertical-ECE-NOL-SEARCH",s:24,e:10,n:24,us:24,r:0,ap:0},
+    {a:-1,d:"tablet",u:"returning",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:25,e:14,n:0,us:22,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:26,e:19,n:26,us:26,r:2,ap:3},
+    {a:-1,d:"mobile",u:"returning",c:"Brand-NOL-US-SEARCH-GA",s:22,e:18,n:0,us:14,r:4,ap:0},
+    {a:-1,d:"desktop",u:"(not set)",c:"SOE-Vertical-ECE-NOL-SEARCH",s:17,e:0,n:0,us:15,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:12,e:5,n:0,us:7,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:18,e:14,n:18,us:18,r:5,ap:5},
+    {a:-1,d:"mobile",u:"new",c:"(cross-network)",s:22,e:20,n:21,us:22,r:2,ap:2},
+    {a:-1,d:"mobile",u:"new",c:"Competitor-NA-RCC-All-SEARCH",s:13,e:13,n:0,us:13,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"Generic-RCC-SOCIAL-FB-PROSP",s:14,e:13,n:0,us:14,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:17,e:8,n:0,us:17,r:1,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"Brand-RCC-IL-SEARCH-GA",s:14,e:10,n:0,us:11,r:1,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"Upper-NA-RCC-US-SEARCH",s:18,e:10,n:0,us:16,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"Brand-RCC-FL-SEARCH-GA",s:12,e:9,n:0,us:10,r:0,ap:3},
+    {a:-1,d:"mobile",u:"returning",c:"Upper-NA-NOL-SEARCH",s:12,e:4,n:0,us:11,r:0,ap:1},
+    {a:-1,d:"desktop",u:"new",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:15,e:11,n:14,us:15,r:1,ap:1},
+    {a:-1,d:"mobile",u:"(not set)",c:"SON-Program-BSN-RCC-SOCIAL-FB-RMRKT",s:12,e:1,n:0,us:3,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"(direct)",s:12,e:8,n:0,us:9,r:1,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:11,e:0,n:0,us:11,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"(other)",s:96,e:88,n:63,us:96,r:17,ap:8},
+    {a:-1,d:"tablet",u:"new",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:8,e:3,n:8,us:8,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"SON-RCC-SOCIAL-FB-PROSP",s:13,e:3,n:0,us:8,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"SoHS-Vertical-RCC-SOCIAL-FB-PROSP",s:10,e:4,n:0,us:10,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"(direct)",s:11,e:9,n:9,us:11,r:1,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:11,e:6,n:11,us:11,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:6,e:0,n:0,us:6,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"Brand-RCC-FL-SEARCH-GA",s:8,e:8,n:0,us:8,r:2,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"(not set)",s:6,e:1,n:0,us:3,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"SON-Program-BSN-RCC-SOCIAL-FB-RMRKT",s:12,e:9,n:0,us:5,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"(other)",s:66,e:50,n:0,us:50,r:5,ap:1},
+    {a:-1,d:"desktop",u:"new",c:"(other)",s:275,e:44,n:246,us:275,r:9,ap:3},
+    {a:-1,d:"tablet",u:"returning",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:6,e:3,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:8,e:3,n:8,us:8,r:1,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:9,e:6,n:0,us:8,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"Brand-RCC-MN-SEARCH-GA",s:7,e:7,n:0,us:7,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"Brand-RCC-MN-SEARCH-GA",s:8,e:6,n:0,us:7,r:3,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:10,e:7,n:0,us:8,r:1,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:9,e:3,n:0,us:8,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:6,e:4,n:0,us:6,r:1,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:8,e:5,n:0,us:8,r:2,ap:0},
+    {a:-1,d:"desktop",u:"(not set)",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:6,e:1,n:0,us:6,r:1,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"(organic)",s:8,e:7,n:0,us:8,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"Brand-NOL-US-SEARCH-GA",s:11,e:11,n:0,us:11,r:3,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:8,e:4,n:0,us:8,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"Upper-NA-RCC-US-SEARCH",s:8,e:3,n:8,us:8,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"(cross-network)",s:7,e:7,n:7,us:7,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"(not set)",s:8,e:4,n:8,us:8,r:2,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"Brand-NOL-US-SEARCH-GA",s:6,e:6,n:0,us:6,r:2,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"Brand-NOL-US-SEARCH-GA",s:5,e:5,n:0,us:3,r:1,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"(other)",s:12,e:2,n:0,us:9,r:0,ap:3},
+    {a:-1,d:"tablet",u:"new",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:4,e:4,n:4,us:4,r:1,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"(other)",s:50,e:38,n:0,us:44,r:4,ap:1},
+    {a:-1,d:"mobile",u:"(not set)",c:"Generic-RCC-SOCIAL-FB-PROSP",s:7,e:0,n:0,us:5,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"Brand-RCC-IL-SEARCH-GA",s:8,e:8,n:1,us:8,r:1,ap:1},
+    {a:-1,d:"tablet",u:"(not set)",c:"SOE-Vertical-ECE-NOL-SEARCH",s:4,e:0,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"desktop",u:"(not set)",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:3,e:0,n:0,us:3,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"(referral)",s:3,e:3,n:3,us:3,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"SOE-Program-ECE-BS-NOL-SEARCH",s:5,e:2,n:0,us:5,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"Generic-RCC-SOCIAL-FB-RMRKT",s:4,e:4,n:0,us:4,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:3,e:3,n:3,us:3,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"Upper-NA-NOL-SEARCH",s:6,e:2,n:6,us:5,r:0,ap:0},
+    {a:-1,d:"tablet",u:"returning",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:3,e:0,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"Upper-NA-NOL-SEARCH",s:5,e:3,n:0,us:5,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"(not set)",s:5,e:4,n:4,us:5,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:4,e:4,n:0,us:4,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:5,e:3,n:0,us:5,r:0,ap:0},
+    {a:-1,d:"tablet",u:"(not set)",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:3,e:1,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"Brand-RCC-FL-SEARCH-GA",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"(not set)",s:4,e:0,n:0,us:4,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"Brand-RCC-FL-SEARCH-GA",s:4,e:3,n:0,us:3,r:1,ap:1},
+    {a:-1,d:"desktop",u:"returning",c:"Brand-RCC-IL-SEARCH-GA",s:3,e:3,n:0,us:3,r:4,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"SOE-Program-ECE-BS-RCC-All-SEARCH",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"SOE-Vertical-ECE-NOL-SEARCH",s:3,e:0,n:0,us:3,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"Upper-NA-RCC-US-SEARCH",s:4,e:1,n:0,us:4,r:1,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"(organic)",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"SoHS-Vertical-RCC-SOCIAL-FB-PROSP",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"Competitor-NA-RCC-All-SEARCH",s:4,e:4,n:1,us:4,r:1,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:2,e:2,n:2,us:2,r:0,ap:0},
+    {a:-1,d:"desktop",u:"(not set)",c:"SOE-Program-ECE-Cert-RCC-US-SEARCH",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"Brand-RCC-MN-SEARCH-GA",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"Competitor-NA-RCC-All-SEARCH",s:3,e:3,n:0,us:3,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"Brand-RCC-MN-SEARCH-GA",s:3,e:2,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"Generic-RCC-SOCIAL-FB-PROSP",s:2,e:0,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:3,e:2,n:0,us:3,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"Vertical-RCC-SOCIAL-FB-PROSP",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"mobile",u:"returning",c:"(referral)",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"tablet",u:"returning",c:"Generic-RCC-SOCIAL-FB-RMRKT",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"tablet",u:"returning",c:"SON-RCC-SOCIAL-FB-PROSP",s:2,e:2,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"desktop",u:"(not set)",c:"(direct)",s:2,e:0,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"Brand-RCC-IL-SEARCH-GA",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"desktop",u:"returning",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"Brand-RCC-IL-SEARCH-GA",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"mobile",u:"new",c:"SON-RCC-SOCIAL-FB-PROSP",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"(cross-network)",s:1,e:1,n:1,us:1,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"Generic-RCC-SOCIAL-FB-PROSP",s:2,e:2,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"SOE-Program-ECE-AS-RCC-All-SEARCH",s:1,e:1,n:1,us:1,r:0,ap:0},
+    {a:-1,d:"tablet",u:"returning",c:"SOE-Vertical-ECE-NOL-SEARCH",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"tablet",u:"returning",c:"SOE-Vertical-Education-NA-RCC-US-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"tablet",u:"returning",c:"(other)",s:2,e:1,n:0,us:2,r:0,ap:0},
+    {a:-1,d:"tablet",u:"returning",c:"SON-Vertical-MN-SOCIAL-FB-RMRKT",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"desktop",u:"(not set)",c:"(not set)",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"desktop",u:"(not set)",c:"Brand-RCC-IL-SEARCH-GA",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"desktop",u:"(not set)",c:"SOE-Program-ECE-CERT-NOL-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"desktop",u:"new",c:"Generic-RCC-SOCIAL-FB-PROSP",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"(cross-network)",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"mobile",u:"(not set)",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"tablet",u:"(not set)",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:1,e:0,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"(other)",s:3,e:2,n:2,us:3,r:0,ap:0},
+    {a:-1,d:"tablet",u:"new",c:"SON-Vertical-FL-SOCIAL-FB-RMRKT",s:1,e:1,n:0,us:1,r:0,ap:0},
+    {a:-1,d:"tablet",u:"returning",c:"SOE-Program-ECE-AS-NOL-SEARCH",s:1,e:1,n:0,us:1,r:1,ap:0},
+    {a:-1,d:"tablet",u:"returning",c:"Upper-NA-RCC-US-SEARCH",s:1,e:1,n:0,us:1,r:0,ap:0}
+  ],
+  dims: {
+    devices: ["mobile","desktop","tablet"],
+    userTypes: ["new","returning","(not set)"],
+    campaigns: ["SOE-Vertical-ECE-NOL-SEARCH", "(direct)", "SOE-Vertical-Education-NA-RCC-US-SEARCH", "Vertical-RCC-SOCIAL-FB-PROSP", "Generic-RCC-SOCIAL-FB-PROSP", "Upper-NA-RCC-US-SEARCH", "SOE-Program-ECE-Cert-RCC-US-SEARCH", "Upper-NA-NOL-SEARCH", "SOE-Program-ECE-AS-NOL-SEARCH", "SON-Vertical-MN-SOCIAL-FB-RMRKT", "SOE-Program-ECE-CERT-NOL-SEARCH", "SOE-Program-ECE-BS-NOL-SEARCH", "SOE-Program-ECE-BS-RCC-All-SEARCH", "(referral)", "SOE-Program-ECE-AS-RCC-All-SEARCH", "SON-Vertical-FL-SOCIAL-FB-RMRKT", "SON-RCC-SOCIAL-FB-PROSP", "Brand-NOL-US-SEARCH-GA", "SoHS-Vertical-RCC-SOCIAL-FB-PROSP", "(organic)", "Generic-RCC-SOCIAL-FB-RMRKT", "(cross-network)", "Brand-RCC-IL-SEARCH-GA", "Brand-RCC-FL-SEARCH-GA", "SON-Program-BSN-RCC-SOCIAL-FB-RMRKT", "(not set)", "Brand-RCC-MN-SEARCH-GA", "Competitor-NA-RCC-All-SEARCH", "(other)"]
+  },
+  clicksSegmented: false
+};
+
+/*__DATA_END__*/
+/* ---------- global filter state + engine ---------- */
+const F = { dev:"All", ut:"All", camp:"All" };
+
+function segQuery(aud){
+  const ai = aud==="__site__" ? -1 : FACTS.audNames.indexOf(aud);
+  let rows = FACTS.core.filter(r=>r.a===ai);
+  if(!rows.length) return null;
+  const dimKey = {dev:"d", ut:"u", camp:"c"};
+  const segmented = { dev:rows.some(r=>r.d!=="*"), ut:rows.some(r=>r.u!=="*"), camp:rows.some(r=>r.c!=="*") };
+  for(const d of ["dev","ut","camp"]){
+    if(F[d]!=="All"){
+      if(!segmented[d]) return null;
+      rows = rows.filter(r=>r[dimKey[d]]===F[d]);
+    }
+  }
+  if(!rows.length) return null;
+  const out = {sessions:0,engaged:0,newUsers:0,users:0,rfi:0,app:0};
+  rows.forEach(r=>{ out.sessions+=r.s; out.engaged+=r.e; out.newUsers+=r.n; out.users+=r.us; out.rfi+=r.r; out.app+=r.ap; });
+  out.bounce = out.sessions ? (1 - out.engaged/out.sessions)*100 : 0;
+  out.rfiCvr = out.sessions ? out.rfi/out.sessions*100 : 0;
+  out.appCvr = out.sessions ? out.app/out.sessions*100 : 0;
+  out.usersApprox = rows.length>1;
+  return out;
+}
+const anyFilterActive = ()=> F.dev!=="All"||F.ut!=="All"||F.camp!=="All";
+
+function filterSelect(id,label,options){
+  return `<label class="filter fsel">${label}
+    <select data-f="${id}"><option>All</option>${options.map(o=>`<option>${o}</option>`).join("")}</select></label>`;
+}
+function globalFilters(withUT){
+  return `<div class="filters">
+    ${withUT?filterSelect("ut","New / Returning",FACTS.dims.userTypes):""}
+    <div class="spacer"></div>
+    ${filterSelect("camp","Session Campaign",FACTS.dims.campaigns)}
+    ${filterSelect("dev","Device",FACTS.dims.devices)}
+  </div>`;
+}
+function bindFilters(){
+  document.querySelectorAll("select[data-f]").forEach(s=>{
+    s.value = F[s.dataset.f];
+    s.onchange = ()=>{ F[s.dataset.f]=s.value; renderAll(); };
+  });
+}
+const LEGACY = (DATA.meta.legacyNote?`<span class="segbadge" style="background:#eef2fb;border-color:#c8d4ee;color:#3d5788">${DATA.meta.legacyNote}</span>`:"");
+const segBadge = ()=> anyFilterActive()
+  ? `<span class="segbadge">Not segmented in this snapshot — showing unfiltered totals. Refresh via GA4 pull to segment.</span>` : "";
+
+</script>
+<script>
+/* =====================================================================
+   RENDER ENGINE — no external dependencies, pure SVG/CSS.
+   ===================================================================== */
+const $$ = s => document.querySelector(s);
+const fmt = n => (typeof n === "number") ? n.toLocaleString("en-US") : n;
+
+/* ---------- SVG helpers ---------- */
+function spark(series, w=86, h=22){
+  const max = Math.max(...series), min = Math.min(...series);
+  const pts = series.map((v,i)=>{
+    const x = (i/(series.length-1))*w;
+    const y = h-2 - ((v-min)/(max-min||1))*(h-6);
+    return x.toFixed(1)+","+y.toFixed(1);
+  }).join(" ");
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}"><polyline points="${pts}"/></svg>`;
+}
+function sparkFor(total){
+  // scale the daily-sessions shape to this metric so sparklines share the real trend
+  const base = DATA.meta.dailySessions;
+  const sum = base.reduce((a,b)=>a+b,0);
+  return spark(base.map(v=>v*(total/sum)));
+}
+function donut(segs, size=150, hole=0.62){
+  if(!segs || !segs.length) return "";
+  const r=size/2, ir=r*hole; let a0=-Math.PI/2, paths="";
+  segs.forEach(s=>{
+    const a1=a0+(s.pct/100)*2*Math.PI;
+    const large=(a1-a0)>Math.PI?1:0;
+    const x0=r+r*Math.cos(a0), y0=r+r*Math.sin(a0), x1=r+r*Math.cos(a1), y1=r+r*Math.sin(a1);
+    const xi1=r+ir*Math.cos(a1), yi1=r+ir*Math.sin(a1), xi0=r+ir*Math.cos(a0), yi0=r+ir*Math.sin(a0);
+    paths+=`<path d="M${x0},${y0} A${r},${r} 0 ${large} 1 ${x1},${y1} L${xi1},${yi1} A${ir},${ir} 0 ${large} 0 ${xi0},${yi0} Z" fill="${s.color}"><title>${s.label}: ${s.pct}%</title></path>`;
+    a0=a1;
+  });
+  const lead=segs[0];
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${paths}
+    <text x="${r}" y="${r+5}" text-anchor="middle" font-size="15" font-weight="700" fill="#3c4043">${lead.pct}%</text></svg>`;
+}
+function legend(segs){
+  return `<div class="legend">${segs.map(s=>`<div class="li"><span class="sw" style="background:${s.color}"></span>${s.label} &nbsp;<b>${s.pct}%</b></div>`).join("")}</div>`;
+}
+function dailyBars(){
+  const d=DATA.meta.dailySessions, max=Math.max(...d), w=920, h=170, bw=w/d.length;
+  let bars=""; 
+  d.forEach((v,i)=>{
+    const bh=(v/max)*(h-24);
+    bars+=`<rect x="${(i*bw+1).toFixed(1)}" y="${(h-18-bh).toFixed(1)}" width="${(bw-2.2).toFixed(1)}" height="${bh.toFixed(1)}" rx="1.5" fill="#a8c545"><title>${v} sessions</title></rect>`;
+  });
+  const labels=DATA.meta.dailyLabels;
+  let lx="";
+  labels.forEach((t,i)=>{ lx+=`<text x="${(i*(w/labels.length)+14).toFixed(0)}" y="${h-4}" font-size="9.5" fill="#9aa0a6">${t}</text>`; });
+  return `<svg width="100%" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="max-height:190px">${bars}${lx}</svg>`;
+}
+
+/* ---------- table builders ---------- */
+function cellBar(v, max, extraClass="", width=90){
+  const pct=Math.max(2,(v/max)*width);
+  return `<div class="cellbar"><span>${fmt(v)}</span><span class="bar ${extraClass}" style="width:${pct}px"></span></div>`;
+}
+function simpleBarTable(rows, headers, total, totalLabel, count, barCol=1, barClass=""){
+  if(!rows || !rows.length) return "";
+  const max=Math.max(...rows.map(r=>r[barCol]));
+  let h=`<table class="ds"><thead><tr>${headers.map((x,i)=>`<th class="${i>0?'num':''}">${x}${i===barCol?' <span class="arrow">▼</span>':''}</th>`).join("")}</tr></thead><tbody>`;
+  rows.forEach(r=>{
+    h+=`<tr>${r.map((c,i)=> i===barCol
+        ? `<td class="num">${cellBar(c,max,barClass)}</td>`
+        : `<td class="${typeof c==='number'?'num':''}">${fmt(c)}</td>`).join("")}</tr>`;
+  });
+  h+=`</tbody>`;
+  if(total!==undefined){
+    h+=`<tfoot><tr><td>${totalLabel||"Grand total"}</td>`;
+    const totals=Array.isArray(total)?total:[total];
+    for(let i=1;i<headers.length;i++){ h+=`<td class="num">${totals[i-1]!==undefined?fmt(totals[i-1]):""}</td>`; }
+    h+=`</tr></tfoot>`;
+  }
+  h+=`</table>`;
+  if(count) h+=`<div class="pager">1 – ${rows.length} / ${count} <span class="btn">‹</span><span class="btn">›</span></div>`;
+  return h;
+}
+function card(tabLabel, bodyHtml){
+  if(!bodyHtml) return "";
+  return `<div class="card"><span class="cardtab">${tabLabel}</span><div class="cardbody">${bodyHtml}</div></div>`;
+}
+function scoreCard(lbl,val,sub,total){
+  return `<div class="score"><div class="lbl">${lbl}</div><div class="val">${val}</div>${sub||""}${total?sparkFor(total):""}</div>`;
+}
+const engagedNote = `<div class="note">Sessions &gt; 10s OR Conversions &gt; 0 OR<br>Page Views &gt;= 2</div>`;
+
+/* ---------- audience scorecard row (engine-driven) ---------- */
+function fmtPct(v){ return v.toFixed(2)+"%"; }
+function audienceScores(aud, compareAud){
+  const q = segQuery(aud);
+  if(!q){
+    return `<div class="scores">${["Sessions","Engaged sessions","New users","Bounce rate","RFI Submit","RFI Submit CVR%","App Complete","App Complete CVR%"]
+      .map(l=>`<div class="score"><div class="lbl">${l}</div><div class="val nd">No data</div><div class="note">Segment not in snapshot —<br>refresh via GA4 pull</div></div>`).join("")}</div>`;
+  }
+  let rfiDelta="", revCard="";
+  if(compareAud){
+    const c=segQuery(compareAud);
+    if(c && c.rfiCvr>0){
+      const d=((q.rfiCvr-c.rfiCvr)/c.rfiCvr)*100;
+      rfiDelta=`<div class="delta ${d>=0?'up':'down'}">${d>=0?'⬆':'⬇'} ${Math.abs(d).toFixed(1)}% CVR vs control</div>`;
+    }
+    if(c){
+      const totS = DATA.abtests.audiences.map(x=>segQuery(x.name)).filter(Boolean).reduce((s,x)=>s+x.sessions,0);
+      const r=revenue1yr(c,q,totS);
+      if(r) revCard=`<div class="score"><div class="lbl">1-Yr Incremental Revenue</div>
+        <div class="val" style="color:${r.total>=0?'var(--pos)':'var(--neg)'}">${fmtMoney(r.total)}</div>
+        <div class="note">if shipped · RFI ${fmtMoney(r.rfiRev)} + App ${fmtMoney(r.appRev)}<br>Incremental Calculator methodology</div></div>`;
+    }
+  }
+  const uNote = q.usersApprox?`<div class="note">users approx. when summed<br>across segments</div>`:"";
+  return `<div class="scores">
+    ${scoreCard("Sessions",fmt(q.sessions),"",q.sessions)}
+    ${scoreCard("Engaged sessions",fmt(q.engaged),engagedNote,q.engaged)}
+    ${scoreCard("New users",fmt(q.newUsers),uNote,q.newUsers)}
+    ${scoreCard("Bounce rate",fmtPct(q.bounce),"",Math.round(q.bounce*100))}
+    ${scoreCard("RFI Submit",fmt(q.rfi),rfiDelta,q.rfi)}
+    ${scoreCard("RFI Submit CVR%",fmtPct(q.rfiCvr),"",Math.round(q.rfiCvr*1000))}
+    ${scoreCard("App Complete",fmt(q.app),"",q.app)}
+    ${scoreCard("App Complete CVR%",fmtPct(q.appCvr),"",Math.round(q.appCvr*1000))}
+    ${revCard}
+  </div>`;
+}
+
+
+/* ---------- 1-yr incremental revenue (CRO Incremental Calculator v4 assumptions, 2026-06-18) ---------- */
+const CALC_ASSUMPTIONS = {
+  REV:{RAS:7684.4119892, AMU:3900, APU:5200},
+  seg:{
+    AMUPW:{R2L:0.68047167098073,  L2E:0.144789263996645,  A2L:0.579466357308584, A2E:0.364174427713465},
+    APUPW:{R2L:0.727848101265822, L2E:0.0501186239620403, A2L:0.5794708573702,   A2E:0.176544450025113},
+    AMULP:{R2L:0.659855723835782, L2E:0.0677496769429573, A2L:0.769627915257254, A2E:0.176903390914907},
+    APULP:{R2L:0.67502661273153,  L2E:0.0175046138359152, A2L:0.807811052794072, A2E:0.0897891000208811},
+    RASLP:{R2L:0.609282916999353, L2E:0.0341546898290425, A2L:0.599618538168106, A2E:0.0677101449275362},
+    RASPW:{R2L:0.43414317887122,  L2E:0.0668629375204448, A2L:0.660644968647357, A2E:0.0912487083697639}
+  }
+};
+function calcSegKey(){ return (DATA.meta.school||"RAS").toUpperCase()+(DATA.meta.channel||"LP").toUpperCase(); }
+function revenue1yr(c,v,totalSessions){
+  const A=CALC_ASSUMPTIONS.seg[calcSegKey()], REV=CALC_ASSUMPTIONS.REV[(DATA.meta.school||"RAS").toUpperCase()];
+  if(!A||!REV||!c||!v||!c.sessions||!v.sessions||!totalSessions) return null;
+  const days=(DATA.meta.dailySessions||[]).length||1;
+  const vis1yr=totalSessions*365/days;
+  const rfiRev=vis1yr*(v.rfiCvr-c.rfiCvr)/100*A.R2L*A.L2E*REV;
+  const appRev=vis1yr*(v.appCvr-c.appCvr)/100*A.A2L*A.A2E*REV;
+  return {total:rfiRev+appRev, rfiRev, appRev, vis1yr, days};
+}
+const fmtMoney=x=>(x<0?"-$":"$")+Math.abs(Math.round(x)).toLocaleString();
+
+/* ---------- significance (two-proportion z, one-sided) ---------- */
+function zTest(x1,n1,x2,n2){
+  const p1=x1/n1, p2=x2/n2, p=(x1+x2)/(n1+n2);
+  const se=Math.sqrt(p*(1-p)*(1/n1+1/n2));
+  const z=(p2-p1)/se;
+  const conf=(0.5*(1+erf(z/Math.SQRT2)))*100; // one-sided confidence that variation > control
+  return {z,conf,lift:((p2-p1)/p1)*100};
+}
+function erf(x){ // Abramowitz–Stegun
+  const s=x<0?-1:1; x=Math.abs(x);
+  const t=1/(1+0.3275911*x);
+  const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);
+  return s*y;
+}
+function shortVarName(aud){ const i=aud.lastIndexOf("-"); return i>0?aud.slice(i+1):aud; }
+function sigSummary(ctrlAud, varAud){
+  const c=segQuery(ctrlAud), v=segQuery(varAud);
+  if(!c || !v || !c.sessions || !v.sessions)
+    return `<div class="nodata-note">Significance unavailable for this filter combination — segment not in snapshot. Refresh via GA4 pull.</div>`;
+  const rfi=zTest(c.rfi,c.sessions,v.rfi,v.sessions);
+  const app=zTest(c.app,c.sessions,v.app,v.sessions);
+  const verdict=(t,name)=>{
+    const win=t.conf>=90;
+    const word=win?`significant at ${Math.min(t.conf,99.9).toFixed(1)}% (one-sided)`
+      :(t.conf<=10?`significantly negative (${(100-t.conf).toFixed(1)}% confidence of a loss)`
+      :`not significant (${t.conf.toFixed(1)}% one-sided confidence)`);
+    return `<b class="${win?'win':'flat'}">${name}: ${t.lift>=0?"+":""}${t.lift.toFixed(1)}% lift — ${word}</b>`;
+  };
+  const scope = anyFilterActive() ? ` &nbsp;<span class="segbadge">filtered segment</span>` : "";
+  const totS = DATA.abtests.audiences.map(x=>segQuery(x.name)).filter(Boolean).reduce((s,x)=>s+x.sessions,0);
+  const rev = revenue1yr(c, v, totS);
+  const revLine = rev?` &nbsp;·&nbsp; <b class="${rev.total>=0?'win':'flat'}">${fmtMoney(rev.total)}</b> projected 1-yr incremental revenue if shipped`:"";
+  return `<div class="sigbox">
+    <span style="display:inline-block;background:var(--gold-soft);border-radius:4px;padding:1px 8px;font-size:11px;font-weight:700;color:#5b4a12;margin-bottom:6px">★ LEADING VARIANT — ${shortVarName(varAud)}</span><br>
+    ${verdict(rfi,"RFI Submit CVR")} &nbsp;·&nbsp; ${verdict(app,"App Complete CVR")}${revLine}${scope}
+    <span class="small">Two-proportion z-test, variation vs. control, sessions as denominator. Ship rule: ≥90% one-sided confidence.</span>
+  </div>`;
+}
+
+/* =====================================================================
+   PAGE: A/B TESTS
+   ===================================================================== */
+function renderABTests(){
+  const A=DATA.abtests;
+  const audOptions = A.audiences.map((a,i)=>`<option value="${i}">${a.name}</option>`).join("");
+
+  // results table computed from engine so global filters apply
+  const ctrlIdx = window.__ctrlIdx??0, varIdx = window.__varIdx??1;
+  let bestRev=-Infinity, bestName=null;
+  const qs = A.audiences.map(a=>({a, q:segQuery(a.name)}));
+  const have = qs.filter(x=>x.q);
+  let tbl;
+  if(!have.length){
+    tbl = `<div class="nodata-note">No data for this filter combination — segment not in snapshot. Refresh via GA4 pull.</div>`;
+  } else {
+    const maxRfi=Math.max(...have.map(x=>x.q.rfi),1), maxApp=Math.max(...have.map(x=>x.q.app),1);
+    const cq = qs[window.__ctrlIdx??0] ? qs[window.__ctrlIdx??0].q : null;
+    const totS = have.reduce((s,x)=>s+x.q.sessions,0);
+    qs.forEach(({a,q},i)=>{ if(!q||i===(window.__ctrlIdx??0)) return;
+      const r=revenue1yr(cq,q,totS); if(r&&r.total>bestRev){bestRev=r.total;bestName=a.name;} });
+    tbl=`<table class="ds"><thead><tr>
+        <th>Audience name</th><th class="num">Sessions</th><th class="num">Users <span class="arrow">▼</span></th>
+        <th class="num">RFI Submit</th><th class="num">CVR%</th><th class="num">RFI Lift</th><th class="num">Sig.</th>
+        <th class="num">App Complete</th><th class="num">CVR%</th><th class="num">1-Yr Revenue</th>
+      </tr></thead><tbody>`;
+    let T={sessions:0,users:0,rfi:0,app:0};
+    qs.forEach(({a,q})=>{
+      if(!q){ tbl+=`<tr><td>${a.name}</td>${'<td class="num" style="color:#c2c6c0">No data</td>'.repeat(9)}</tr>`; return; }
+      T.sessions+=q.sessions;T.users+=q.users;T.rfi+=q.rfi;T.app+=q.app;
+      const isCtrl = qs.indexOf(qs.find(x=>x.a===a))===(window.__ctrlIdx??0);
+      let liftCell='<td class="num" style="color:var(--text-soft)">Control</td><td class="num">—</td>', revCell='<td class="num">—</td>', lead='';
+      if(!isCtrl && cq && cq.rfiCvr>0){
+        const d=((q.rfiCvr-cq.rfiCvr)/cq.rfiCvr)*100;
+        const z=zTest(cq.rfi,cq.sessions,q.rfi,q.sessions);
+        const win=d>=0&&z.conf>=90;
+        liftCell=`<td class="num" style="font-weight:600;color:${d>=0?'var(--pos)':'var(--neg)'}">${d>=0?'▲':'▼'} ${Math.abs(d).toFixed(1)}%</td>`+
+                 `<td class="num" style="font-weight:${win?700:400};color:${win?'var(--pos)':'var(--text-soft)'}">${Math.min(z.conf,99.9).toFixed(1)}%</td>`;
+        const r=revenue1yr(cq,q,totS);
+        if(r) revCell=`<td class="num" style="font-weight:600;color:${r.total>=0?'var(--pos)':'var(--neg)'}">${fmtMoney(r.total)}</td>`;
+        if(a.name===bestName&&bestRev>0) lead=` <span style="background:var(--gold-soft);border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;color:#5b4a12;white-space:nowrap">★ LEADING</span>`;
+      } else if(!isCtrl){ liftCell='<td class="num">—</td><td class="num">—</td>'; }
+      tbl+=`<tr><td>${a.name}${lead}</td><td class="num">${fmt(q.sessions)}</td><td class="num">${fmt(q.users)}</td>
+        <td class="num">${cellBar(q.rfi,maxRfi,"limegrad",70)}</td>
+        <td class="num"><div class="cellbar"><span>${fmtPct(q.rfiCvr)}</span><span class="bar" style="width:${Math.max(4,q.rfiCvr*9)}px"></span></div></td>
+        ${liftCell}
+        <td class="num">${cellBar(q.app,maxApp,"gold",60)}</td>
+        <td class="num"><div class="cellbar"><span>${fmtPct(q.appCvr)}</span><span class="bar pale" style="width:${Math.max(4,q.appCvr*22)}px"></span></div></td>
+        ${revCell}</tr>`;
+    });
+    tbl+=`</tbody><tfoot><tr><td>Grand total</td><td class="num">${fmt(T.sessions)}</td><td class="num">${fmt(T.users)}</td>
+        <td class="num">${fmt(T.rfi)}</td><td class="num">${T.sessions?fmtPct(T.rfi/T.sessions*100):"–"}</td><td class="num"></td><td class="num"></td>
+        <td class="num">${fmt(T.app)}</td><td class="num">${T.sessions?fmtPct(T.app/T.sessions*100):"–"}</td><td class="num"></td></tr></tfoot></table>`;
+    if(!anyFilterActive()) tbl = tbl.replace("Grand total</td>","Grand total</td>"); // totals note: audiences may overlap
+    tbl += `<div class="pager" style="justify-content:flex-start">Audience totals may differ slightly from sitewide totals (audiences can overlap). Lift, Sig. and 1-Yr Revenue are vs. the selected Control audience. Revenue = CRO Incremental Calculator methodology (segment ${calcSegKey()}, $${Math.round(CALC_ASSUMPTIONS.REV[(DATA.meta.school||"RAS").toUpperCase()]).toLocaleString()}/enrollment), recomputed on the current filter view.</div>`;
+  }
+
+  $$("#page-abtests").innerHTML = `
+    ${globalFilters(true)}
+    ${card("A/B Test Results by Audience Name", tbl + sigSummary(A.audiences[ctrlIdx].name, bestName || A.audiences[varIdx].name))}
+    <div class="aud-bar"><b>Select a Control Audience:</b>
+      <select id="ctrlSel">${audOptions}</select></div>
+    <div id="ctrlScores"></div>
+    <div style="height:20px"></div>
+    <div class="section-green">
+      <div class="aud-bar"><b>Select a Variation Audience:</b>
+        <select id="varSel">${audOptions}</select></div>
+      <div id="varScores"></div>
+    </div>`;
+
+  const draw=()=>{
+    const ci=+$$("#ctrlSel").value, vi=+$$("#varSel").value;
+    window.__ctrlIdx=ci; window.__varIdx=vi;
+    $$("#ctrlScores").innerHTML=audienceScores(A.audiences[ci].name);
+    $$("#varScores").innerHTML=audienceScores(A.audiences[vi].name, vi!==ci?A.audiences[ci].name:null);
+  };
+  const _oldDrawCtrl=$$("#ctrlSel");
+  $$("#ctrlSel").value=ctrlIdx; $$("#varSel").value=varIdx;
+  $$("#ctrlSel").onchange=()=>{window.__ctrlIdx=+$$("#ctrlSel").value;renderABTests();}; $$("#varSel").onchange=draw;
+  draw();
+}
+
+/* =====================================================================
+   PAGE: OVERVIEW
+   ===================================================================== */
+function renderOverview(){
+  const O=DATA.overview;
+  const q=segQuery("__site__");
+  const kpis = q ? `<div class="scores" style="box-shadow:none;padding:6px 0">
+        ${scoreCard("Sessions",fmt(q.sessions),"",q.sessions)}
+        ${scoreCard("Views",anyFilterActive()?"–":fmt(O.kpis.views),"",O.kpis.views||1)}
+        ${scoreCard("Avg. Session Duration",O.kpis.avgSessionDuration||"–","",227)}
+        ${scoreCard("Total users",fmt(q.users),q.usersApprox?'<div class="note">approx. across segments</div>':"",q.users)}
+        <div class="score"><div class="lbl">New vs Returning Users</div>
+          <div class="donut-wrap" style="padding:0">${donut(O.newVsReturning,86,.6)}</div></div>
+      </div>`
+    : `<div class="nodata-note">No data for this filter combination — segment not in snapshot. Refresh via GA4 pull.</div>`;
+  const b = segBadge();
+  $$("#page-overview").innerHTML=`
+    ${globalFilters(false)}
+    <div class="grid c2">
+      ${card("Website Performance Overview", kpis)}
+      ${card("Performance Over Time"+b, dailyBars())}
+    </div>
+    <div class="grid c3">
+      ${card("Sessions/Conversions by Device"+b,`<div class="donut-wrap">${donut(O.deviceSplit,170)}${legend(O.deviceSplit)}</div>`)}
+      ${card("Most Viewed Pages"+LEGACY, simpleBarTable(O.mostViewedPages,["Page path","Views"],[O.mostViewedTotal],"Grand total",O.mostViewedCount))}
+      ${card("Top Session Sources"+LEGACY, simpleBarTable(O.topSources,["Session source / medium","Sessions"],[O.topSourcesTotal],"Grand total",O.topSourcesCount))}
+    </div>
+    <div class="grid c2">
+      ${card("Users by Country"+LEGACY, simpleBarTable(O.usersByCountry,["Region (Country)","Total users","Sessions"],O.usersByCountryTotals,"Grand total",O.usersByCountryCount))}
+      ${!(O.browsers&&O.browsers.length)?"":card("Browsers & Devices"+LEGACY,`<div class="grid c2" style="margin:0;gap:24px">
+          <div>${simpleBarTable(O.browsers,["Browser","Total users"],[O.browsersTotal])}</div>
+          <div>${simpleBarTable(O.deviceBrands,["Device brand","Total users"],[O.browsersTotal])}</div>
+        </div>`)}
+    </div>
+    <div class="grid c3">
+      ${O.gender&&O.gender.length?card("Users by Gender"+LEGACY,`<div class="donut-wrap">${donut(O.gender,170)}${legend(O.gender)}</div>`):""}
+      ${card("Users by Interests"+LEGACY, simpleBarTable(O.interests,["Interests","Total users"],[O.interestsTotal],"Grand total",O.interestsCount))}
+      ${card("Users/Sessions by Age"+LEGACY, simpleBarTable(O.age,["Age","Total users","Sessions"],O.ageTotals,"Grand total"))}
+    </div>`;
+}
+
+/* =====================================================================
+   PAGE: ACQUISITION
+   ===================================================================== */
+function renderAcquisition(){
+  const A=DATA.acquisition, k=A.kpis;
+  const maxLP=A.landingPages.length?Math.max(...A.landingPages.map(r=>r[1])):1;
+  let lp = !A.landingPages.length ? "" : `<table class="ds"><thead><tr><th>Landing page</th><th class="num">Sessions <span class="arrow">▼</span></th>
+      <th class="num">RFI Submit</th><th class="num">RFI Submit CVR%</th><th class="num">App Complete</th><th class="num">App Complete CVR %</th></tr></thead><tbody>`;
+  if(lp) A.landingPages.forEach(r=>{
+    lp+=`<tr><td>${r[0]}</td><td class="num">${cellBar(r[1],maxLP,"",70)}</td>
+      <td class="num">${fmt(r[2])}</td><td class="num">${r[3]}</td><td class="num">${fmt(r[4])}</td><td class="num">${r[5]}</td></tr>`;
+  });
+  if(lp) lp+=`</tbody><tfoot><tr><td>Grand total</td><td class="num">${fmt(A.landingTotals[0])}</td><td class="num">${fmt(A.landingTotals[1])}</td>
+      <td class="num">${A.landingTotals[2]}</td><td class="num">${fmt(A.landingTotals[3])}</td><td class="num">${A.landingTotals[4]}</td></tr></tfoot></table>
+      <div class="pager">1 – 50 / ${A.landingCount} <span class="btn">‹</span><span class="btn">›</span></div>`;
+
+  const maxCh=A.channels.length?Math.max(...A.channels.map(c=>c[1])):1;
+  const channels=!A.channels.length?"":A.channels.map(c=>`<div class="hbar-row"><div>${c[0]}</div>
+      <div class="track"><div class="fill" style="width:${Math.max(1.5,(c[1]/maxCh)*100)}%">${c[1]>=300?fmt(c[1]):""}</div></div>
+      <div class="v">${c[1]<300?fmt(c[1]):""}</div></div>`).join("");
+
+  $$("#page-acquisition").innerHTML=`
+    ${globalFilters(false)}
+    ${(()=>{const q=segQuery("__site__");
+      if(!q) return card("Sessions & Conversions by Landing Page",`<div class="nodata-note">No data for this filter combination — segment not in snapshot. Refresh via GA4 pull.</div>`);
+      return card("Sessions & Conversions by Landing Page",`
+      <div class="scores" style="box-shadow:none;padding:6px 0">
+        ${scoreCard("Sessions",fmt(q.sessions),"",q.sessions)}
+        ${scoreCard("Engaged sessions",fmt(q.engaged),engagedNote,q.engaged)}
+        ${scoreCard("New users",fmt(q.newUsers),"",q.newUsers)}
+        ${scoreCard("Bounce rate",fmtPct(q.bounce),"",Math.round(q.bounce*100))}
+        ${scoreCard("RFI Submit",fmt(q.rfi),"",q.rfi)}
+        ${scoreCard("RFI Submit CVR%",fmtPct(q.rfiCvr),"",Math.round(q.rfiCvr*1000))}
+        ${scoreCard("App Complete",fmt(q.app),"",q.app)}
+        ${scoreCard("App Complete CVR%",fmtPct(q.appCvr),"",Math.round(q.appCvr*1000))}
+      </div>`)})()}
+    ${card("Top Landing Pages"+LEGACY, lp)}
+    <div class="grid c3">
+      ${card("Top Channels"+LEGACY, channels)}
+      ${card("Top Sources/Mediums"+LEGACY, simpleBarTable(A.sourcesMediums,["Session source / medium","Sessions","RFIs","App Complete"],A.sourcesTotals,"Grand total",A.sourcesCount))}
+      ${card("Top Campaigns · GA4 test window"+segBadge(), simpleBarTable(A.campaigns,["Session campaign","Sessions","RFIs","App Complete"],A.campaignsTotals,"Grand total",A.campaignsCount))}
+    </div>`;
+}
+
+/* =====================================================================
+   PAGE: CLICK EVENT TRACKING (side-by-side audience comparison)
+   ===================================================================== */
+function renderClicks(){
+  const C=DATA.clicks;
+  if(!C.clickEvents || !C.clickEvents.length){
+    $$("#page-clicks").innerHTML = `${globalFilters(false)}<div class="nodata-note">Click event tracking not yet pulled for this test window — requires event-scoped custom dimensions (click_text, click_id) crossed with audienceName. See skill reference ga4_queries.md §Phase 2.</div>`;
+    return;
+  }
+  const A=DATA.abtests.audiences;
+  const audOpts = `<option value="All">All audiences (unsegmented)</option>` + A.map((a,i)=>`<option value="${i}">${a.name}</option>`).join("");
+  const panel = builder => {
+    return sel => {
+      if(sel==="All" || FACTS.clicksSegmented) return "<div>"+builder()+"</div>";
+      return `<div><div class="nodata-note" style="margin-top:0">No data — click events are not audience-segmented in this snapshot. Refresh via GA4 pull (requires event-scoped custom dimensions crossed with audienceName).</div></div>`;
+    };
+  };
+  const clickTbl=panel(()=>simpleBarTable(C.clickEvents.map(r=>[r[0],r[2],r[3]||"(not set)",r[4]]),
+      ["click text","click classes","click id","# of Clicks"],[,,C.clickEventsTotal],"Grand total",C.clickEventsCount,3));
+  const callTbl=panel(()=>simpleBarTable(C.clickToCall,["Click Component","Click Text","Click URL","Page path","# of Clicks"],
+      [,,,C.clickToCallTotal],"Grand total",C.clickToCallCount,4));
+  const degTbl=panel(()=>simpleBarTable(C.degreeSearch,["search_keyword","search_degree","search_school","# of Clicks"],
+      [,,C.degreeSearchTotal],"Grand total",C.degreeSearchCount,3));
+
+  const L = window.__clickAudL??"All", R = window.__clickAudR??"All";
+  $$("#page-clicks").innerHTML=`
+    ${globalFilters(false)}
+    <div class="filters" style="background:#eecf6d;border-radius:10px;padding:12px 16px;align-items:center">
+      <label class="filter fsel" style="flex:1">Select an Audience
+        <select id="clickAudL">${audOpts}</select></label>
+      <b style="font-style:italic;color:#5c4a12">--- vs. ---</b>
+      <label class="filter fsel" style="flex:1">Select an Audience
+        <select id="clickAudR">${audOpts}</select></label>
+    </div>
+    ${card("Click Event Tracking"+LEGACY,`<div class="grid c2" style="margin:0">${clickTbl(L)}${clickTbl(R)}</div>`)}
+    ${card("Click to Call Event Tracking"+LEGACY,`<div class="grid c2" style="margin:0">${callTbl(L)}${callTbl(R)}</div>`)}
+    ${card("Degree Search Event Tracking"+LEGACY,`<div class="grid c2" style="margin:0">${degTbl(L)}${degTbl(R)}</div>`)}`;
+  $$("#clickAudL").value=L; $$("#clickAudR").value=R;
+  $$("#clickAudL").onchange=e=>{window.__clickAudL=e.target.value;renderClicks();bindFilters();};
+  $$("#clickAudR").onchange=e=>{window.__clickAudR=e.target.value;renderClicks();bindFilters();};
+}
+
+/* =====================================================================
+   PAGE: FORM INTERACTIONS
+   ===================================================================== */
+function renderForms(){
+  const F=DATA.forms;
+  if(!F.steps || !F.steps.length){
+    $$("#page-forms").innerHTML = `${globalFilters(false)}<div class="nodata-note">Form interaction tracking not yet pulled for this test window — see skill reference ga4_queries.md §Phase 2.</div>`;
+    return;
+  }
+  $$("#page-forms").innerHTML=`
+    ${globalFilters(false)}
+    ${card("Form Interaction Tracking"+LEGACY,`<div class="grid c2" style="margin:0;gap:40px">
+      <div>${simpleBarTable(F.steps,["Form Interaction Step","Total Interactions"],undefined,undefined,9)}</div>
+      <div>${simpleBarTable(F.programs,["Program Selected","Total Inqs"],undefined,undefined,16)}</div>
+    </div>`)}`;
+}
+
+/* ---------- nav + boot ---------- */
+document.querySelectorAll(".nav button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    $$("#page-"+b.dataset.page).classList.add("active");
+    window.scrollTo({top:0});
+  });
+});
+const SCHOOL_BRAND={
+  RAS:{letter:"R",name:"RASMUSSEN",sub:"UNIVERSITY"},
+  AMU:{letter:"AMU",name:"AMERICAN MILITARY",sub:"UNIVERSITY"},
+  APU:{letter:"APU",name:"AMERICAN PUBLIC",sub:"UNIVERSITY"}};
+(function(){
+  const sc=(DATA.meta.school||"RAS").toUpperCase();
+  document.documentElement.dataset.school = SCHOOL_BRAND[sc]?sc:"RAS";
+  const b=SCHOOL_BRAND[sc]||SCHOOL_BRAND.RAS;
+  const sh=$$("#brandShield"); if(sh){sh.textContent=b.letter; if(b.letter.length>1) sh.style.fontSize="12px";}
+  const bn=$$("#brandName"); if(bn) bn.textContent=b.name;
+  const bs=$$("#brandSub"); if(bs) bs.textContent=b.sub;
+  const hn=$$("#hostNote"); if(hn&&DATA.meta.hostname) hn.textContent="Data below is from "+DATA.meta.hostname+" only.";
+})();
+$$("#reportTitle").textContent=DATA.meta.title;
+$$("#dateRange").textContent=DATA.meta.dateRange;
+$$("#lastUpdated").textContent=DATA.meta.lastUpdated;
+function renderAll(){
+  renderABTests();
+  bindFilters();
+}
+renderAll();
+</script>
+</body>
+</html>
