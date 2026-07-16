@@ -6,13 +6,28 @@
       "school": "AMU",
       "channel": "LP",
       "testId": "10989",
-      "window": "Jul 2 \u2013 Jul 14, 2026",
+      "window": "Jul 2 – Jul 14, 2026",
       "year": 2026,
       "status": "Running",
       "leading": "V2_Flag",
       "rfiLift": "+29.9%",
       "sig": "99.9%",
       "revenue": 4785279,
+      "added": "2026-07-15"
+    },
+    {
+      "file": "reports/2026/amu_10916_form_prepopulation_report.html",
+      "title": "AMU Form Pre-Population A/B Test Report",
+      "school": "AMU",
+      "channel": "PW",
+      "testId": "10916",
+      "window": "Jun 4 – Jul 9, 2026",
+      "year": 2026,
+      "status": "Complete",
+      "leading": "Control (pooled - 10 pages)",
+      "rfiLift": "-5.4%",
+      "sig": "73.8%",
+      "revenue": -354571,
       "added": "2026-07-15"
     }
   ]
