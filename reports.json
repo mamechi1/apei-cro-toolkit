@@ -2,18 +2,18 @@
   "reports": [
     {
       "file": "reports/2026/amu_10989_hero_image_report.html",
-      "title": "AMU Hero Image A/B Test Report",
+      "title": "Hero Image A/B Test Report",
       "school": "AMU",
       "channel": "LP",
       "testId": "10989",
-      "window": "Jul 2 – Jul 14, 2026",
+      "window": "Jul 2 - Jul 16, 2026",
       "year": 2026,
       "status": "Running",
       "leading": "V2_Flag",
-      "rfiLift": "+29.9%",
+      "rfiLift": "+22.2%",
       "sig": "99.9%",
-      "revenue": 4785279,
-      "added": "2026-07-15"
+      "revenue": 3471722,
+      "added": "2026-07-17"
     },
     {
       "file": "reports/2026/amu_10916_form_prepopulation_report.html",
@@ -21,7 +21,7 @@
       "school": "AMU",
       "channel": "PW",
       "testId": "10916",
-      "window": "Jun 4 – Jul 9, 2026",
+      "window": "Jun 4 - Jul 9, 2026",
       "year": 2026,
       "status": "Complete",
       "leading": "Control (pooled - 10 pages)",
