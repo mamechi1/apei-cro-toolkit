@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAS Campaign × Landing Page Explorer</title>
+<style>
+  :root { color-scheme: light;
+    --green:#1E4D2B; --green-dark:#14371F; --green-tint:#F2F7F3; --green-mid:#2E6B44;
+    --ink:#1A2B20; --mut:#6B7280; --line:#D6E5DA; --gold:#B8860B; --bad:#B23B3B; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.45 "Segoe UI", Arial, sans-serif; background:#FFFFFF; color:var(--ink); }
+  header { background:var(--green-dark); color:#fff; padding:14px 20px; }
+  header h1 { margin:0; font-size:17px; font-weight:700; }
+  header .sub { font-size:12px; color:#B9D2C1; margin-top:2px; }
+  .stats { display:flex; gap:10px; padding:12px 20px 0; flex-wrap:wrap; }
+  .stat { background:var(--green-tint); border:1px solid var(--line); border-radius:8px; padding:8px 14px; min-width:120px; }
+  .stat .v { font-size:20px; font-weight:700; color:var(--green); }
+  .stat .l { font-size:11px; color:var(--mut); }
+  .controls { display:flex; gap:14px; align-items:center; padding:12px 20px; flex-wrap:wrap; }
+  .controls label { font-size:12px; color:var(--mut); }
+  select, input[type=text] { font:13px inherit; padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:#fff; color:var(--ink); }
+  input[type=text] { width:230px; }
+  .wrap { display:grid; grid-template-columns: 420px 1fr; gap:0; border-top:1px solid var(--line); min-height:420px; }
+  .pane { overflow:auto; max-height:calc(100vh - 210px); }
+  .pane.left { border-right:1px solid var(--line); }
+  table { border-collapse:collapse; width:100%; font-size:12.5px; }
+  th { position:sticky; top:0; background:var(--green); color:#fff; text-align:left; padding:6px 8px; font-size:11.5px; cursor:pointer; user-select:none; white-space:nowrap; }
+  th .arr { opacity:.7; font-size:10px; }
+  td { padding:5px 8px; border-bottom:1px solid #EDF3EE; white-space:nowrap; }
+  td.num, th.num { text-align:right; }
+  tr.sel { background:#DCEDE1; }
+  tbody tr:hover { background:#F5FAF6; cursor:pointer; }
+  .right tbody tr:hover { cursor:default; }
+  .pct { color:var(--green-mid); font-weight:600; }
+  .nc td { color:#9AA3AD; font-style:italic; }
+  .pane h2 { font-size:13px; margin:10px 12px 6px; color:var(--green); }
+  .pane h2 span { color:var(--mut); font-weight:400; }
+  #status { padding:40px; text-align:center; color:var(--mut); font-size:14px; }
+  .err { color:var(--bad); }
+  .note { font-size:11px; color:var(--mut); padding:8px 20px 16px; }
+  .spin { display:inline-block; width:16px; height:16px; border:2px solid var(--line); border-top-color:var(--green); border-radius:50%; animation:s 0.8s linear infinite; vertical-align:-3px; margin-right:8px; }
+  @keyframes s { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<header>
+  <h1>RAS Campaign × Landing Page Explorer</h1>
+  <div class="sub">Which campaigns drive RFIs to each landing page — info.rasmussen.edu · live from GA4 (property 253925809)</div>
+</header>
+
+<div class="stats" id="stats"></div>
+
+<div class="controls">
+  <label>Date range
+    <select id="range">
+      <option value="90">Last 90 days</option>
+      <option value="180">Last 180 days</option>
+      <option value="365" selected>Last 365 days</option>
+    </select>
+  </label>
+  <label>Find landing page <input type="text" id="lpSearch" placeholder="e.g. overview"></label>
+  <label><input type="checkbox" id="excl" checked> Exclude non-campaign traffic (direct / organic / referral)</label>
+</div>
+
+<div id="status"><span class="spin"></span>Pulling fresh data from GA4…</div>
+
+<div class="wrap" id="wrap" style="display:none">
+  <div class="pane left">
+    <h2>Landing pages <span id="lpCount"></span></h2>
+    <table id="lpTable"><thead></thead><tbody></tbody></table>
+  </div>
+  <div class="pane right">
+    <h2 id="campTitle">Campaigns</h2>
+    <table id="campTable"><thead></thead><tbody></tbody></table>
+  </div>
+</div>
+
+<div class="note">RFI = landing_page_inquiry · Apps = lp_application_complete · CVRs = per sessions on info.rasmussen.edu.
+Pairs with ≤20 sessions show “—” sessions; apps counted for pairs with 3+ apps. Session-campaign attribution (GA4).
+Click a landing page row to see every campaign driving to it. Click column headers to sort.</div>
+
+<script>
+const PROP = "253925809";
+const NONCAMP = new Set(["(direct)","(referral)","(organic)","(cross-network)","(not set)"]);
+const $ = id => document.getElementById(id);
+const fmt = n => n == null ? "—" : n.toLocaleString("en-US");
+const pctf = (a,b) => (b && a != null) ? (100*a/b).toFixed(2)+"%" : "—";
+
+let PAIRS = [];            // {c, lp, s, rfi, app}
+let selLP = null;
+let lpSort = {k:"rfi", d:-1}, campSort = {k:"rfi", d:-1};
+
+function dateRange(days) {
+  const end = new Date(); end.setDate(end.getDate()-1);
+  const start = new Date(); start.setDate(start.getDate()-days);
+  const f = d => d.toISOString().slice(0,10);
+  return { start_date: f(start), end_date: f(end) };
+}
+
+async function ga(args) {
+  const r = await window.cowork.callMcpTool("mcp__google-analytics__run_report", args);
+  if (r.isError) throw new Error(typeof r.content === "string" ? r.content : (r.content?.[0]?.text || "GA4 call failed"));
+  const j = r.structuredContent ?? JSON.parse(r.content[0].text);
+  return j.rows || [];
+}
+
+async function load() {
+  $("status").style.display = "block";
+  $("wrap").style.display = "none";
+  $("status").innerHTML = '<span class="spin"></span>Pulling fresh data from GA4… (3 queries, can take ~20s)';
+  const dr = [ dateRange(+$("range").value) ];
+  const base = { property_id: PROP, date_ranges: dr, dimensions: ["sessionCampaignName","landingPage"], limit: 10000,
+                 order_bys: [] };
+  try {
+    const [rfiRows, sessRows, appRows] = await Promise.all([
+      ga({ ...base, metrics:["keyEvents"],
+        dimension_filter:{ filter:{ field_name:"eventName", string_filter:{ value:"landing_page_inquiry", match_type:"EXACT" }}},
+        metric_filter:{ filter:{ field_name:"keyEvents", numeric_filter:{ operation:"GREATER_THAN", value:{ int64_value: 0 }}}} }),
+      ga({ ...base, metrics:["sessions"],
+        dimension_filter:{ filter:{ field_name:"hostName", string_filter:{ value:"info.rasmussen.edu", match_type:"EXACT" }}},
+        metric_filter:{ filter:{ field_name:"sessions", numeric_filter:{ operation:"GREATER_THAN", value:{ int64_value: 20 }}}} }),
+      ga({ ...base, metrics:["keyEvents"],
+        dimension_filter:{ filter:{ field_name:"eventName", string_filter:{ value:"lp_application_complete", match_type:"EXACT" }}},
+        metric_filter:{ filter:{ field_name:"keyEvents", numeric_filter:{ operation:"GREATER_THAN", value:{ int64_value: 2 }}}} }),
+    ]);
+    const key = r => r.dimension_values[0].value + "|~|" + r.dimension_values[1].value;
+    const val = r => parseFloat(r.metric_values[0].value);
+    const sess = new Map(sessRows.map(r => [key(r), val(r)]));
+    const apps = new Map(appRows.map(r => [key(r), val(r)]));
+    const m = new Map();
+    for (const r of rfiRows) m.set(key(r), { c:r.dimension_values[0].value, lp:r.dimension_values[1].value, rfi:val(r), s:null, app:0 });
+    for (const [k,v] of sess) { if (!m.has(k)) { const [c,lp] = k.split("|~|"); if (v < 100) continue; m.set(k,{c,lp,rfi:0,s:null,app:0}); } m.get(k).s = v; }
+    for (const [k,v] of apps) { if (m.has(k)) m.get(k).app = v; }
+    PAIRS = [...m.values()];
+    $("status").style.display = "none";
+    $("wrap").style.display = "grid";
+    render();
+  } catch (e) {
+    $("status").innerHTML = '<span class="err">Could not load GA4 data: ' + e.message + '</span><br><br>Use the Reload button in the header to retry.';
+  }
+}
+
+function filtered() {
+  return $("excl").checked ? PAIRS.filter(p => !NONCAMP.has(p.c)) : PAIRS;
+}
+
+function lpAgg() {
+  const q = $("lpSearch").value.trim().toLowerCase();
+  const m = new Map();
+  for (const p of filtered()) {
+    if (q && !p.lp.toLowerCase().includes(q)) continue;
+    const a = m.get(p.lp) || { lp:p.lp, s:0, rfi:0, app:0, n:0 };
+    a.s += p.s||0; a.rfi += p.rfi; a.app += p.app; if (p.rfi>0) a.n++;
+    m.set(p.lp, a);
+  }
+  return [...m.values()];
+}
+
+function sortRows(rows, srt) {
+  const k = srt.k, d = srt.d;
+  return rows.sort((a,b) => {
+    let x = a[k], y = b[k];
+    if (k === "rfiCvr") { x = (a.s? a.rfi/a.s : -1); y = (b.s? b.rfi/b.s : -1); }
+    if (k === "appCvr") { x = (a.s? a.app/a.s : -1); y = (b.s? b.app/b.s : -1); }
+    if (typeof x === "string") return d * x.localeCompare(y);
+    return d * ((x??-1) - (y??-1));
+  });
+}
+
+function headRow(cols, srt, onclick) {
+  return "<tr>" + cols.map(c =>
+    `<th class="${c.num?'num':''}" onclick="${onclick}('${c.k}')">${c.t}${srt.k===c.k ? ' <span class=arr>'+(srt.d<0?'▼':'▲')+'</span>':''}</th>`
+  ).join("") + "</tr>";
+}
+
+function render() {
+  // stats
+  const f = filtered();
+  const tS = f.reduce((s,p)=>s+(p.s||0),0), tR = f.reduce((s,p)=>s+p.rfi,0), tA = f.reduce((s,p)=>s+p.app,0);
+  const pages = new Set(f.map(p=>p.lp)).size;
+  $("stats").innerHTML = [
+    [fmt(tR),"RFIs"], [fmt(tS),"Sessions"], [pctf(tR,tS),"RFI CVR"], [fmt(tA),"Apps"], [pctf(tA,tS),"App CVR"], [fmt(pages),"Landing pages"]
+  ].map(x=>`<div class="stat"><div class="v">${x[0]}</div><div class="l">${x[1]}</div></div>`).join("");
+
+  // LP table
+  const lps = sortRows(lpAgg(), lpSort);
+  $("lpCount").textContent = "(" + lps.length + ")";
+  const lpCols = [ {k:"lp",t:"Landing Page"}, {k:"s",t:"Sessions",num:1}, {k:"rfi",t:"RFIs",num:1}, {k:"rfiCvr",t:"RFI CVR",num:1}, {k:"n",t:"# Camp.",num:1} ];
+  $("lpTable").tHead.innerHTML = headRow(lpCols, lpSort, "sortLP");
+  if (selLP && !lps.some(a=>a.lp===selLP)) selLP = null;
+  if (!selLP && lps.length) selLP = lps[0].lp;
+  $("lpTable").tBodies[0].innerHTML = lps.slice(0,400).map(a => `
+    <tr class="${a.lp===selLP?'sel':''}" onclick="pick('${encodeURIComponent(a.lp)}')">
+      <td title="${a.lp}">${a.lp.length>38 ? a.lp.slice(0,37)+"…" : a.lp}</td>
+      <td class="num">${fmt(a.s||null)}</td><td class="num"><b>${fmt(a.rfi)}</b></td>
+      <td class="num pct">${pctf(a.rfi,a.s)}</td><td class="num">${a.n}</td></tr>`).join("");
+
+  // campaign table for selected LP
+  const rows = sortRows(filtered().filter(p=>p.lp===selLP), campSort);
+  $("campTitle").innerHTML = `Campaigns driving to <b>${selLP||"—"}</b> <span>(${rows.length})</span>`;
+  const cCols = [ {k:"c",t:"Campaign"}, {k:"s",t:"Sessions",num:1}, {k:"rfi",t:"RFIs",num:1}, {k:"rfiCvr",t:"RFI CVR",num:1}, {k:"app",t:"Apps",num:1}, {k:"appCvr",t:"App CVR",num:1} ];
+  $("campTable").tHead.innerHTML = headRow(cCols, campSort, "sortCamp");
+  $("campTable").tBodies[0].innerHTML = rows.map(p => `
+    <tr class="${NONCAMP.has(p.c)?'nc':''}">
+      <td title="${p.c}">${p.c.length>52 ? p.c.slice(0,51)+"…" : p.c}</td>
+      <td class="num">${fmt(p.s)}</td><td class="num"><b>${fmt(p.rfi)}</b></td>
+      <td class="num pct">${pctf(p.rfi,p.s)}</td>
+      <td class="num">${fmt(p.app)}</td><td class="num">${pctf(p.app,p.s)}</td></tr>`).join("");
+}
+
+window.pick = lp => { selLP = decodeURIComponent(lp); render(); };
+window.sortLP = k => { lpSort = { k, d: lpSort.k===k ? -lpSort.d : -1 }; render(); };
+window.sortCamp = k => { campSort = { k, d: campSort.k===k ? -campSort.d : -1 }; render(); };
+
+$("range").addEventListener("change", () => { localStorage.setItem("rasLp.range", $("range").value); load(); });
+$("excl").addEventListener("change", () => { localStorage.setItem("rasLp.excl", $("excl").checked); render(); });
+$("lpSearch").addEventListener("input", () => render());
+
+// restore prefs
+if (localStorage.getItem("rasLp.range")) $("range").value = localStorage.getItem("rasLp.range");
+if (localStorage.getItem("rasLp.excl") !== null) $("excl").checked = localStorage.getItem("rasLp.excl") === "true";
+load();
+</script>
+</body>
+</html>
