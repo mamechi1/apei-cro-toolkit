@@ -8,12 +8,12 @@
       "testId": "10989",
       "window": "Jul 2 - Jul 23, 2026",
       "year": 2026,
-      "status": "Running",
-      "leading": "V2_Flag",
-      "rfiLift": "+16.0%",
+      "status": "Winner",
+      "leading": "V2 Flag",
+      "rfiLift": "+16.9%",
       "sig": "99.9%",
-      "revenue": 2004680,
-      "added": "2026-07-17"
+      "revenue": 1868179,
+      "added": "2026-07-24"
     },
     {
       "file": "reports/2026/amu_10916_form_prepopulation_report.html",
