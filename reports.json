@@ -6,13 +6,13 @@
       "school": "RAS",
       "channel": "LP",
       "testId": "11037",
-      "window": "Aug 13 - Aug 16, 2026",
+      "window": "Aug 13 - Aug 23, 2026",
       "year": 2026,
       "status": "Running",
       "leading": "V1 11037_v1_anchor",
-      "rfiLift": "+95.0%",
+      "rfiLift": "+66.0%",
       "sig": "99.9%",
-      "revenue": 5139555,
+      "revenue": 4394444,
       "added": "2026-08-14"
     },
     {
