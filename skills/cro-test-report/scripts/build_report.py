@@ -239,6 +239,32 @@ const FACTS = {{
     m = re.search(r'/\*__DATA_START__\*/.*?/\*__DATA_END__\*/', tpl, re.S)
     if not m: sys.exit('FATAL: template markers not found')
     out = tpl[:m.start()] + '/*__DATA_START__*/\n' + block + '/*__DATA_END__*/' + tpl[m.end():]
+
+    # ---- static markup: mirror the JS-rendered header into the served HTML ----
+    # The banner/<title> are normally filled in by JS on load. Anything that reads the
+    # file without running JS (curl, raw.githubusercontent, link unfurls, previews)
+    # would otherwise show the template's stub values. Write the real ones in too.
+    SCHOOL_BRAND = {'RAS': ('R', 'RASMUSSEN', 'UNIVERSITY'),
+                    'AMU': ('AMU', 'AMERICAN MILITARY', 'UNIVERSITY'),
+                    'APU': ('APU', 'AMERICAN PUBLIC', 'UNIVERSITY')}
+    sc = str(cfg.get('school', 'RAS')).upper()
+    letter, bname, bsub = SCHOOL_BRAND.get(sc, SCHOOL_BRAND['RAS'])
+    esc = lambda t: (str(t).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'))
+    hostnote = f"Data below is from {esc(cfg['hostname'])} only." if cfg.get('hostname') else ''
+    statics = [
+        (r'(<title>).*?(</title>)', f"APEI – {sc} – ({esc(cfg['testId'])}) {esc(cfg['title'])}"),
+        (r'(<h1 id="reportTitle">).*?(</h1>)', esc(cfg['title'])),
+        (r'(<div class="sub" id="hostNote">).*?(</div>)', hostnote),
+        (r'(<div class="daterange" id="dateRange">).*?(</div>)', esc(dr)),
+        (r'(<div class="shield" id="brandShield">).*?(</div>)', esc(letter)),
+        (r'(<b id="brandName">).*?(</b>)', esc(bname)),
+        (r'(<span id="brandSub">).*?(</span>)', esc(bsub)),
+    ]
+    for pat, val in statics:
+        out, n = re.subn(pat, lambda mm, v=val: mm.group(1) + v + mm.group(2), out, count=1, flags=re.S)
+        if n != 1:
+            sys.exit(f'FATAL: static header hook not found in template: {pat}')
+
     open(a.out, 'w', encoding='utf-8').write(out)
 
     # ---- summary to stdout for the chat recap ----
