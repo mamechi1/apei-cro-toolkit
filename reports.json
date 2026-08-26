@@ -6,14 +6,14 @@
       "school": "RAS",
       "channel": "LP",
       "testId": "11037",
-      "window": "Aug 13 - Aug 23, 2026",
+      "window": "Aug 13 - Aug 25, 2026",
       "year": 2026,
-      "status": "Running",
+      "status": "Winner",
       "leading": "V1 11037_v1_anchor",
-      "rfiLift": "+66.0%",
-      "sig": "99.9%",
-      "revenue": 4394444,
-      "added": "2026-08-14"
+      "rfiLift": "+63.1%",
+      "sig": "100.0%",
+      "revenue": 4725579,
+      "added": "2026-08-26"
     },
     {
       "file": "reports/2026/amu_10989_hero_image_report.html",
