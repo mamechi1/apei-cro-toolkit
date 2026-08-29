@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>APEI CRO — Live Test Dashboard</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --card:#ffffff; --ink:#1a2332; --muted:#5b6b7d; --line:#e3e8ef;
+    --blue:#2563eb; --blue-soft:#eff4ff;
+    --ras:#65a30d; --ras-soft:#f2f8e6;
+    --amu:#dc2626; --amu-soft:#fdeeee;
+    --apu:#0d9488; --apu-soft:#e8f6f4;
+    --live:#2563eb; --rec:#d97706; --show:#7c3aed; --pers:#0891b2; --win:#16a34a; --lose:#dc2626;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-bottom:60px}
+  a{color:var(--blue)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  header{background:linear-gradient(135deg,#16233d,#1e3a5f);color:#fff;padding:28px 0 22px}
+  header h1{font-size:1.5rem;font-weight:700}
+  header p{color:#b9c6da;font-size:.9rem;margin-top:4px}
+  .updated{display:inline-block;margin-top:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:4px 14px;font-size:.8rem}
+
+  .stats{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 0}
+  .stat{flex:1;min-width:130px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;box-shadow:0 1px 3px rgba(16,30,54,.06)}
+  .stat .n{font-size:1.5rem;font-weight:800}
+  .stat .l{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0 6px}
+  .tabs{display:flex;background:#e6ebf2;border-radius:10px;padding:3px}
+  .tabs button{border:0;background:transparent;padding:8px 18px;border-radius:8px;font-size:.9rem;font-weight:600;color:var(--muted);cursor:pointer}
+  .tabs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(16,30,54,.15)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer}
+  .chip.on{color:#fff;border-color:transparent}
+  .chip.on[data-school="ALL"]{background:#334155}
+  .chip.on[data-school="RAS"]{background:var(--ras)}
+  .chip.on[data-school="AMU"]{background:var(--amu)}
+  .chip.on[data-school="APU"]{background:var(--apu)}
+  #search{margin-left:auto;border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:.9rem;min-width:220px;background:#fff}
+
+  .lane{margin-top:26px}
+  .lane-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .lane-head .dot{width:12px;height:12px;border-radius:4px}
+  .lane-head h2{font-size:1.05rem;font-weight:700}
+  .lane-head .count{background:#e6ebf2;color:var(--muted);border-radius:99px;font-size:.75rem;font-weight:700;padding:2px 10px}
+  .lane-head .hint{font-size:.8rem;color:var(--muted);margin-left:6px}
+  .empty{background:repeating-linear-gradient(45deg,#fff,#fff 12px,#f8fafc 12px,#f8fafc 24px);border:1px dashed var(--line);border-radius:var(--radius);padding:18px;color:var(--muted);font-size:.9rem}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:0 1px 3px rgba(16,30,54,.06);border-top:4px solid var(--laneColor,#94a3b8);display:flex;flex-direction:column;gap:10px}
+  .card .top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .badge{font-size:.7rem;font-weight:800;letter-spacing:.03em;border-radius:6px;padding:3px 8px}
+  .badge.RAS{background:var(--ras-soft);color:var(--ras)}
+  .badge.AMU{background:var(--amu-soft);color:var(--amu)}
+  .badge.APU{background:var(--apu-soft);color:var(--apu)}
+  .badge.id{background:#eef2f7;color:var(--muted)}
+  .badge.result-Winner{background:#e7f6ec;color:var(--win)}
+  .badge.result-Loser{background:#fdeeee;color:var(--lose)}
+  .badge.result-Inconclusive{background:#fdf5e3;color:#b45309}
+  .card h3{font-size:1rem;font-weight:700;line-height:1.35}
+  .syn{font-size:.88rem;color:#38445a}
+  .kv{font-size:.8rem;color:var(--muted)}
+  .kv b{color:var(--ink)}
+  details.urls{border:1px solid var(--line);border-radius:8px;background:#f8fafc}
+  details.urls summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--muted);padding:8px 12px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  details.urls summary::after{content:"▾";transition:transform .15s}
+  details.urls[open] summary::after{transform:rotate(180deg)}
+  details.urls ul{list-style:none;padding:0 12px 10px}
+  details.urls li{font-size:.8rem;padding:3px 0;word-break:break-all}
+  .note{font-size:.78rem;color:var(--muted);font-style:italic;padding:0 12px 10px}
+  .links{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+  .btn{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;text-decoration:none;border-radius:8px;padding:7px 12px;border:1px solid var(--line);color:var(--ink);background:#fff;cursor:pointer}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+
+  /* URL view */
+  .urlview{display:none;margin-top:22px}
+  .urlview.on{display:block}
+  .board.off{display:none}
+  .url-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+  .seg{display:flex;background:#e6ebf2;border-radius:10px;padding:3px}
+  .seg button{border:0;background:transparent;padding:7px 16px;border-radius:8px;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer}
+  .seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(16,30,54,.15)}
+  .school-block{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:16px;overflow:hidden}
+  .school-block .sb-head{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);background:#fafbfd}
+  .school-block .sb-head h3{font-size:.95rem}
+  .school-block .sb-head .count{font-size:.75rem;color:var(--muted)}
+  .copybtn{margin-left:auto}
+  table{width:100%;border-collapse:collapse;font-size:.84rem}
+  th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 16px;border-bottom:1px solid var(--line);background:#fafbfd}
+  td{padding:8px 16px;border-bottom:1px solid #eef2f7;vertical-align:top}
+  td.u{word-break:break-all;max-width:480px}
+  tr:last-child td{border-bottom:0}
+  .lane-tag{font-size:.7rem;font-weight:700;border-radius:6px;padding:2px 8px;white-space:nowrap}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#16233d;color:#fff;padding:10px 22px;border-radius:99px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .25s}
+  .toast.show{opacity:1}
+  footer{margin-top:40px;text-align:center;color:var(--muted);font-size:.78rem}
+  .tablewrap{overflow-x:auto}
+  @media(max-width:640px){#search{min-width:100%;margin-left:0}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>APEI CRO — Live Test Dashboard</h1>
+    <p>Every active, ending, and cleanup-pending A/B test across RAS, AMU, and APU. Tests drop off automatically when moved to Done on Asana.</p>
+    <span class="updated" id="updated"></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="stats" id="stats"></div>
+
+  <div class="controls">
+    <div class="tabs">
+      <button class="on" data-view="board" onclick="setView('board')">Test Board</button>
+      <button data-view="urls" onclick="setView('urls')">All URLs (PM View)</button>
+    </div>
+    <div class="chips" id="schoolChips">
+      <button class="chip on" data-school="ALL" onclick="setSchool('ALL')">All Schools</button>
+      <button class="chip" data-school="RAS" onclick="setSchool('RAS')">RAS</button>
+      <button class="chip" data-school="AMU" onclick="setSchool('AMU')">AMU</button>
+      <button class="chip" data-school="APU" onclick="setSchool('APU')">APU</button>
+    </div>
+    <input id="search" type="search" placeholder="Search tests, pages, IDs…" oninput="render()">
+  </div>
+
+  <div class="board" id="board"></div>
+
+  <div class="urlview" id="urlview">
+    <div class="url-toolbar">
+      <div class="seg">
+        <button class="on" data-mode="all" onclick="setUrlMode('all')">All URLs at Once</button>
+        <button data-mode="school" onclick="setUrlMode('school')">Separated by School</button>
+      </div>
+      <button class="btn primary" onclick="copyAllUrls()">⧉ Copy every URL</button>
+    </div>
+    <div id="urlcontent"></div>
+  </div>
+
+  <footer>
+    Source of truth: <a href="https://app.asana.com/1/1104986434757437/project/1214706069876945" target="_blank" rel="noopener">2026 CRO APEI Board (Asana)</a> ·
+    Dashboard refreshed twice weekly from the board · Questions → Michael Amechi
+  </footer>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+const LAST_UPDATED = "August 28, 2026";
+
+const LANES = [
+  {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
+  {key:"Recommend Ending", color:"var(--rec)", hint:"Data collected — awaiting decision to stop"},
+  {key:"Showcase", color:"var(--show)", hint:"Finished — results being written up"},
+  {key:"Personalization", color:"var(--pers)", hint:"Winners running as Optimizely personalizations, or personalization experiences in flight"},
+  {key:"Winners (Needs Dev Cleanup)", color:"var(--win)", hint:"Won — dev needs to hardcode the winning experience and remove test code"},
+  {key:"Losers (Dev Cleanup)", color:"var(--lose)", hint:"Did not win — dev needs to remove the variation code from these pages"}
+];
+
+const TESTS = [
+  {
+    id:"9677", lane:"Personalization", school:"RAS",
+    name:"Anchoring Effect 2.0 — All Batches",
+    synopsis:"Shows price-anchoring messaging (framing cost against a higher reference point) on RAS program landing pages. The winning experience from Anchoring 1.0 now runs as a personalization across page batches while we build the best per-page messaging and test those individually.",
+    result:null, dates:"Ongoing personalization",
+    urls:[
+      "https://info.rasmussen.edu/pharmacy-technician/certificate",
+      "https://info.rasmussen.edu/medical-billing-coding/certificate",
+      "https://info.rasmussen.edu/health-information-technician/associate",
+      "https://info.rasmussen.edu/accounting/overview",
+      "https://info.rasmussen.edu/healthcare-administration/master-of-healthcare-administration",
+      "https://info.rasmussen.edu/computer-science/bachelors",
+      "https://info.rasmussen.edu/business-management/bachelors"
+    ],
+    urlNote:"Batch 1 pages listed. Additional batches tracked in the QA sheet on the Asana card.",
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1214711355511036",
+    extra:[{label:"Looker Report", url:"https://lookerstudio.google.com/reporting/6e74e955-7afc-4040-82dc-6de1bcb6c441/page/p_nag6ivvu1d"}]
+  },
+  {
+    id:"10989", lane:"Personalization", school:"AMU",
+    name:"Hero Image — /military-degrees/overview",
+    synopsis:"Tested three hero images against the current one on AMU's military degrees page. All three beat the original on inquiries (RFIs) at 99.9% confidence. The winner — the Flag image (+16.9% RFIs, ~$1.44M projected annual value) — is now running as a personalization until dev makes it permanent.",
+    result:"Winner", dates:"Ran Jul 2 – Jul 23, 2026 · winner live via personalization",
+    urls:["https://start.amu.apus.edu/military-degrees/overview"],
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1215976704015816",
+    extra:[
+      {label:"Personalization (Optimizely)", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/4641617900994560/summary"},
+      {label:"Results Report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10989_hero_image_report.html"}
+    ]
+  },
+  {
+    id:"11037", lane:"Personalization", school:"RAS",
+    name:"New Template — /overview",
+    synopsis:"A full redesign of the Rasmussen Overview landing page, modeled on the template that won on the Nursing and ECE pages (test 10464). Three-way read: current page vs. the new template vs. the recent batch-two winner, to confirm the new layout beats our best performer — not just the original. Sized at +7% minimum detectable lift (~8 weeks).",
+    result:null, dates:"Variation pages staged — launch pending (existing personalization on this page must stop first)",
+    urls:[
+      "https://info.rasmussen.edu/overview",
+      "https://info.rasmussen.edu/overview-batch-two",
+      "https://info.rasmussen.edu/overview-11037-anc",
+      "https://info.rasmussen.edu/overview-11037-ext"
+    ],
+    urlNote:"First two = control & benchmark winner. Last two = new template variation pages.",
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1216947623267033",
+    extra:[{label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25320110923/experiments/5960423176929280/variations"}]
+  },
+  {
+    id:"10716", lane:"Losers (Dev Cleanup)", school:"RAS",
+    name:"Form CTA Copy — Multiple Pages",
+    synopsis:"Tested the form button wording on Rasmussen nursing pages — \"Request Info\" vs. \"Learn More\" vs. \"Get Started\" against the control. After 65 days, no version won on inquiries at our confidence bar. Keeping the original button; the test code needs to be removed.",
+    result:"Inconclusive", dates:"Ran Mar 26 – Jun 1, 2026",
+    urls:[
+      "https://www.rasmussen.edu/degrees/nursing/bachelor-science-nursing-bsn/",
+      "https://www.rasmussen.edu/degrees/nursing/professional-nursing/"
+    ],
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1214710915696755",
+    extra:[{label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25237572343/experiments/6702377948938240/variations"}]
+  },
+  {
+    id:"10904", lane:"Losers (Dev Cleanup)", school:"APU",
+    name:"Form Placement New Design — Homepage (ADHOC)",
+    synopsis:"Tried moving the request-info form and CTAs higher up the APU homepage (three layouts). The original page won — every new layout reduced inquiries. Control stays; variation code needs to be removed from the homepage.",
+    result:"Loser", dates:"Ran Jun 1 – Jun 22, 2026",
+    urls:["https://www.apu.apus.edu/"],
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1215281505116141",
+    extra:[{label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25265062280/experiments/5467617113145344/api_names"}]
+  },
+  {
+    id:"10623", lane:"Losers (Dev Cleanup)", school:"RAS",
+    name:"Fixed Mobile CTA Bar — Multiple Pages",
+    synopsis:"Added a sticky call-to-action bar to the bottom of the screen on mobile across 13 Rasmussen landing pages. Did not produce a win; the bar is coming off and the test code needs to be removed from all 13 pages.",
+    result:"Loser", dates:"Ended — awaiting cleanup",
+    urls:[
+      "https://info.rasmussen.edu/campus/minnesota",
+      "https://info.rasmussen.edu/campus/florida",
+      "https://info.rasmussen.edu/professional-nursing/associate",
+      "https://info.rasmussen.edu/paralegal/overview",
+      "https://info.rasmussen.edu/schools/nursing",
+      "https://info.rasmussen.edu/campus/illinois",
+      "https://info.rasmussen.edu/medical-assisting/diploma",
+      "https://info.rasmussen.edu/nursing/bachelors",
+      "https://info.rasmussen.edu/practical-nursing/diploma-florida",
+      "https://info.rasmussen.edu/early-childhood-education/overview",
+      "https://info.rasmussen.edu/surgical-technologist/associate",
+      "https://info.rasmussen.edu/degrees/overview",
+      "https://info.rasmussen.edu/practical-nursing/diploma-minnesota"
+    ],
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1214711423805588"
+  },
+  {
+    id:"10916", lane:"Losers (Dev Cleanup)", school:"AMU",
+    name:"Form Pre-Population — Various URLs",
+    synopsis:"Pre-filled the degree level and program fields on request-info forms across 10 AMU program pages (split-URL test: Sports & Health Sciences, Intelligence Studies, Cybersecurity, MBA, Space Studies, Emergency & Disaster Mgmt, Nursing, Homeland Security, and more). Ended inconclusive — inquiries up only +1.9% at 57% confidence. Keeping the standard forms; 10 split-URL experiments need cleanup.",
+    result:"Inconclusive", dates:"Ran Jun 4 – Jul 9, 2026",
+    urls:[],
+    urlNote:"10 AMU program pages — the full URL list lives in the QA sheet linked on the Asana card.",
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1215339045140438",
+    extra:[
+      {label:"Optimizely Project", url:"https://app.optimizely.com/v2/projects/25247321696/experiments"},
+      {label:"Results Report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10916_form_prepopulation_report.html"}
+    ]
+  }
+];
+
+let view="board", school="ALL", urlMode="all";
+
+function setView(v){view=v;document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.view===v));render();}
+function setSchool(s){school=s;document.querySelectorAll('#schoolChips .chip').forEach(c=>c.classList.toggle('on',c.dataset.school===s));render();}
+function setUrlMode(m){urlMode=m;document.querySelectorAll('.seg button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));render();}
+
+function filtered(){
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  return TESTS.filter(t=>{
+    if(school!=='ALL'&&t.school!==school)return false;
+    if(!q)return true;
+    return (t.name+' '+t.id+' '+t.synopsis+' '+t.school+' '+t.lane+' '+t.urls.join(' ')).toLowerCase().includes(q);
+  });
+}
+
+function laneColor(lane){return (LANES.find(l=>l.key===lane)||{}).color||'#94a3b8';}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
+function renderStats(){
+  const el=document.getElementById('stats');
+  const t=filtered();
+  const active=t.filter(x=>['Live','Recommend Ending','Personalization'].includes(x.lane)).length;
+  const cleanup=t.filter(x=>x.lane.includes('Cleanup')).length;
+  const urls=new Set(t.flatMap(x=>x.urls)).size;
+  el.innerHTML=`
+    <div class="stat"><div class="n">${t.length}</div><div class="l">Tests on board</div></div>
+    <div class="stat"><div class="n">${active}</div><div class="l">Active / running</div></div>
+    <div class="stat"><div class="n">${cleanup}</div><div class="l">Awaiting dev cleanup</div></div>
+    <div class="stat"><div class="n">${urls}</div><div class="l">Pages involved</div></div>`;
+}
+
+function card(t){
+  const urlsBlock = t.urls.length
+    ? `<details class="urls"><summary>Pages in this test (${t.urls.length})</summary>
+        <ul>${t.urls.map(u=>`<li><a href="${u}" target="_blank" rel="noopener">${esc(u)}</a></li>`).join('')}</ul>
+        ${t.urlNote?`<div class="note">${esc(t.urlNote)}</div>`:''}
+       </details>`
+    : `<details class="urls"><summary>Pages in this test</summary><div class="note">${esc(t.urlNote||'See Asana card for page list.')}</div></details>`;
+  const extras=(t.extra||[]).map(e=>`<a class="btn" href="${e.url}" target="_blank" rel="noopener">${esc(e.label)}</a>`).join('');
+  return `<div class="card" style="--laneColor:${laneColor(t.lane)}">
+    <div class="top">
+      <span class="badge ${t.school}">${t.school}</span>
+      <span class="badge id">#${t.id}</span>
+      ${t.result?`<span class="badge result-${t.result}">${t.result.toUpperCase()}</span>`:''}
+    </div>
+    <h3>${esc(t.name)}</h3>
+    <div class="syn">${esc(t.synopsis)}</div>
+    <div class="kv"><b>Status:</b> ${esc(t.dates||'—')}</div>
+    ${urlsBlock}
+    <div class="links">
+      <a class="btn primary" href="${t.asana}" target="_blank" rel="noopener">Asana Card ↗</a>
+      ${extras}
+    </div>
+  </div>`;
+}
+
+function renderBoard(){
+  const el=document.getElementById('board');
+  const t=filtered();
+  el.innerHTML=LANES.map(l=>{
+    const items=t.filter(x=>x.lane===l.key);
+    return `<section class="lane">
+      <div class="lane-head">
+        <span class="dot" style="background:${l.color}"></span>
+        <h2>${l.key}</h2>
+        <span class="count">${items.length}</span>
+        <span class="hint">${l.hint}</span>
+      </div>
+      ${items.length?`<div class="grid">${items.map(card).join('')}</div>`
+        :`<div class="empty">No tests in this lane right now.</div>`}
+    </section>`;
+  }).join('');
+}
+
+function urlRows(tests){
+  const rows=[];
+  tests.forEach(t=>t.urls.forEach(u=>rows.push({url:u,test:t})));
+  return rows;
+}
+
+function laneTag(lane){
+  return `<span class="lane-tag" style="color:#fff;background:${laneColor(lane)}">${lane}</span>`;
+}
+
+function urlTable(rows){
+  if(!rows.length)return `<div class="empty" style="margin:0 16px 16px">No URLs.</div>`;
+  return `<div class="tablewrap"><table>
+    <thead><tr><th>Page URL</th><th>Test</th><th>Lane</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr>
+      <td class="u"><a href="${r.url}" target="_blank" rel="noopener">${esc(r.url)}</a></td>
+      <td>${r.test.school} · ${esc(r.test.name)} <span style="color:var(--muted)">(#${r.test.id})</span></td>
+      <td>${laneTag(r.test.lane)}</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function renderUrls(){
+  const el=document.getElementById('urlcontent');
+  const t=filtered();
+  const notes=t.filter(x=>!x.urls.length&&x.urlNote);
+  const noteHtml=notes.length?`<div class="empty" style="margin-bottom:14px">Note: ${notes.map(n=>`<b>${n.school} #${n.id}</b> (${esc(n.name)}) — ${esc(n.urlNote)}`).join(' · ')}</div>`:'';
+  if(urlMode==='all'){
+    const rows=urlRows(t);
+    el.innerHTML=noteHtml+`<div class="school-block">
+      <div class="sb-head"><h3>All Test URLs</h3><span class="count">${rows.length} URLs</span>
+        <button class="btn copybtn" onclick="copySet('ALLROWS')">⧉ Copy list</button></div>
+      ${urlTable(rows)}
+    </div>`;
+  }else{
+    el.innerHTML=noteHtml+['RAS','AMU','APU'].map(s=>{
+      const rows=urlRows(t.filter(x=>x.school===s));
+      return `<div class="school-block">
+        <div class="sb-head"><span class="badge ${s}">${s}</span><h3>${s==='RAS'?'Rasmussen University':s==='AMU'?'American Military University':'American Public University'}</h3>
+          <span class="count">${rows.length} URLs</span>
+          <button class="btn copybtn" onclick="copySet('${s}')">⧉ Copy list</button></div>
+        ${urlTable(rows)}
+      </div>`;
+    }).join('');
+  }
+}
+
+function copySet(which){
+  const t=filtered();
+  const src=which==='ALLROWS'?t:t.filter(x=>x.school===which);
+  const urls=[...new Set(urlRows(src).map(r=>r.url))];
+  copyText(urls.join('\n'),`${urls.length} URLs copied`);
+}
+function copyAllUrls(){
+  const urls=[...new Set(urlRows(filtered()).map(r=>r.url))];
+  copyText(urls.join('\n'),`${urls.length} URLs copied`);
+}
+function copyText(text,msg){
+  const done=()=>{const t=document.getElementById('toast');t.textContent=msg||'Copied';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done));}
+  else fallbackCopy(text,done);
+}
+function fallbackCopy(text,done){
+  const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');}catch(e){}
+  document.body.removeChild(ta);done();
+}
+
+function render(){
+  document.getElementById('updated').textContent='Last updated: '+LAST_UPDATED;
+  renderStats();
+  const isBoard=view==='board';
+  document.getElementById('board').classList.toggle('off',!isBoard);
+  document.getElementById('urlview').classList.toggle('on',!isBoard);
+  if(isBoard)renderBoard();else renderUrls();
+}
+render();
+</script>
+</body>
+</html>
