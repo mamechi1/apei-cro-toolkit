@@ -41,6 +41,7 @@
   .chip.on[data-school="RAS"]{background:var(--ras)}
   .chip.on[data-school="AMU"]{background:var(--amu)}
   .chip.on[data-school="APU"]{background:var(--apu)}
+  .chip.on[data-chan]{background:#0f766e}
   #search{margin-left:auto;border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:.9rem;min-width:220px;background:#fff}
 
   .lane{margin-top:26px}
@@ -59,6 +60,7 @@
   .badge.AMU{background:var(--amu-soft);color:var(--amu)}
   .badge.APU{background:var(--apu-soft);color:var(--apu)}
   .badge.id{background:#eef2f7;color:var(--muted)}
+  .badge.chan{background:#e6f4f2;color:#0f766e}
   .badge.result-Winner{background:#e7f6ec;color:var(--win)}
   .badge.result-Loser{background:#fdeeee;color:var(--lose)}
   .badge.result-Inconclusive{background:#fdf5e3;color:#b45309}
@@ -127,6 +129,11 @@
       <button class="chip" data-school="AMU" onclick="setSchool('AMU')">AMU</button>
       <button class="chip" data-school="APU" onclick="setSchool('APU')">APU</button>
     </div>
+    <div class="chips" id="chanChips">
+      <button class="chip on" data-chan="ALL" onclick="setChan('ALL')">LP + PW</button>
+      <button class="chip" data-chan="LP" onclick="setChan('LP')">LP</button>
+      <button class="chip" data-chan="PW" onclick="setChan('PW')">PW</button>
+    </div>
     <input id="search" type="search" placeholder="Search tests, pages, IDs…" oninput="render()">
   </div>
 
@@ -152,7 +159,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "September 3, 2026";
+const LAST_UPDATED = "August 28, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -165,7 +172,7 @@ const LANES = [
 
 const TESTS = [
   {
-    id:"9677", lane:"Personalization", school:"RAS",
+    id:"9677", lane:"Personalization", school:"RAS", channel:"LP",
     name:"Anchoring Effect 2.0 — All Batches",
     synopsis:"Shows price-anchoring messaging (framing cost against a higher reference point) on RAS program landing pages. The winning experience from Anchoring 1.0 now runs as a personalization across page batches while we build the best per-page messaging and test those individually.",
     result:null, dates:"Ongoing personalization",
@@ -183,7 +190,7 @@ const TESTS = [
     extra:[{label:"Looker Report", url:"https://lookerstudio.google.com/reporting/6e74e955-7afc-4040-82dc-6de1bcb6c441/page/p_nag6ivvu1d"}]
   },
   {
-    id:"10989", lane:"Personalization", school:"AMU",
+    id:"10989", lane:"Personalization", school:"AMU", channel:"LP",
     name:"Hero Image — /military-degrees/overview",
     synopsis:"Tested three hero images against the current one on AMU's military degrees page. All three beat the original on inquiries (RFIs) at 99.9% confidence. The winner — the Flag image (+16.9% RFIs, ~$1.44M projected annual value) — is now running as a personalization until dev makes it permanent.",
     result:"Winner", dates:"Ran Jul 2 – Jul 23, 2026 · winner live via personalization",
@@ -195,7 +202,7 @@ const TESTS = [
     ]
   },
   {
-    id:"11037", lane:"Personalization", school:"RAS",
+    id:"11037", lane:"Personalization", school:"RAS", channel:"LP",
     name:"New Template — /overview",
     synopsis:"A full redesign of the Rasmussen Overview landing page, modeled on the template that won on the Nursing and ECE pages (test 10464). Three-way read: current page vs. the new template vs. the recent batch-two winner, to confirm the new layout beats our best performer — not just the original. Sized at +7% minimum detectable lift (~8 weeks).",
     result:null, dates:"Variation pages staged — launch pending (existing personalization on this page must stop first)",
@@ -210,7 +217,7 @@ const TESTS = [
     extra:[{label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25320110923/experiments/5960423176929280/variations"}]
   },
   {
-    id:"10716", lane:"Losers (Dev Cleanup)", school:"RAS",
+    id:"10716", lane:"Losers (Dev Cleanup)", school:"RAS", channel:"PW",
     name:"Form CTA Copy — Multiple Pages",
     synopsis:"Tested the form button wording on Rasmussen nursing pages — \"Request Info\" vs. \"Learn More\" vs. \"Get Started\" against the control. After 65 days, no version won on inquiries at our confidence bar. Keeping the original button; the test code needs to be removed.",
     result:"Inconclusive", dates:"Ran Mar 26 – Jun 1, 2026",
@@ -222,7 +229,7 @@ const TESTS = [
     extra:[{label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25237572343/experiments/6702377948938240/variations"}]
   },
   {
-    id:"10904", lane:"Losers (Dev Cleanup)", school:"APU",
+    id:"10904", lane:"Losers (Dev Cleanup)", school:"APU", channel:"PW",
     name:"Form Placement New Design — Homepage (ADHOC)",
     synopsis:"Tried moving the request-info form and CTAs higher up the APU homepage (three layouts). The original page won — every new layout reduced inquiries. Control stays; variation code needs to be removed from the homepage.",
     result:"Loser", dates:"Ran Jun 1 – Jun 22, 2026",
@@ -231,7 +238,7 @@ const TESTS = [
     extra:[{label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25265062280/experiments/5467617113145344/api_names"}]
   },
   {
-    id:"10623", lane:"Losers (Dev Cleanup)", school:"RAS",
+    id:"10623", lane:"Losers (Dev Cleanup)", school:"RAS", channel:"LP",
     name:"Fixed Mobile CTA Bar — Multiple Pages",
     synopsis:"Added a sticky call-to-action bar to the bottom of the screen on mobile across 13 Rasmussen landing pages. Did not produce a win; the bar is coming off and the test code needs to be removed from all 13 pages.",
     result:"Loser", dates:"Ended — awaiting cleanup",
@@ -253,7 +260,7 @@ const TESTS = [
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1214711423805588"
   },
   {
-    id:"10916", lane:"Losers (Dev Cleanup)", school:"AMU",
+    id:"10916", lane:"Losers (Dev Cleanup)", school:"AMU", channel:"PW",
     name:"Form Pre-Population — Various URLs",
     synopsis:"Pre-filled the degree level and program fields on request-info forms across 10 AMU program pages (split-URL test: Sports & Health Sciences, Intelligence Studies, Cybersecurity, MBA, Space Studies, Emergency & Disaster Mgmt, Nursing, Homeland Security, and more). Ended inconclusive — inquiries up only +1.9% at 57% confidence. Keeping the standard forms; 10 split-URL experiments need cleanup.",
     result:"Inconclusive", dates:"Ran Jun 4 – Jul 9, 2026",
@@ -267,18 +274,20 @@ const TESTS = [
   }
 ];
 
-let view="board", school="ALL", urlMode="all";
+let view="board", school="ALL", chan="ALL", urlMode="all";
 
 function setView(v){view=v;document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.view===v));render();}
 function setSchool(s){school=s;document.querySelectorAll('#schoolChips .chip').forEach(c=>c.classList.toggle('on',c.dataset.school===s));render();}
+function setChan(c){chan=c;document.querySelectorAll('#chanChips .chip').forEach(b=>b.classList.toggle('on',b.dataset.chan===c));render();}
 function setUrlMode(m){urlMode=m;document.querySelectorAll('.seg button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));render();}
 
 function filtered(){
   const q=(document.getElementById('search').value||'').toLowerCase();
   return TESTS.filter(t=>{
     if(school!=='ALL'&&t.school!==school)return false;
+    if(chan!=='ALL'&&t.channel!==chan)return false;
     if(!q)return true;
-    return (t.name+' '+t.id+' '+t.synopsis+' '+t.school+' '+t.lane+' '+t.urls.join(' ')).toLowerCase().includes(q);
+    return (t.name+' '+t.id+' '+t.synopsis+' '+t.school+' '+(t.channel||'')+' '+t.lane+' '+t.urls.join(' ')).toLowerCase().includes(q);
   });
 }
 
@@ -310,6 +319,7 @@ function card(t){
   return `<div class="card" style="--laneColor:${laneColor(t.lane)}">
     <div class="top">
       <span class="badge ${t.school}">${t.school}</span>
+      ${t.channel?`<span class="badge chan">${t.channel}</span>`:''}
       <span class="badge id">#${t.id}</span>
       ${t.result?`<span class="badge result-${t.result}">${t.result.toUpperCase()}</span>`:''}
     </div>
@@ -358,7 +368,7 @@ function urlTable(rows){
     <thead><tr><th>Page URL</th><th>Test</th><th>Lane</th></tr></thead>
     <tbody>${rows.map(r=>`<tr>
       <td class="u"><a href="${r.url}" target="_blank" rel="noopener">${esc(r.url)}</a></td>
-      <td>${r.test.school} · ${esc(r.test.name)} <span style="color:var(--muted)">(#${r.test.id})</span></td>
+      <td>${r.test.school}${r.test.channel?' · '+r.test.channel:''} · ${esc(r.test.name)} <span style="color:var(--muted)">(#${r.test.id})</span></td>
       <td>${laneTag(r.test.lane)}</td>
     </tr>`).join('')}</tbody>
   </table></div>`;
