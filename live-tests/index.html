@@ -159,7 +159,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "September 7, 2026";
+const LAST_UPDATED = "September 10, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -188,18 +188,6 @@ const TESTS = [
     urlNote:"Batch 1 pages listed. Additional batches tracked in the QA sheet on the Asana card.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1214711355511036",
     extra:[{label:"Looker Report", url:"https://lookerstudio.google.com/reporting/6e74e955-7afc-4040-82dc-6de1bcb6c441/page/p_nag6ivvu1d"}]
-  },
-  {
-    id:"10989", lane:"Personalization", school:"AMU", channel:"LP",
-    name:"Hero Image — /military-degrees/overview",
-    synopsis:"Tested three hero images against the current one on AMU's military degrees page. All three beat the original on inquiries (RFIs) at 99.9% confidence. The winner — the Flag image (+16.9% RFIs, ~$1.44M projected annual value) — is now running as a personalization until dev makes it permanent.",
-    result:"Winner", dates:"Ran Jul 2 – Jul 23, 2026 · winner live via personalization",
-    urls:["https://start.amu.apus.edu/military-degrees/overview"],
-    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1215976704015816",
-    extra:[
-      {label:"Personalization (Optimizely)", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/4641617900994560/summary"},
-      {label:"Results Report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10989_hero_image_report.html"}
-    ]
   },
   {
     id:"10716", lane:"Losers (Dev Cleanup)", school:"RAS", channel:"PW",
