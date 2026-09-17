@@ -159,7 +159,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "September 10, 2026";
+const LAST_UPDATED = "September 17, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -172,10 +172,28 @@ const LANES = [
 
 const TESTS = [
   {
+    id:"10893", lane:"Live", school:"AMU", channel:"LP",
+    name:"Next Gen 360 Campaign — Desktop Hero",
+    synopsis:"Replaces the desktop hero image and headline on AMU's military degrees paid landing page with the new Next Gen 360 campaign creative. Only visitors arriving from trademark searches see it, because that group converts well and we don't want to put it at risk. This is a safety check ahead of the campaign rollout to paid landing pages: if inquiries hold steady the new look ships in October, and if they drop the rollout gets reconsidered.",
+    result:null, dates:"Running · targeted for market mid-September, ~2 weeks planned (Live/End dates not yet logged on the card)",
+    urls:["https://start.amu.apus.edu/military-degrees/overview"],
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218157278585178",
+    extra:[{label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/6024783245082624/variations"}]
+  },
+  {
+    id:"10893", lane:"Live", school:"AMU", channel:"LP",
+    name:"Next Gen 360 Campaign — Mobile Hero",
+    synopsis:"The mobile counterpart to the Next Gen 360 hero test, running on the same AMU military degrees landing page and limited to the same trademark-search visitors. It checks whether the refreshed campaign creative keeps inquiry rates steady on phones before the new look rolls out more widely.",
+    result:null, dates:"Running · paired with the desktop test above (Live/End dates not yet logged on the card)",
+    urls:["https://start.amu.apus.edu/military-degrees/overview"],
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218550388713477",
+    extra:[{label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/5919027862700032/summary"}]
+  },
+  {
     id:"9677", lane:"Personalization", school:"RAS", channel:"LP",
     name:"Anchoring Effect 2.0 — All Batches",
-    synopsis:"Shows price-anchoring messaging (framing cost against a higher reference point) on RAS program landing pages. The winning experience from Anchoring 1.0 now runs as a personalization across page batches while we build the best per-page messaging and test those individually.",
-    result:null, dates:"Ongoing personalization",
+    synopsis:"Shows price-anchoring messaging (framing cost against a higher reference point) on RAS program landing pages. The anchoring version won on inquiries, worth roughly $1.73M in projected annual value, and now runs as a personalization across page batches while we build the best per-page messaging and test those individually.",
+    result:"Winner", dates:"Ran Apr 22 – May 14, 2026 · winner live via personalization",
     urls:[
       "https://info.rasmussen.edu/pharmacy-technician/certificate",
       "https://info.rasmussen.edu/medical-billing-coding/certificate",
@@ -213,8 +231,8 @@ const TESTS = [
   {
     id:"10623", lane:"Losers (Dev Cleanup)", school:"RAS", channel:"LP",
     name:"Fixed Mobile CTA Bar — Multiple Pages",
-    synopsis:"Added a sticky call-to-action bar to the bottom of the screen on mobile across 13 Rasmussen landing pages. Did not produce a win; the bar is coming off and the test code needs to be removed from all 13 pages.",
-    result:"Loser", dates:"Ended — awaiting cleanup",
+    synopsis:"Added a sticky call-to-action bar to the bottom of the screen on mobile across 13 Rasmussen landing pages. No version won at our confidence bar, so the bar is coming off and the test code needs to be removed from all 13 pages.",
+    result:"Inconclusive", dates:"Ran Apr 13 – May 14, 2026",
     urls:[
       "https://info.rasmussen.edu/campus/minnesota",
       "https://info.rasmussen.edu/campus/florida",
@@ -230,7 +248,8 @@ const TESTS = [
       "https://info.rasmussen.edu/degrees/overview",
       "https://info.rasmussen.edu/practical-nursing/diploma-minnesota"
     ],
-    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1214711423805588"
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1214711423805588",
+    extra:[{label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25320110923/experiments/5381847136337920/variations"}]
   },
   {
     id:"10916", lane:"Losers (Dev Cleanup)", school:"AMU", channel:"PW",
