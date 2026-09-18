@@ -1,6 +1,36 @@
 {
   "reports": [
     {
+      "file": "reports/2026/amu_10893_next_gen_360_campaign_report.html",
+      "title": "Next Gen 360 Campaign A/B Test Report",
+      "school": "AMU",
+      "channel": "LP",
+      "testId": "10893",
+      "window": "Sep 14 - Sep 17, 2026",
+      "year": 2026,
+      "status": "Running",
+      "leading": "V2 10893_New_Image_v2",
+      "rfiLift": "-26.5%",
+      "sig": "4.2%",
+      "revenue": 1010150,
+      "added": "2026-09-18"
+    },
+    {
+      "file": "reports/2026/amu_10893_next_gen_360_campaign_mobile_report.html",
+      "title": "Next Gen 360 Campaign (mobile) A/B Test Report",
+      "school": "AMU",
+      "channel": "LP",
+      "testId": "10893",
+      "window": "Sep 15 - Sep 17, 2026",
+      "year": 2026,
+      "status": "Running",
+      "leading": "V1 10893-mobile_New_Copy",
+      "rfiLift": "+22.5%",
+      "sig": "96.2%",
+      "revenue": 681248,
+      "added": "2026-09-18"
+    },
+    {
       "file": "reports/2026/ras_11037_new_template_overview_report.html",
       "title": "New Template /overview A/B Test Report",
       "school": "RAS",
