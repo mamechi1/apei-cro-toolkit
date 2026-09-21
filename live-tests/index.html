@@ -12,6 +12,7 @@
     --ras:#65a30d; --ras-soft:#f2f8e6;
     --amu:#dc2626; --amu-soft:#fdeeee;
     --apu:#0d9488; --apu-soft:#e8f6f4;
+    --hon:#be185d; --hon-soft:#fdf0f5;
     --live:#2563eb; --rec:#d97706; --show:#7c3aed; --pers:#0891b2; --win:#16a34a; --lose:#dc2626;
     --radius:12px;
   }
@@ -41,6 +42,7 @@
   .chip.on[data-school="RAS"]{background:var(--ras)}
   .chip.on[data-school="AMU"]{background:var(--amu)}
   .chip.on[data-school="APU"]{background:var(--apu)}
+  .chip.on[data-school="HON"]{background:var(--hon)}
   .chip.on[data-chan]{background:#0f766e}
   #search{margin-left:auto;border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:.9rem;min-width:220px;background:#fff}
 
@@ -59,6 +61,7 @@
   .badge.RAS{background:var(--ras-soft);color:var(--ras)}
   .badge.AMU{background:var(--amu-soft);color:var(--amu)}
   .badge.APU{background:var(--apu-soft);color:var(--apu)}
+  .badge.HON{background:var(--hon-soft);color:var(--hon)}
   .badge.id{background:#eef2f7;color:var(--muted)}
   .badge.chan{background:#e6f4f2;color:#0f766e}
   .badge.result-Winner{background:#e7f6ec;color:var(--win)}
@@ -110,7 +113,7 @@
 <header>
   <div class="wrap">
     <h1>APEI CRO — Live Test Dashboard</h1>
-    <p>Every active, ending, and cleanup-pending A/B test across RAS, AMU, and APU. Tests drop off automatically when moved to Done on Asana.</p>
+    <p>Every active, ending, and cleanup-pending A/B test across RAS, AMU, APU, and HON. Tests drop off automatically when moved to Done on Asana.</p>
     <span class="updated" id="updated"></span>
   </div>
 </header>
@@ -128,6 +131,7 @@
       <button class="chip" data-school="RAS" onclick="setSchool('RAS')">RAS</button>
       <button class="chip" data-school="AMU" onclick="setSchool('AMU')">AMU</button>
       <button class="chip" data-school="APU" onclick="setSchool('APU')">APU</button>
+      <button class="chip" data-school="HON" onclick="setSchool('HON')">HON</button>
     </div>
     <div class="chips" id="chanChips">
       <button class="chip on" data-chan="ALL" onclick="setChan('ALL')">LP + PW</button>
@@ -266,6 +270,14 @@ const TESTS = [
   }
 ];
 
+const SCHOOLS = ["RAS","AMU","APU","HON"];
+const SCHOOL_NAMES = {
+  RAS:"Rasmussen University",
+  AMU:"American Military University",
+  APU:"American Public University",
+  HON:"Hondros College of Nursing"
+};
+
 let view="board", school="ALL", chan="ALL", urlMode="all";
 
 function setView(v){view=v;document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.view===v));render();}
@@ -379,15 +391,16 @@ function renderUrls(){
       ${urlTable(rows)}
     </div>`;
   }else{
-    el.innerHTML=noteHtml+['RAS','AMU','APU'].map(s=>{
+    el.innerHTML=noteHtml+SCHOOLS.map(s=>{
       const rows=urlRows(t.filter(x=>x.school===s));
+      if(!rows.length)return '';
       return `<div class="school-block">
-        <div class="sb-head"><span class="badge ${s}">${s}</span><h3>${s==='RAS'?'Rasmussen University':s==='AMU'?'American Military University':'American Public University'}</h3>
+        <div class="sb-head"><span class="badge ${s}">${s}</span><h3>${SCHOOL_NAMES[s]||s}</h3>
           <span class="count">${rows.length} URLs</span>
           <button class="btn copybtn" onclick="copySet('${s}')">⧉ Copy list</button></div>
         ${urlTable(rows)}
       </div>`;
-    }).join('');
+    }).join('')||'<div class="empty">No pages match the current filters.</div>';
   }
 }
 
