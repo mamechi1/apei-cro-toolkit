@@ -54,7 +54,7 @@ select{border:1px solid var(--border);border-radius:8px;padding:5px 8px;font-siz
 .meta a{color:var(--soft)}
 .badges{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
 .badge{font-size:10.5px;font-weight:800;letter-spacing:.6px;border-radius:4px;padding:2px 8px;background:#e8eaed;color:#3c4043}
-.b-RAS{background:var(--ras);color:var(--ras-acc)} .b-AMU{background:var(--amu);color:var(--amu-acc)} .b-APU,.b-APUS{background:var(--apu);color:var(--apu-acc)}
+.b-RAS{background:var(--ras);color:var(--ras-acc)} .b-AMU{background:var(--amu);color:var(--amu-acc)} .b-APU,.b-APUS{background:var(--apu);color:var(--apu-acc)} .b-HON{background:#003a70;color:#ffc72c}
 .b-Winner{background:#e6f4ea;color:var(--pos)} .b-Loser{background:#fce8e6;color:var(--neg)} .b-Inconclusive{background:#fef7e0;color:var(--warn)} .b-Running{background:#e8f0fe;color:#1a73e8} .b-Noresult{background:#f1f3f4;color:#5f6368}
 .stats{text-align:right;min-width:180px}
 .stats .rev{font-size:20px;font-weight:800}
@@ -77,7 +77,7 @@ footer{max-width:1150px;margin:30px auto 40px;padding:0 20px;font-size:11px;colo
 <div class="banner">
   <div>
     <h1>/ APEI CRO Test Archive /</h1>
-    <div class="sub">Every completed A/B test from 2024 on · RAS · AMU · APU · results, revenue and documentation</div>
+    <div class="sub">Every A/B test from 2024 on · RAS · AMU · APU · Hondros · results, revenue and documentation</div>
   </div>
   <div class="navside">
     <a class="navbtn ghost" href="../">← Report Hub</a>
@@ -155,6 +155,7 @@ function links(r){
   if(r.test_plan_url)L.push(["Test plan",r.test_plan_url]);
   if(r.optimizely_url)L.push(["Optimizely",r.optimizely_url]);
   if(r.trello_url)L.push(["Trello card",r.trello_url]);
+  if(r.asana_url)L.push(["Asana task",r.asana_url]);
   if(r.files_url)L.push(["All files",r.files_url]);
   return L.length?`<div class="links">${L.map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${t}</a>`).join("")}</div>`:"";
 }
@@ -167,7 +168,7 @@ function card(r){
     <div class="top">
       <div style="flex:1;min-width:260px">
         <div class="title">${esc(r.test_name)}</div>
-        <div class="meta">${r.test_id?`<span>RH# ${esc(r.test_id)}</span>`:""}<span>${esc(r.start||"")}${r.end?` to ${esc(r.end)}`:r.outcome==="Running"?" to running":""}</span>${r.kpi?`<span>KPI: ${esc(r.kpi)}</span>`:""}${page?`<span>${page}</span>`:""}</div>
+        <div class="meta">${r.test_id?`<span>RH# ${esc(r.test_id)}</span>`:""}<span>${r.start?esc(r.start)+(r.end?` to ${esc(r.end)}`:r.outcome==="Running"?" to running":""):(r.outcome==="Running"?"Live now":esc(r.end||""))}</span>${r.kpi?`<span>KPI: ${esc(r.kpi)}</span>`:""}${page?`<span>${page}</span>`:""}</div>
         <div class="badges">
           ${r.school?`<span class="badge b-${esc(r.school)}">${esc(r.school)}</span>`:""}
           ${r.channel?`<span class="badge">${esc(r.channel)}</span>`:""}
