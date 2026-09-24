@@ -163,7 +163,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "September 21, 2026";
+const LAST_UPDATED = "September 24, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -202,22 +202,27 @@ const TESTS = [
     ]
   },
   {
-    id:"9677", lane:"Personalization", school:"RAS", channel:"LP",
-    name:"Anchoring Effect 2.0 — All Batches",
-    synopsis:"Shows price-anchoring messaging (framing cost against a higher reference point) on RAS program landing pages. The winning experience from Anchoring 1.0 now runs as a personalization across page batches while we build the best per-page messaging and test those individually.",
-    result:null, dates:"Ongoing personalization",
+    id:"11044", lane:"Live", school:"RAS", channel:"PW",
+    name:"AI Effectiveness — Rasmussen Homepage",
+    synopsis:"Removes the AI feature from the Rasmussen homepage to see whether fewer competing calls-to-action push more visitors into the request-info form. Built in Optimizely and running on all devices. Primary measure is inquiries, with applications and profiles created watched alongside. Just launched, so there is no read yet.",
+    result:null, dates:"Live since Sept 22, 2026 · too early to read",
+    urls:["https://www.rasmussen.edu/"],
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218622186582741",
+    extra:[
+      {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25237572343/experiments/6273462791045120/variations"}
+    ]
+  },
+  {
+    id:"11107", lane:"Live", school:"HON", channel:"LP",
+    name:"Homepage Hero Design — /nursing/overview",
+    synopsis:"A redesigned hero section on the Hondros nursing overview landing page, run as a split-URL test where half of visitors land on a separate variation page. The goal is to find out whether the new hero drives more inquiries than the current one. Just launched, so there is no read yet.",
+    result:null, dates:"Live since Sept 22, 2026 · too early to read",
     urls:[
-      "https://info.rasmussen.edu/pharmacy-technician/certificate",
-      "https://info.rasmussen.edu/medical-billing-coding/certificate",
-      "https://info.rasmussen.edu/health-information-technician/associate",
-      "https://info.rasmussen.edu/accounting/overview",
-      "https://info.rasmussen.edu/healthcare-administration/master-of-healthcare-administration",
-      "https://info.rasmussen.edu/computer-science/bachelors",
-      "https://info.rasmussen.edu/business-management/bachelors"
+      "https://start.hondros.edu/nursing/overview",
+      "https://start.hondros.edu/nursing/overview-11107"
     ],
-    urlNote:"Batch 1 pages listed. Additional batches tracked in the QA sheet on the Asana card.",
-    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1214711355511036",
-    extra:[{label:"Looker Report", url:"https://lookerstudio.google.com/reporting/6e74e955-7afc-4040-82dc-6de1bcb6c441/page/p_nag6ivvu1d"}]
+    urlNote:"First URL is the control, second is the variation page. A staging copy at hcneducation.com/nursing/overview-11107 is still in development and is not public traffic.",
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218368364963970"
   },
   {
     id:"10716", lane:"Losers (Dev Cleanup)", school:"RAS", channel:"PW",
