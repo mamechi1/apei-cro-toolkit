@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>APEI CRO Test Archive</title>
+<style>
+:root{
+  --bg:#f1f3f0; --card:#fff; --text:#3c4043; --soft:#80868b; --border:#e4e7e2;
+  --dark:#1a1a1a; --pos:#1e8e3e; --neg:#d93025; --warn:#b06000;
+  --ras:#004712; --ras-acc:#a6ce39; --amu:#1a1a1a; --amu-acc:#ffc600; --apu:#0d0d0d; --apu-acc:#00e5e5;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.banner{background:var(--dark);color:#fff;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-bottom:5px solid var(--amu-acc)}
+.banner h1{font-size:22px;font-style:italic}
+.banner .sub{font-size:12px;color:#cfcfcf;margin-top:3px}
+.navside{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.navbtn{background:var(--amu-acc);color:#1a1a1a;font-weight:800;font-size:12.5px;text-decoration:none;border-radius:8px;padding:9px 16px;white-space:nowrap}
+.navbtn.ghost{background:transparent;color:#fff;border:1px solid #555}
+.wrap{max-width:1150px;margin:26px auto;padding:0 20px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.kpi .k{font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--soft);text-transform:uppercase}
+.kpi .v{font-size:24px;font-weight:800;margin-top:4px;color:var(--dark)}
+.kpi .v.pos{color:var(--pos)}
+.kpi .s{font-size:11.5px;color:var(--soft);margin-top:2px}
+.years{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:18px;overflow-x:auto;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.years table{width:100%;border-collapse:collapse;font-size:13px}
+.years th{font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--soft);text-align:left;padding:10px 14px;border-bottom:1px solid var(--border)}
+.years td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.years tr:last-child td{border-bottom:0}
+.years td.num{font-variant-numeric:tabular-nums}
+.years tr{cursor:pointer} .years tr:hover td{background:#fafbf9}
+.bar{height:8px;border-radius:4px;background:#e8eaed;overflow:hidden;display:flex;min-width:120px}
+.bar i{display:block;height:100%}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:center}
+.fgroup{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.fgroup .lbl{font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--soft);text-transform:uppercase;margin-right:2px}
+.chip{appearance:none;border:1px solid var(--border);background:#fff;border-radius:16px;padding:4px 12px;font-size:12.5px;font-weight:600;color:var(--text);cursor:pointer}
+.chip.on{background:var(--dark);border-color:var(--dark);color:#fff}
+.search{flex:1;min-width:200px}
+.search input{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;background:#fff}
+.bar2{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:4px 2px 10px;flex-wrap:wrap}
+.count{font-size:12px;color:var(--soft)}
+select{border:1px solid var(--border);border-radius:8px;padding:5px 8px;font-size:12.5px;background:#fff;color:var(--text)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.05);border-left:5px solid var(--border)}
+.card.o-Winner{border-left-color:var(--pos)} .card.o-Loser{border-left-color:var(--neg)} .card.o-Inconclusive{border-left-color:#f9ab00} .card.o-Running{border-left-color:#1a73e8}
+.card:hover{box-shadow:0 3px 10px rgba(0,0,0,.09)}
+.top{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.title{font-size:15.5px;font-weight:700;color:var(--dark);overflow-wrap:anywhere}
+.meta{font-size:12px;color:var(--soft);margin-top:5px;display:flex;gap:14px;flex-wrap:wrap}
+.meta a{color:var(--soft)}
+.badges{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.badge{font-size:10.5px;font-weight:800;letter-spacing:.6px;border-radius:4px;padding:2px 8px;background:#e8eaed;color:#3c4043}
+.b-RAS{background:var(--ras);color:var(--ras-acc)} .b-AMU{background:var(--amu);color:var(--amu-acc)} .b-APU,.b-APUS{background:var(--apu);color:var(--apu-acc)}
+.b-Winner{background:#e6f4ea;color:var(--pos)} .b-Loser{background:#fce8e6;color:var(--neg)} .b-Inconclusive{background:#fef7e0;color:var(--warn)} .b-Running{background:#e8f0fe;color:#1a73e8} .b-Noresult{background:#f1f3f4;color:#5f6368}
+.stats{text-align:right;min-width:180px}
+.stats .rev{font-size:20px;font-weight:800}
+.stats .rev.pos{color:var(--pos)} .stats .rev.neg{color:var(--neg)}
+.stats .lift{font-size:12.5px;color:var(--soft);margin-top:4px}
+.stats .detail{font-size:11px;margin-top:6px}
+.stats .detail span{background:#fef7e0;border-radius:4px;padding:1px 7px;font-weight:700;color:#5b4a12}
+.links{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.links a{font-size:12px;font-weight:700;text-decoration:none;color:var(--dark);border:1px solid var(--border);border-radius:6px;padding:4px 10px;background:#fafbf9}
+.links a:hover{border-color:var(--dark)}
+details{margin-top:10px;font-size:12.5px;line-height:1.5}
+details summary{cursor:pointer;color:var(--soft);font-weight:600;font-size:12px}
+details p{margin-top:6px} details b{color:var(--dark)}
+.empty{background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:40px;text-align:center;color:var(--soft);font-size:13.5px}
+footer{max-width:1150px;margin:30px auto 40px;padding:0 20px;font-size:11px;color:var(--soft);line-height:1.6}
+@media (max-width:640px){.banner{padding:16px}.stats{text-align:left}}
+</style>
+</head>
+<body>
+<div class="banner">
+  <div>
+    <h1>/ APEI CRO Test Archive /</h1>
+    <div class="sub">Every completed A/B test from 2024 on · RAS · AMU · APU · results, revenue and documentation</div>
+  </div>
+  <div class="navside">
+    <a class="navbtn ghost" href="../">← Report Hub</a>
+    <a class="navbtn ghost" href="../live-tests/">Live Test Board</a>
+    <span class="sub" id="stamp"></span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="kpis" id="kpis"></div>
+  <div class="years" id="years"></div>
+
+  <div class="filters">
+    <div class="fgroup"><span class="lbl">Year</span><span id="fYear"></span></div>
+    <div class="fgroup"><span class="lbl">School</span><span id="fSchool"></span></div>
+    <div class="fgroup"><span class="lbl">Channel</span><span id="fChannel"></span></div>
+    <div class="fgroup"><span class="lbl">Result</span><span id="fOutcome"></span></div>
+    <div class="search"><input id="fSearch" type="search" placeholder="Search test name, RH#, page, notes…"></div>
+  </div>
+  <div class="bar2">
+    <div class="count" id="count"></div>
+    <label class="count">Sort <select id="fSort">
+      <option value="date">Newest first</option>
+      <option value="rev">Highest revenue</option>
+      <option value="id">Test ID</option>
+    </select></label>
+  </div>
+  <div id="list"></div>
+</div>
+<footer>
+Source of truth: Test Dashboard.xlsx (2024, 2025, 2026 tabs and Winners tabs), the 2024 and 2025 APEI Testing Boards in Trello, the Experiments 2026 decks, and this report hub.
+Revenue is the projected first year (annualized) impact recorded for each test; the "revenue from winners" totals add up Winner rows only.
+Deck and file links open the private apei-cro-experiments repo (GitHub login with access needed). Exec summary and test plan links open SharePoint (APEI login needed).
+To update: edit tests.csv in apei-cro-experiments, run <code>python tools/build_index.py --json tests.json</code>, and commit that file here as <code>archive/tests.json</code>.
+</footer>
+
+<script>
+const F={year:"All",school:"All",channel:"All",outcome:"All",q:"",sort:"date"};
+const OUT=["Winner","Loser","Inconclusive","Running","No result"];
+const COL={"Winner":"#1e8e3e","Loser":"#d93025","Inconclusive":"#f9ab00","Running":"#1a73e8","No result":"#bdc1c6"};
+let T=[];
+const num=v=>v===undefined||v===""||isNaN(+v)?null:+v;
+const money=x=>(x<0?"-$":"$")+Math.abs(Math.round(x)).toLocaleString();
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const winRev=rows=>rows.filter(r=>r.outcome==="Winner").reduce((a,r)=>a+(num(r.annualized_revenue)||0),0);
+
+function chips(el,key,values){
+  const box=document.getElementById(el);
+  box.innerHTML=["All",...values].map(v=>`<button class="chip ${F[key]===v?'on':''}" data-k="${key}" data-v="${esc(v)}">${esc(v)}</button>`).join("");
+}
+function kpis(rows){
+  const done=rows.filter(r=>["Winner","Loser","Inconclusive"].includes(r.outcome));
+  const w=rows.filter(r=>r.outcome==="Winner").length;
+  document.getElementById("kpis").innerHTML=[
+    ["Tests",rows.length,`${done.length} with a final result`],
+    ["Winners",w,done.length?`${Math.round(100*w/done.length)}% win rate`:""],
+    ["Revenue from winners",money(winRev(rows)),"projected first year","pos"],
+    ["Losers / Inconclusive",`${rows.filter(r=>r.outcome==="Loser").length} / ${rows.filter(r=>r.outcome==="Inconclusive").length}`,"learnings banked"]
+  ].map(([k,v,s,c])=>`<div class="kpi"><div class="k">${k}</div><div class="v ${c||""}">${v}</div><div class="s">${s}</div></div>`).join("");
+}
+function years(){
+  const ys=[...new Set(T.map(r=>r.year))].sort().reverse();
+  document.getElementById("years").innerHTML=`<table><tr><th>Year</th><th>Tests</th><th>Winners</th><th>Losers</th><th>Inconclusive</th><th>Result mix</th><th>Revenue from winners</th></tr>${
+    ys.map(y=>{const rs=T.filter(r=>r.year===y);const n=rs.length;
+      return `<tr data-y="${y}"><td><b>${y}</b></td><td class="num">${n}</td><td class="num">${rs.filter(r=>r.outcome==="Winner").length}</td><td class="num">${rs.filter(r=>r.outcome==="Loser").length}</td><td class="num">${rs.filter(r=>r.outcome==="Inconclusive").length}</td>
+      <td><div class="bar">${OUT.map(o=>{const c=rs.filter(r=>r.outcome===o).length;return c?`<i title="${o}: ${c}" style="width:${100*c/n}%;background:${COL[o]}"></i>`:""}).join("")}</div></td>
+      <td class="num"><b>${money(winRev(rs))}</b></td></tr>`}).join("")}</table>`;
+  document.querySelectorAll("#years tr[data-y]").forEach(tr=>tr.onclick=()=>{F.year=F.year===tr.dataset.y?"All":tr.dataset.y;render();});
+}
+function links(r){
+  const L=[];
+  (r.decks||[]).forEach((u,i,a)=>L.push([a.length>1?`Deck ${i+1} (PDF)`:"Deck (PDF)",u]));
+  if(r.exec_summary_url)L.push(["Exec summary",r.exec_summary_url]);
+  if(r.report_url)L.push(["Report",r.report_url]);
+  if(r.test_plan_url)L.push(["Test plan",r.test_plan_url]);
+  if(r.optimizely_url)L.push(["Optimizely",r.optimizely_url]);
+  if(r.trello_url)L.push(["Trello card",r.trello_url]);
+  if(r.files_url)L.push(["All files",r.files_url]);
+  return L.length?`<div class="links">${L.map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${t}</a>`).join("")}</div>`:"";
+}
+function card(r){
+  const rev=num(r.annualized_revenue);
+  const page=r.page&&r.page.startsWith("http")?`<a href="${esc(r.page)}" target="_blank" rel="noopener">${esc(r.page.replace(/^https?:\/\//,"").replace(/\/$/,""))}</a>`:esc(r.page||"");
+  const extra=[r.annualized_rfi&&`${(+r.annualized_rfi).toLocaleString()} RFIs`,r.annualized_enrollments&&`${r.annualized_enrollments} enrollments`,r.annualized_apps&&`${r.annualized_apps} apps`].filter(Boolean).join(" · ");
+  const notes=[r.description&&`<p><b>What we tested:</b> ${esc(r.description)}</p>`,r.next_steps&&`<p><b>Outcome / next steps:</b> ${esc(r.next_steps)}</p>`].filter(Boolean).join("");
+  return `<div class="card o-${r.outcome.replace(" ","")}">
+    <div class="top">
+      <div style="flex:1;min-width:260px">
+        <div class="title">${esc(r.test_name)}</div>
+        <div class="meta">${r.test_id?`<span>RH# ${esc(r.test_id)}</span>`:""}<span>${esc(r.start||"")}${r.end?` to ${esc(r.end)}`:r.outcome==="Running"?" to running":""}</span>${r.kpi?`<span>KPI: ${esc(r.kpi)}</span>`:""}${page?`<span>${page}</span>`:""}</div>
+        <div class="badges">
+          ${r.school?`<span class="badge b-${esc(r.school)}">${esc(r.school)}</span>`:""}
+          ${r.channel?`<span class="badge">${esc(r.channel)}</span>`:""}
+          <span class="badge">${esc(r.year)}</span>
+          ${r.test_type?`<span class="badge">${esc(r.test_type)}</span>`:""}
+          <span class="badge b-${r.outcome.replace(" ","")}">${r.outcome.toUpperCase()}</span>
+        </div>
+      </div>
+      <div class="stats">
+        ${rev!==null?`<div class="rev ${rev>=0?"pos":"neg"}">${money(rev)}</div><div class="lift">1-yr revenue${r.lift?` · lift ${esc(r.lift)}`:""}</div>`:r.lift?`<div class="lift">Lift ${esc(r.lift)}</div>`:""}
+        ${extra?`<div class="lift">${extra}</div>`:""}
+        ${r.outcome_detail?`<div class="detail"><span>${esc(r.outcome_detail)}</span></div>`:""}
+      </div>
+    </div>
+    ${notes?`<details><summary>Details</summary>${notes}</details>`:""}
+    ${links(r)}
+  </div>`;
+}
+function render(){
+  chips("fYear","year",[...new Set(T.map(r=>r.year))].sort().reverse());
+  chips("fSchool","school",[...new Set(T.map(r=>r.school).filter(Boolean))].sort());
+  chips("fChannel","channel",[...new Set(T.map(r=>r.channel).filter(Boolean))].sort());
+  chips("fOutcome","outcome",OUT.filter(o=>T.some(r=>r.outcome===o)));
+  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{F[c.dataset.k]=c.dataset.v;render();});
+  const q=F.q.toLowerCase();
+  let rows=T.filter(r=>
+    (F.year==="All"||r.year===F.year)&&(F.school==="All"||r.school===F.school)&&
+    (F.channel==="All"||r.channel===F.channel)&&(F.outcome==="All"||r.outcome===F.outcome)&&
+    (!q||[r.test_name,r.test_id,r.page,r.description,r.next_steps,r.test_type,r.kpi].join(" ").toLowerCase().includes(q)));
+  rows.sort(F.sort==="rev"?(a,b)=>(num(b.annualized_revenue)??-1e12)-(num(a.annualized_revenue)??-1e12)
+          :F.sort==="id"?(a,b)=>(+b.test_id||0)-(+a.test_id||0)
+          :(a,b)=>(b.start||"").localeCompare(a.start||""));
+  kpis(rows);
+  document.getElementById("count").textContent=`${rows.length} test${rows.length===1?"":"s"}${F.year!=="All"||F.school!=="All"||F.channel!=="All"||F.outcome!=="All"||q?" match these filters":""}`;
+  document.getElementById("list").innerHTML=rows.length?rows.map(card).join(""):`<div class="empty">No tests match these filters.</div>`;
+}
+document.getElementById("fSearch").addEventListener("input",e=>{F.q=e.target.value;render();});
+document.getElementById("fSort").addEventListener("change",e=>{F.sort=e.target.value;render();});
+fetch("tests.json").then(r=>r.json()).then(d=>{
+  T=(d.tests||[]).map(r=>({...r,outcome:r.outcome||"No result"}));
+  document.getElementById("stamp").textContent=`${T.length} tests`;
+  years(); render();
+}).catch(()=>{
+  document.getElementById("list").innerHTML='<div class="empty">Could not load tests.json. If you opened this file from disk that is expected; it works once served from GitHub Pages.</div>';
+});
+</script>
+</body>
+</html>
