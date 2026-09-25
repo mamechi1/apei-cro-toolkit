@@ -1,6 +1,21 @@
 {
   "reports": [
     {
+      "file": "reports/2026/hon_11107_homepage_hero_design_report.html",
+      "title": "Homepage Hero Design A/B Test Report",
+      "school": "HON",
+      "channel": "LP",
+      "testId": "11107",
+      "window": "Sep 22 - Sep 24, 2026",
+      "year": 2026,
+      "status": "Running",
+      "leading": "V1 v1_new_design_11107",
+      "rfiLift": "+37.2%",
+      "sig": "97.0%",
+      "revenue": 0,
+      "added": "2026-09-25"
+    },
+    {
       "file": "reports/2026/ras_11044_ai_effectiveness_report.html",
       "title": "AI Effectiveness A/B Test Report",
       "school": "RAS",
@@ -8,7 +23,7 @@
       "testId": "11044",
       "window": "Sep 22 - Sep 22, 2026",
       "year": 2026,
-      "status": "Running",
+      "status": "Complete",
       "leading": "V1 v1_AI_Removed_11044",
       "rfiLift": "-100.0%",
       "sig": "2.8%",
@@ -21,13 +36,13 @@
       "school": "AMU",
       "channel": "LP",
       "testId": "10893",
-      "window": "Sep 14 - Sep 17, 2026",
+      "window": "Sep 14 - Sep 24, 2026",
       "year": 2026,
       "status": "Running",
-      "leading": "V2 10893_New_Image_v2",
-      "rfiLift": "-26.5%",
-      "sig": "4.2%",
-      "revenue": 1010150,
+      "leading": "V3 10893_New_Image_v2",
+      "rfiLift": "-0.9%",
+      "sig": "46.8%",
+      "revenue": 1086627,
       "added": "2026-09-18"
     },
     {
@@ -36,13 +51,13 @@
       "school": "AMU",
       "channel": "LP",
       "testId": "10893",
-      "window": "Sep 15 - Sep 17, 2026",
+      "window": "Sep 14 - Sep 24, 2026",
       "year": 2026,
       "status": "Running",
       "leading": "V1 10893-mobile_New_Copy",
-      "rfiLift": "+22.5%",
-      "sig": "96.2%",
-      "revenue": 681248,
+      "rfiLift": "+11.4%",
+      "sig": "96.1%",
+      "revenue": 571767,
       "added": "2026-09-18"
     },
     {
