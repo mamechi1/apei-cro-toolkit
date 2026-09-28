@@ -163,7 +163,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "September 24, 2026";
+const LAST_UPDATED = "September 28, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -178,8 +178,8 @@ const TESTS = [
   {
     id:"10893", lane:"Live", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (desktop) — /military-degrees/overview",
-    synopsis:"Swaps the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point is to check the new campaign look does not cost us inquiries before it rolls out across the paid landing pages. Early read at 4 days: inquiries down 14–21% on all three versions while applications are up — not yet past the 7-day minimum, so nothing is decided.",
-    result:null, dates:"Live since Sept 14, 2026 · early read only · rollout decision week of Oct 5",
+    synopsis:"Swaps the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point is to check the new campaign look does not cost us inquiries before it rolls out across the paid landing pages. The picture has improved since last week: at day 10 the new-image and new-copy versions are level with the original on inquiries (+0.1% and +1.1%), while the full new hero is still down about 11%. Applications are up on all three. Nothing has cleared the confidence bar, so no rollout call yet.",
+    result:null, dates:"Live since Sept 14, 2026 · day 10 read, no clear winner yet · rollout decision week of Oct 5",
     urls:["https://start.amu.apus.edu/military-degrees/overview"],
     urlNote:"Desktop experience only, and only for trademark (brand) search traffic. The mobile experience is covered by the companion mobile test.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218157278585178",
@@ -191,8 +191,8 @@ const TESTS = [
   {
     id:"10893", lane:"Live", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (mobile) — /military-degrees/overview",
-    synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to trademark search traffic. Early read at 3 days: inquiries up about 16% but applications down about 13%, neither strong enough to call. Runs alongside the desktop test and feeds the same rollout decision.",
-    result:null, dates:"Live since Sept 15, 2026 · early read only · rollout decision week of Oct 5",
+    synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to trademark search traffic. At day 10 the new copy is ahead on inquiries by about 11% with 96% confidence, and the application dip seen early on has narrowed to roughly flat. This one is holding up as a likely winner. It runs alongside the desktop test and feeds the same rollout decision.",
+    result:null, dates:"Live since Sept 15, 2026 · day 10 read, variation leading on inquiries · rollout decision week of Oct 5",
     urls:["https://start.amu.apus.edu/military-degrees/overview"],
     urlNote:"Mobile experience only, and only for trademark (brand) search traffic. The desktop experience is covered by the companion desktop test.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218550388713477",
@@ -204,14 +204,17 @@ const TESTS = [
   {
     id:"11107", lane:"Live", school:"HON", channel:"LP",
     name:"Homepage Hero Design — /nursing/overview",
-    synopsis:"A redesigned hero section on the Hondros nursing overview landing page, run as a split-URL test where half of visitors land on a separate variation page. The goal is to find out whether the new hero drives more inquiries than the current one. Just launched, so there is no read yet.",
+    synopsis:"A redesigned hero section on the Hondros nursing overview landing page, run as a split-URL test where half of visitors land on a separate variation page. The goal is to find out whether the new hero drives more inquiries than the current one. Launched Sept 22 and still in its first full week, so there is no read yet.",
     result:null, dates:"Live since Sept 22, 2026 · too early to read",
     urls:[
       "https://start.hondros.edu/nursing/overview",
       "https://start.hondros.edu/nursing/overview-11107"
     ],
     urlNote:"First URL is the control, second is the variation page. A staging copy at hcneducation.com/nursing/overview-11107 is still in development and is not public traffic.",
-    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218368364963970"
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218368364963970",
+    extra:[
+      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/b3ffb241-a3e7-436b-84ec-8954325b571e/page/p_nag6ivvu1d?s=hWs32dcZi9w"}
+    ]
   },
   {
     id:"10904", lane:"Losers (Dev Cleanup)", school:"APU", channel:"PW",
@@ -220,15 +223,29 @@ const TESTS = [
     result:"Loser", dates:"Ran Jun 1 – Jun 22, 2026",
     urls:["https://www.apu.apus.edu/"],
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1215281505116141",
-    extra:[{label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25265062280/experiments/5467617113145344/api_names"}]
+    extra:[
+      {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25265062280/experiments/5467617113145344/api_names"},
+      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/293a585d-125c-4ff1-80e0-6ef27869cd59/page/p_nag6ivvu1d?s=sCtBvwwSz8M"}
+    ]
   },
   {
     id:"10916", lane:"Losers (Dev Cleanup)", school:"AMU", channel:"PW",
     name:"Form Pre-Population — Various URLs",
     synopsis:"Pre-filled the degree level and program fields on request-info forms across 10 AMU program pages (split-URL test: Sports & Health Sciences, Intelligence Studies, Cybersecurity, MBA, Space Studies, Emergency & Disaster Mgmt, Nursing, Homeland Security, and more). Ended inconclusive — inquiries up only +1.9% at 57% confidence. Keeping the standard forms; 10 split-URL experiments need cleanup.",
     result:"Inconclusive", dates:"Ran Jun 4 – Jul 9, 2026",
-    urls:[],
-    urlNote:"10 AMU program pages — the full URL list lives in the QA sheet linked on the Asana card.",
+    urls:[
+      "https://www.amu.apus.edu/online-bachelor-degrees/bachelor-of-science-in-sports-and-health-sciences/",
+      "https://www.amu.apus.edu/online-masters-programs/master-of-arts-in-intelligence-studies/",
+      "https://www.amu.apus.edu/online-bachelor-degrees/bachelor-of-science-in-cybersecurity/",
+      "https://www.amu.apus.edu/online-masters-programs/master-of-business-administration/",
+      "https://www.amu.apus.edu/online-bachelor-degrees/bachelor-of-science-in-space-studies/",
+      "https://www.amu.apus.edu/online-bachelor-degrees/bachelor-of-arts-in-emergency-and-disaster-management/",
+      "https://www.amu.apus.edu/online-associate-degrees/associate-of-science-in-cybersecurity/",
+      "https://www.amu.apus.edu/online-bachelor-degrees/bachelor-of-science-in-nursing/",
+      "https://www.amu.apus.edu/online-masters-programs/master-of-science-in-cybersecurity-studies/",
+      "https://www.amu.apus.edu/online-bachelor-degrees/bachelor-of-arts-in-homeland-security/"
+    ],
+    urlNote:"These are the 10 control pages. Each one had a matching variation page in a split-URL experiment — those variation URLs are listed in the QA sheet linked on the Asana card.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1215339045140438",
     extra:[
       {label:"Optimizely Project", url:"https://app.optimizely.com/v2/projects/25247321696/experiments"},
