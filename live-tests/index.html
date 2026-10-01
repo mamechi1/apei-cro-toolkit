@@ -163,7 +163,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "September 28, 2026";
+const LAST_UPDATED = "October 1, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -176,10 +176,37 @@ const LANES = [
 
 const TESTS = [
   {
-    id:"10893", lane:"Live", school:"AMU", channel:"LP",
+    id:"11044B", lane:"Live", school:"RAS", channel:"PW",
+    name:"RFI Form Placement — Homepage",
+    synopsis:"Moves the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sits directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking is that people will see the form sooner and fill it in rather than scrolling past it. This was fast-tracked as a priority test and has only just gone live, so there is no read yet.",
+    result:null, dates:"Just moved to Live · no read yet · priority test (start date not yet recorded on the card)",
+    urls:["https://www.rasmussen.edu/"],
+    urlNote:"Built in Optimizely on the live homepage — there is no separate variation URL. Optimizely layer 5824636963782656, variation 4544796302245888.",
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218988707355171",
+    extra:[
+      {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25237572343/experiments/5824636963782656/summary"}
+    ]
+  },
+  {
+    id:"11107", lane:"Live", school:"HON", channel:"LP",
+    name:"Homepage Hero Design — /nursing/overview",
+    synopsis:"A redesigned hero section on the Hondros nursing overview landing page, run as a split-URL test where half of visitors land on a separate variation page. The goal is to find out whether the new hero drives more inquiries than the current one. It has been live about nine days and no results read has been posted to the card yet.",
+    result:null, dates:"Live since Sept 22, 2026 · day 9 · no read posted yet",
+    urls:[
+      "https://start.hondros.edu/nursing/overview",
+      "https://start.hondros.edu/nursing/overview-11107"
+    ],
+    urlNote:"First URL is the control, second is the variation page. A staging copy at hcneducation.com/nursing/overview-11107 is still in development and is not public traffic.",
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218368364963970",
+    extra:[
+      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/b3ffb241-a3e7-436b-84ec-8954325b571e/page/p_nag6ivvu1d?s=hWs32dcZi9w"}
+    ]
+  },
+  {
+    id:"10893", lane:"Showcase", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (desktop) — /military-degrees/overview",
-    synopsis:"Swaps the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point is to check the new campaign look does not cost us inquiries before it rolls out across the paid landing pages. The picture has improved since last week: at day 10 the new-image and new-copy versions are level with the original on inquiries (+0.1% and +1.1%), while the full new hero is still down about 11%. Applications are up on all three. Nothing has cleared the confidence bar, so no rollout call yet.",
-    result:null, dates:"Live since Sept 14, 2026 · day 10 read, no clear winner yet · rollout decision week of Oct 5",
+    synopsis:"Swapped the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point was to check the new campaign look would not cost us inquiries before it rolls out across the paid landing pages. Final read at day 14: the new-image version came out ahead on inquiries by 5.6% and on applications by 15%, the new-copy version up 4.8%, and the full new hero down 4.8%. Nothing cleared the 90% confidence bar on inquiries, so the honest read is that the new creative did not hurt this high-value segment rather than that it beat it. Now being written up for the rollout decision; the best-performing version is worth roughly $1.25M a year if the gain is real.",
+    result:null, dates:"Ran Sept 14 – Sept 28, 2026 (14 days) · results being written up · rollout decision week of Oct 5",
     urls:["https://start.amu.apus.edu/military-degrees/overview"],
     urlNote:"Desktop experience only, and only for trademark (brand) search traffic. The mobile experience is covered by the companion mobile test.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218157278585178",
@@ -189,31 +216,16 @@ const TESTS = [
     ]
   },
   {
-    id:"10893", lane:"Live", school:"AMU", channel:"LP",
+    id:"10893", lane:"Showcase", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (mobile) — /military-degrees/overview",
-    synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to trademark search traffic. At day 10 the new copy is ahead on inquiries by about 11% with 96% confidence, and the application dip seen early on has narrowed to roughly flat. This one is holding up as a likely winner. It runs alongside the desktop test and feeds the same rollout decision.",
-    result:null, dates:"Live since Sept 15, 2026 · day 10 read, variation leading on inquiries · rollout decision week of Oct 5",
+    synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to trademark search traffic. Final read at day 14: the new copy finished 13.7% ahead on inquiries at 98% confidence, with applications essentially flat. That is a clear win on the primary measure and worth about $520K a year if it holds. Being written up now, and it feeds the same campaign rollout decision as the desktop test.",
+    result:null, dates:"Ran Sept 15 – Sept 28, 2026 (14 days) · variation won on inquiries (98% confidence) · results being written up",
     urls:["https://start.amu.apus.edu/military-degrees/overview"],
     urlNote:"Mobile experience only, and only for trademark (brand) search traffic. The desktop experience is covered by the companion desktop test.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218550388713477",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/5919027862700032/summary"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/s/kmV9JYUF-HA"}
-    ]
-  },
-  {
-    id:"11107", lane:"Live", school:"HON", channel:"LP",
-    name:"Homepage Hero Design — /nursing/overview",
-    synopsis:"A redesigned hero section on the Hondros nursing overview landing page, run as a split-URL test where half of visitors land on a separate variation page. The goal is to find out whether the new hero drives more inquiries than the current one. Launched Sept 22 and still in its first full week, so there is no read yet.",
-    result:null, dates:"Live since Sept 22, 2026 · too early to read",
-    urls:[
-      "https://start.hondros.edu/nursing/overview",
-      "https://start.hondros.edu/nursing/overview-11107"
-    ],
-    urlNote:"First URL is the control, second is the variation page. A staging copy at hcneducation.com/nursing/overview-11107 is still in development and is not public traffic.",
-    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218368364963970",
-    extra:[
-      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/b3ffb241-a3e7-436b-84ec-8954325b571e/page/p_nag6ivvu1d?s=hWs32dcZi9w"}
     ]
   },
   {
