@@ -134,6 +134,21 @@
       "sig": "57.4%",
       "revenue": -235210,
       "added": "2026-07-24"
+    },
+    {
+      "file": "reports/2026/ras_11044b_rfi_form_placement_report.html",
+      "title": "RFI Form Placement A/B Test Report",
+      "school": "RAS",
+      "channel": "PW",
+      "testId": "11044B",
+      "window": "Sep 29 - Oct 1, 2026",
+      "year": 2026,
+      "status": "Running",
+      "leading": "V1 v1_RFI_Move_11044B",
+      "rfiLift": "-4.1%",
+      "sig": "42.1%",
+      "revenue": -135150,
+      "added": "2026-10-02"
     }
   ]
 }

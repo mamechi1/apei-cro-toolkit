@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-10-02 — v2026.10.02
+- event_map.json: added **RAS_PW** (www.rasmussen.edu · `lead_inquiry` / `pub_application_complete`)
+  and **HON** (Hondros, start.hondros.edu · `requestinfomation_lp`). The existing RAS entry is
+  LP-only: its info.rasmussen.edu hostname and `landing_page_inquiry` event see ~1% of a homepage
+  PW test's traffic. Hondros has no application-complete event anywhere in GA4, so App Complete is
+  always 0 there, and the template's revenue engine has no HON segment — those reports publish
+  revenue 0.
+- Documented the stale-GA-audience-name trap. Test 11044B's Optimizely variations
+  (`v0_Control_11044B` / `v1_RFI_Move_11044B`) export to GA4 under the *previous* experiment's
+  labels, `RAS | PW | Degree Finder Higher | homepage-*`. A match on the Asana test name or the
+  RH# returns zero audiences and the test looks untracked. Resolve the audience from Optimizely's
+  Variation Audiences panel, and confirm the audience has no sessions before the Live Date (a
+  reused audience carries prior members for up to its 540-day membership duration).
+- Rejected `request_info_click` as an RFI metric for 11044B: it is a button click, and the
+  variation removes the click by putting the form inline (64 control vs 36 variation while
+  completions stayed flat), so it would report a ~40% false loss.
+- New reports: RAS 11044B RFI Form Placement (Sep 29 – Oct 1), HON 11107 refreshed (Sep 22 – Oct 1).
+
 ## 2026-08-24 — v2026.08.24
 - report_template.html: the static banner markup no longer ships the ECE 10464 stub
   values. `#reportTitle` falls back to a generic "A/B Test Report" and `#hostNote`,

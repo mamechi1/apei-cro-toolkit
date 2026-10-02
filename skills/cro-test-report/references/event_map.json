@@ -1,11 +1,12 @@
 {
-  "_comment": "Per-school GA4 conversion event mapping. VERIFIED = confirmed against live data. On first run for an unverified school, run the event-discovery query (ga4_queries.md) and confirm with the user before building the report.",
+  "_comment": "Per-school (and per-channel where they differ) GA4 conversion event mapping. VERIFIED = confirmed against live data. On first run for an unverified school, run the event-discovery query (ga4_queries.md) and confirm with the user before building the report.",
   "RAS": {
     "property": "253925809",
     "hostname": "info.rasmussen.edu",
     "rfiEvent": "landing_page_inquiry",
     "appEvent": "lp_application_complete",
-    "status": "VERIFIED 2026-07-15 (test 10464: RFI ctrl 142 / V1 273 matched DS-order magnitudes); re-confirmed 2026-07-15 (both events firing property-wide)"
+    "status": "VERIFIED 2026-07-15 (test 10464: RFI ctrl 142 / V1 273 matched DS-order magnitudes); re-confirmed 2026-07-15 (both events firing property-wide)",
+    "notes": "LP channel only. For a PW test on www.rasmussen.edu use the RAS_PW entry - info.rasmussen.edu / landing_page_inquiry return near-zero traffic for a homepage PW test."
   },
   "AMU": {
     "property": "249537963",
@@ -22,5 +23,21 @@
     "appEvent": "apu_application_completed",
     "status": "VERIFIED 2026-07-15 (event discovery on start.apu.apus.edu: rfi_short_thankyou_apu 3,650/30d; apu_application_completed 709 on apply.apus.edu)",
     "notes": "Same two caveats as AMU: app completes fire on apply.apus.edu (drop hostName filter on abConv), and audience names may lack the (RH#) suffix."
+  },
+  "RAS_PW": {
+    "property": "253925809",
+    "hostname": "www.rasmussen.edu",
+    "rfiEvent": "lead_inquiry",
+    "appEvent": "pub_application_complete",
+    "status": "VERIFIED 2026-10-02 (test 11044B, Sep 29 - Oct 1: RFI ctrl 48 / v1 43; App ctrl 26 / v1 24; confirmed with the user against the candidate set)",
+    "notes": "Candidates ruled out: request_info_click is an RFI BUTTON CLICK, not a completion - a test that moves the form inline suppresses it by design (64 ctrl vs 36 v1 on 11044B) and would read as a false loss. application_complete is the generic twin of pub_application_complete (identical counts); prefer the pub_ event, as with the AMU/APU school-specific events. pub_rfi_complete also fires on www but at ~40% of lead_inquiry volume. Keep the hostName filter: adfs./portal.rasmussen.edu are student-login hosts carrying ~50% as many audience sessions as www."
+  },
+  "HON": {
+    "property": "312451343",
+    "hostname": "start.hondros.edu",
+    "rfiEvent": "requestinfomation_lp",
+    "appEvent": "n/a - no Hondros application event in GA4",
+    "status": "VERIFIED 2026-10-02 (test 11107: event discovery on start.hondros.edu - requestinfomation_lp 3,041/30d; RFI ctrl 304 / v1 310 over Sep 22 - Oct 1)",
+    "notes": "Hondros has NO application-complete event anywhere in GA4 - App Complete is always 0; appEvent is a deliberate non-matching placeholder so the abConv inList still runs. The PW equivalent of the RFI event is requestinfomation_pw on www.hondros.edu. report_template.html's revenue engine has no HONLP/HONPW segment, so revenue1yr() returns null and no projection renders - publish revenue 0 in reports.json. School reads 'Hondros' in the Asana School field but HON in task names. No HON palette exists, so reports render in the default RAS green."
   }
 }
