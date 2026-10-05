@@ -163,7 +163,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "October 1, 2026";
+const LAST_UPDATED = "October 5, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -178,20 +178,21 @@ const TESTS = [
   {
     id:"11044B", lane:"Live", school:"RAS", channel:"PW",
     name:"RFI Form Placement — Homepage",
-    synopsis:"Moves the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sits directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking is that people will see the form sooner and fill it in rather than scrolling past it. This was fast-tracked as a priority test and has only just gone live, so there is no read yet.",
-    result:null, dates:"Just moved to Live · no read yet · priority test (start date not yet recorded on the card)",
+    synopsis:"Moves the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sits directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking is that people will see the form sooner and fill it in rather than scrolling past it. This was fast-tracked as a priority test and is in its first full week, so there is no read yet.",
+    result:null, dates:"Live since Sept 29, 2026 · day 7 · no read posted yet · priority test",
     urls:["https://www.rasmussen.edu/"],
     urlNote:"Built in Optimizely on the live homepage — there is no separate variation URL. Optimizely layer 5824636963782656, variation 4544796302245888.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218988707355171",
     extra:[
-      {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25237572343/experiments/5824636963782656/summary"}
+      {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25237572343/experiments/6167136647774208/summary"},
+      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/d79aa611-42da-49cf-b6fc-e5d4c81ff576/page/p_b156f7tmmd?s=sKxyFrq5ihg"}
     ]
   },
   {
     id:"11107", lane:"Live", school:"HON", channel:"LP",
     name:"Homepage Hero Design — /nursing/overview",
-    synopsis:"A redesigned hero section on the Hondros nursing overview landing page, run as a split-URL test where half of visitors land on a separate variation page. The goal is to find out whether the new hero drives more inquiries than the current one. It has been live about nine days and no results read has been posted to the card yet.",
-    result:null, dates:"Live since Sept 22, 2026 · day 9 · no read posted yet",
+    synopsis:"A redesigned hero section on the Hondros nursing overview landing page, run as a split-URL test where half of visitors land on a separate variation page. The goal is to find out whether the new hero drives more inquiries than the current one. It has been live about two weeks and no results read has been posted to the card yet.",
+    result:null, dates:"Live since Sept 22, 2026 · day 13 · no read posted yet",
     urls:[
       "https://start.hondros.edu/nursing/overview",
       "https://start.hondros.edu/nursing/overview-11107"
@@ -203,28 +204,32 @@ const TESTS = [
     ]
   },
   {
-    id:"10893", lane:"Showcase", school:"AMU", channel:"LP",
+    id:"10893", lane:"Winners (Needs Dev Cleanup)", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (desktop) — /military-degrees/overview",
-    synopsis:"Swapped the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point was to check the new campaign look would not cost us inquiries before it rolls out across the paid landing pages. Final read at day 14: the new-image version came out ahead on inquiries by 5.6% and on applications by 15%, the new-copy version up 4.8%, and the full new hero down 4.8%. Nothing cleared the 90% confidence bar on inquiries, so the honest read is that the new creative did not hurt this high-value segment rather than that it beat it. Now being written up for the rollout decision; the best-performing version is worth roughly $1.25M a year if the gain is real.",
-    result:null, dates:"Ran Sept 14 – Sept 28, 2026 (14 days) · results being written up · rollout decision week of Oct 5",
+    synopsis:"Swapped the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point was to check the new campaign look would not cost us inquiries before it rolls out across the paid landing pages. Final answer: it did not clearly help or hurt. On the brand-search audience the test was scoped to, the full new hero was up 2.1% on inquiries — nowhere near the 90% confidence we need to call a win — and two of the three versions actually lost inquiries. Leadership decided on Oct 1 to ship the new creative anyway, on the grounds that it did no measurable harm and the campaign is moving forward regardless. No revenue lift is being credited. Dev now needs to hardcode the new hero image and the \"Command Your Future\" copy on desktop and strip out the Optimizely code for all four versions.",
+    result:"Inconclusive", dates:"Ran Sept 14 – Sept 28, 2026 (15 days, paused Sept 29) · no 90% winner · shipping on a business decision (Oct 1) · awaiting dev cleanup",
     urls:["https://start.amu.apus.edu/military-degrees/overview"],
-    urlNote:"Desktop experience only, and only for trademark (brand) search traffic. The mobile experience is covered by the companion mobile test.",
+    urlNote:"Desktop experience only, and only for trademark (brand) search traffic. The mobile experience is covered by the companion mobile test. Only about 42% of desktop sessions actually came from the two targeted campaigns — the biggest leak was Bing brand search.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218157278585178",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/6024783245082624/variations"},
+      {label:"Report (all traffic)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_report.html"},
+      {label:"Report (brand only)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_brand_report.html"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/808a1204-382a-45bc-810b-9de28c49f0e4?s=vyZoFMY83F4"}
     ]
   },
   {
-    id:"10893", lane:"Showcase", school:"AMU", channel:"LP",
+    id:"10893", lane:"Winners (Needs Dev Cleanup)", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (mobile) — /military-degrees/overview",
-    synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to trademark search traffic. Final read at day 14: the new copy finished 13.7% ahead on inquiries at 98% confidence, with applications essentially flat. That is a clear win on the primary measure and worth about $520K a year if it holds. Being written up now, and it feeds the same campaign rollout decision as the desktop test.",
-    result:null, dates:"Ran Sept 15 – Sept 28, 2026 (14 days) · variation won on inquiries (98% confidence) · results being written up",
+    synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to brand search traffic. Across all mobile visitors the new copy lifted inquiries 10.6% at 97% confidence, a clear win. But on the brand-search audience this test was actually scoped to, inquiries were up only 8.7% at 86% confidence — short of our 90% bar — and completed applications fell 18%, which would make that segment a net negative. Because paid media is judged on inquiries and the scoped segment did not clear, it was recorded as inconclusive rather than a winner. Leadership decided on Oct 1 to ship the new copy anyway. Dev needs to hardcode the \"Command Your Future\" mobile copy and remove the Optimizely code; CRO should re-check completed applications on brand mobile traffic 2–4 weeks after launch.",
+    result:"Inconclusive", dates:"Ran Sept 15 – Sept 28, 2026 (14 days, paused Sept 29) · won on all traffic, short of the bar on the brand scope · shipping on a business decision (Oct 1) · awaiting dev cleanup",
     urls:["https://start.amu.apus.edu/military-degrees/overview"],
-    urlNote:"Mobile experience only, and only for trademark (brand) search traffic. The desktop experience is covered by the companion desktop test.",
+    urlNote:"Mobile experience only, and only for trademark (brand) search traffic. The desktop experience is covered by the companion desktop test. Only about 25% of mobile sessions came from the two targeted campaigns — most of the rest was Facebook prospecting and Demand Gen, which this ticket did not scope.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218550388713477",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/5919027862700032/summary"},
+      {label:"Report (all traffic)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_mobile_report.html"},
+      {label:"Report (brand only)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_mobile_brand_report.html"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/s/kmV9JYUF-HA"}
     ]
   },
