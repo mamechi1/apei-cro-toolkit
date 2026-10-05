@@ -6,12 +6,12 @@
       "school": "HON",
       "channel": "LP",
       "testId": "11107",
-      "window": "Sep 22 - Oct 1, 2026",
+      "window": "Sep 22 - Oct 4, 2026",
       "year": 2026,
       "status": "Running",
       "leading": "V1 v1_new_design_11107",
-      "rfiLift": "+6.6%",
-      "sig": "79.0%",
+      "rfiLift": "+11.0%",
+      "sig": "93.4%",
       "revenue": 0,
       "added": "2026-09-25"
     },
@@ -141,13 +141,13 @@
       "school": "RAS",
       "channel": "PW",
       "testId": "11044B",
-      "window": "Sep 29 - Oct 1, 2026",
+      "window": "Sep 29 - Oct 4, 2026",
       "year": 2026,
       "status": "Running",
       "leading": "V1 v1_RFI_Move_11044B",
-      "rfiLift": "-4.1%",
-      "sig": "42.1%",
-      "revenue": -135150,
+      "rfiLift": "+0.9%",
+      "sig": "52.3%",
+      "revenue": 85968,
       "added": "2026-10-02"
     }
   ]

@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-10-05 — v2026.10.05
+- Scheduled refresh of both Live-column tests (automated run, no interactive confirmation).
+  RAS 11044B RFI Form Placement extended to Sep 29 – Oct 4 (+0.9% RFI lift, 52.3% one-sided,
+  $85,968 projected) and HON 11107 Homepage Hero Design to Sep 22 – Oct 4, which crossed the
+  ship rule: **+11.0% RFI lift at 93.4% one-sided confidence** (was +6.6% / 79.0% at Oct 1).
+- Confirmed the reused-audience check the 2026-10-02 entry calls for: the stale
+  `RAS | PW | Degree Finder Higher | homepage-*` audiences carrying 11044B's variations have
+  **zero sessions before the Sep 29 Live Date**, so no prior-test membership is bleeding in.
+- build_report.py: added a **HON** entry to `SCHOOL_BRAND` ('H' / HONDROS / COLLEGE OF NURSING).
+  Without it `SCHOOL_BRAND.get('HON', ...)` fell through to the RAS default, so every Hondros
+  report's no-JS header read "RASMUSSEN UNIVERSITY". Donut palettes still fall back to RAS
+  green — no Hondros palette is defined, and none was invented here.
+- Known cosmetic issue, not fixed: with no Hondros application event, the HON sigbox renders
+  "App Complete CVR: NaN% lift". Needs a zero-denominator guard in report_template.html's
+  sigSummary(), which is engine code and out of scope for an unattended run.
+
 ## 2026-10-02 — v2026.10.02
 - event_map.json: added **RAS_PW** (www.rasmussen.edu · `lead_inquiry` / `pub_application_complete`)
   and **HON** (Hondros, start.hondros.edu · `requestinfomation_lp`). The existing RAS entry is

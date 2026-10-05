@@ -246,7 +246,8 @@ const FACTS = {{
     # would otherwise show the template's stub values. Write the real ones in too.
     SCHOOL_BRAND = {'RAS': ('R', 'RASMUSSEN', 'UNIVERSITY'),
                     'AMU': ('AMU', 'AMERICAN MILITARY', 'UNIVERSITY'),
-                    'APU': ('APU', 'AMERICAN PUBLIC', 'UNIVERSITY')}
+                    'APU': ('APU', 'AMERICAN PUBLIC', 'UNIVERSITY'),
+                    'HON': ('H', 'HONDROS', 'COLLEGE OF NURSING')}
     sc = str(cfg.get('school', 'RAS')).upper()
     letter, bname, bsub = SCHOOL_BRAND.get(sc, SCHOOL_BRAND['RAS'])
     esc = lambda t: (str(t).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'))
