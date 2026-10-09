@@ -8,7 +8,7 @@
       "testId": "11107",
       "window": "Sep 22 - Oct 4, 2026",
       "year": 2026,
-      "status": "Running",
+      "status": "Complete",
       "leading": "V1 v1_new_design_11107",
       "rfiLift": "+11.0%",
       "sig": "93.4%",
@@ -141,14 +141,29 @@
       "school": "RAS",
       "channel": "PW",
       "testId": "11044B",
-      "window": "Sep 29 - Oct 4, 2026",
+      "window": "Sep 29 - Oct 8, 2026",
       "year": 2026,
       "status": "Running",
       "leading": "V1 v1_RFI_Move_11044B",
-      "rfiLift": "+0.9%",
-      "sig": "52.3%",
-      "revenue": 85968,
+      "rfiLift": "+10.3%",
+      "sig": "72.8%",
+      "revenue": 6820,
       "added": "2026-10-02"
+    },
+    {
+      "file": "reports/2026/amu_10926_multistep_form_report.html",
+      "title": "MultiStep Form A/B Test Report",
+      "school": "AMU",
+      "channel": "PW",
+      "testId": "10926",
+      "window": "Oct 8 - Oct 8, 2026",
+      "year": 2026,
+      "status": "Running",
+      "leading": "V1 v1_multi_step_form_10926 (1 day of data - directional only)",
+      "rfiLift": "+1.4%",
+      "sig": "50.9%",
+      "revenue": 1296868,
+      "added": "2026-10-09"
     }
   ]
 }
