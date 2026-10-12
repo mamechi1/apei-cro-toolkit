@@ -163,7 +163,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "October 8, 2026";
+const LAST_UPDATED = "October 12, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -178,8 +178,8 @@ const TESTS = [
   {
     id:"11044B", lane:"Live", school:"RAS", channel:"PW",
     name:"RFI Form Placement — Homepage",
-    synopsis:"Moves the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sits directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking is that people will see the form sooner and fill it in rather than scrolling past it. This was fast-tracked as a priority test. The latest read, on Oct 7 (day 8), had inquiries up 2.15% at 57% confidence — well short of the 90% we need to call a win — with completed applications down 4.25%. Too early to call either way, so it keeps running.",
-    result:null, dates:"Live since Sept 29, 2026 · day 10 · latest read Oct 7: RFI +2.15% at 57% confidence (not significant), apps -4.25% · priority test",
+    synopsis:"Moves the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sits directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking is that people will see the form sooner and fill it in rather than scrolling past it. This was fast-tracked as a priority test. The latest read, on Oct 9 (day 10), had inquiries up 10.64% at 73% confidence — better than the earlier reads but still short of the 90% we need to call a win — with completed applications roughly flat at +0.45%. Trending the right way, so it keeps running.",
+    result:null, dates:"Live since Sept 29, 2026 · day 14 · latest read Oct 9 (day 10): RFI +10.64% at 73% confidence (not significant), apps +0.45% · priority test",
     urls:["https://www.rasmussen.edu/"],
     urlNote:"Built in Optimizely on the live homepage — there is no separate variation URL. Optimizely layer 5824636963782656, variation 4544796302245888.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218988707355171",
@@ -189,18 +189,19 @@ const TESTS = [
     ]
   },
   {
-    id:"11107", lane:"Live", school:"HON", channel:"LP",
-    name:"Homepage Hero Design — /nursing/overview",
-    synopsis:"A redesigned hero section on the Hondros nursing overview landing page, run as a split-URL test where half of visitors land on a separate variation page. The goal is to find out whether the new hero drives more inquiries than the current one. It has been live about two and a half weeks and no results read has been posted to the card yet.",
-    result:null, dates:"Live since Sept 22, 2026 · day 17 · no read posted yet",
+    id:"10926", lane:"Live", school:"AMU", channel:"PW",
+    name:"MultiStep Form — Homepage",
+    synopsis:"Replaces the long request-info form on the AMU homepage with a shorter form that asks for a few details at a time across several steps. The idea is that breaking it up feels like less work, so more people finish it and we get more inquiries. It runs as a split-URL test, meaning half of visitors are sent to a separate copy of the homepage that carries the new form. It went live Oct 8 and is scheduled to run through Oct 22; no results read has been posted yet.",
+    result:null, dates:"Live since Oct 8, 2026 · day 5 · planned end Oct 22, 2026 · no read posted yet",
     urls:[
-      "https://start.hondros.edu/nursing/overview",
-      "https://start.hondros.edu/nursing/overview-11107"
+      "https://www.amu.apus.edu/",
+      "https://www.amu.apus.edu/home-10926/"
     ],
-    urlNote:"First URL is the control, second is the variation page. A staging copy at hcneducation.com/nursing/overview-11107 is still in development and is not public traffic.",
-    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218368364963970",
+    urlNote:"First URL is the control homepage, second is the variation page in the split-URL test. A staging copy at stg.amu.apus.edu/home-10926/ and a second internal variation build on the aut. environment are not public traffic. The full list of pages in scope lives in the SharePoint selection sheet linked below.",
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218089694417807",
     extra:[
-      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/b3ffb241-a3e7-436b-84ec-8954325b571e/page/p_nag6ivvu1d?s=hWs32dcZi9w"}
+      {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25247321696/experiments/6375094669279232/variations"},
+      {label:"Final Test Pages (SharePoint)", url:"https://liveateduapus.sharepoint.com/:x:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B50E0E8D0-7BCA-43B2-89A4-372C123E7F8B%7D&file=10464_OnOff_Page_Selection_20260901.xlsx&action=default&mobileredirect=true"}
     ]
   },
   {
@@ -231,6 +232,22 @@ const TESTS = [
       {label:"Report (all traffic)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_mobile_report.html"},
       {label:"Report (brand only)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_mobile_brand_report.html"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/s/kmV9JYUF-HA"}
+    ]
+  },
+  {
+    id:"11107", lane:"Winners (Needs Dev Cleanup)", school:"HON", channel:"LP",
+    name:"Homepage Hero Design — /nursing/overview",
+    synopsis:"Rebuilt the Hondros nursing overview landing page on the redesigned template that already worked on the Rasmussen pages, putting the inquiry form, the program choices and the reasons-to-enroll higher up the page so visitors have less to wade through. Half of visitors were sent to a separate copy of the page carrying the new design. It won: inquiries rose from 3.35% to 3.69% of visitors, a 10.1% lift, at 91.7% confidence — just over the 90% bar we use to call a result real. The winning version is v1_new_design_11107. Worth noting Optimizely's own engine was more cautious, showing +7.8% at only 15% confidence on thank-you-page visits, so the margin is narrow. No revenue figure is being credited because inquiries are the metric this test was judged on. Dev now needs to make the new design the permanent page and remove the split-URL test setup. The post-test deck has been delivered.",
+    result:"Winner", dates:"Ran Sept 22 – Oct 8, 2026 (16 days) · Winner: v1_new_design_11107 · RFI +10.1% at 91.7% confidence · awaiting dev cleanup",
+    urls:[
+      "https://start.hondros.edu/nursing/overview",
+      "https://start.hondros.edu/nursing/overview-11107"
+    ],
+    urlNote:"First URL is the control, second is the variation page that won. A staging copy at hcneducation.com/nursing/overview-11107 is still in development and is not public traffic.",
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218368364963970",
+    extra:[
+      {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25370260077/experiments/6436448545538048/variations"},
+      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/b3ffb241-a3e7-436b-84ec-8954325b571e/page/p_nag6ivvu1d?s=hWs32dcZi9w"}
     ]
   },
   {
