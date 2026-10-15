@@ -163,7 +163,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "October 12, 2026";
+const LAST_UPDATED = "October 15, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -176,23 +176,10 @@ const LANES = [
 
 const TESTS = [
   {
-    id:"11044B", lane:"Live", school:"RAS", channel:"PW",
-    name:"RFI Form Placement — Homepage",
-    synopsis:"Moves the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sits directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking is that people will see the form sooner and fill it in rather than scrolling past it. This was fast-tracked as a priority test. The latest read, on Oct 9 (day 10), had inquiries up 10.64% at 73% confidence — better than the earlier reads but still short of the 90% we need to call a win — with completed applications roughly flat at +0.45%. Trending the right way, so it keeps running.",
-    result:null, dates:"Live since Sept 29, 2026 · day 14 · latest read Oct 9 (day 10): RFI +10.64% at 73% confidence (not significant), apps +0.45% · priority test",
-    urls:["https://www.rasmussen.edu/"],
-    urlNote:"Built in Optimizely on the live homepage — there is no separate variation URL. Optimizely layer 5824636963782656, variation 4544796302245888.",
-    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218988707355171",
-    extra:[
-      {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25237572343/experiments/6167136647774208/summary"},
-      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/d79aa611-42da-49cf-b6fc-e5d4c81ff576/page/p_b156f7tmmd?s=sKxyFrq5ihg"}
-    ]
-  },
-  {
     id:"10926", lane:"Live", school:"AMU", channel:"PW",
     name:"MultiStep Form — Homepage",
-    synopsis:"Replaces the long request-info form on the AMU homepage with a shorter form that asks for a few details at a time across several steps. The idea is that breaking it up feels like less work, so more people finish it and we get more inquiries. It runs as a split-URL test, meaning half of visitors are sent to a separate copy of the homepage that carries the new form. It went live Oct 8 and is scheduled to run through Oct 22; no results read has been posted yet.",
-    result:null, dates:"Live since Oct 8, 2026 · day 5 · planned end Oct 22, 2026 · no read posted yet",
+    synopsis:"Replaces the long request-info form on the AMU homepage with a shorter form that asks for a few details at a time across several steps. The idea is that breaking it up feels like less work, so more people finish it and we get more inquiries. It runs as a split-URL test, meaning half of visitors are sent to a separate copy of the homepage that carries the new form. A tracking problem that double-counted the Continue and Back buttons was fixed on Oct 9, so the first two days of data are being thrown out and clean reporting starts Oct 10. That means a full two weeks of trustworthy data is not available to review until Oct 24, even though the planned end date is Oct 22. No results read has been posted yet; the test keeps running.",
+    result:null, dates:"Live since Oct 8, 2026 · day 8 · planned end Oct 22, 2026 · Oct 8–9 excluded, clean data starts Oct 10 · first full 14-day read available Oct 24 · no read posted yet",
     urls:[
       "https://www.amu.apus.edu/",
       "https://www.amu.apus.edu/home-10926/"
@@ -201,49 +188,65 @@ const TESTS = [
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218089694417807",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25247321696/experiments/6375094669279232/variations"},
+      {label:"Data Studio Report", url:"https://datastudio.google.com/s/jhrZar2CL2c"},
       {label:"Final Test Pages (SharePoint)", url:"https://liveateduapus.sharepoint.com/:x:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B50E0E8D0-7BCA-43B2-89A4-372C123E7F8B%7D&file=10464_OnOff_Page_Selection_20260901.xlsx&action=default&mobileredirect=true"}
     ]
   },
   {
-    id:"10893", lane:"Winners (Needs Dev Cleanup)", school:"AMU", channel:"LP",
+    id:"11044B", lane:"Showcase", school:"RAS", channel:"PW",
+    name:"RFI Form Placement — Homepage",
+    synopsis:"Moved the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sat directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking was that people would see the form sooner and fill it in rather than scrolling past it. It did not work out that way. Over Sept 28 – Oct 13 the original page drew 246 inquiries from 16,665 visits (1.48%) against 227 from 16,356 visits (1.39%) for the moved-form version — about 6% fewer inquiries — with completed applications also slightly lower (125 vs 118). That gap is not large enough to call a proven loss, so the result is being recorded as inconclusive and the original page stays. Next step: stakeholders sign off on the closeout, then the experiment gets switched off. Note the experiment has not actually been stopped yet, and the earlier reads that showed the variation ahead used a different set of visitors and should not be mixed with these numbers.",
+    result:"Inconclusive", dates:"Ran Sept 29 – Oct 14, 2026 · RFI approximately -6.0% (1.48% control vs 1.39% variation), not a proven loss · keeping control · awaiting stakeholder sign-off before shutdown",
+    urls:["https://www.rasmussen.edu/"],
+    urlNote:"Built in Optimizely on the live homepage — there is no separate variation URL. Optimizely layer 5824636963782656, variation 4544796302245888. The experiment was still running as of this update.",
+    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218988707355171",
+    extra:[
+      {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25237572343/experiments/6167136647774208/summary"},
+      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/d79aa611-42da-49cf-b6fc-e5d4c81ff576/page/p_b156f7tmmd?s=sKxyFrq5ihg"}
+    ]
+  },
+  {
+    id:"10893", lane:"Showcase", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (desktop) — /military-degrees/overview",
-    synopsis:"Swapped the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point was to check the new campaign look would not cost us inquiries before it rolls out across the paid landing pages. Final answer: it did not clearly help or hurt. On the brand-search audience the test was scoped to, the full new hero was up 2.1% on inquiries — nowhere near the 90% confidence we need to call a win — and two of the three versions actually lost inquiries. Leadership decided on Oct 1 to ship the new creative anyway, on the grounds that it did no measurable harm and the campaign is moving forward regardless. No revenue lift is being credited. Dev now needs to hardcode the new hero image and the \"Command Your Future\" copy on desktop and strip out the Optimizely code for all four versions.",
-    result:"Inconclusive", dates:"Ran Sept 14 – Sept 28, 2026 (15 days, paused Sept 29) · no 90% winner · shipping on a business decision (Oct 1) · awaiting dev cleanup",
+    synopsis:"Swapped the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point was to check the new campaign look would not cost us inquiries before it rolls out across the paid landing pages. Final answer: it did not clearly help or hurt. On the brand-search audience the test was scoped to, the full new hero was up 2.1% on inquiries — nowhere near the 90% confidence we need to call a win — and two of the three versions actually lost inquiries. Leadership decided on Oct 1 to ship the new creative anyway, on the grounds that it did no measurable harm and the campaign is moving forward regardless. No revenue lift is being credited. Dev finished the work on Oct 13: the new hero and copy are hardcoded and the Optimizely script has been removed. The only thing left is telling the Paid Media team the test is done — a note has been drafted but not yet sent.",
+    result:"Inconclusive", dates:"Ran Sept 14 – Sept 28, 2026 (15 days, paused Sept 29) · no 90% winner · shipped on a business decision (Oct 1) · dev cleanup completed Oct 13 · Paid Media notification still to send",
     urls:["https://start.amu.apus.edu/military-degrees/overview"],
     urlNote:"Desktop experience only, and only for trademark (brand) search traffic. The mobile experience is covered by the companion mobile test. Only about 42% of desktop sessions actually came from the two targeted campaigns — the biggest leak was Bing brand search.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218157278585178",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/6024783245082624/variations"},
+      {label:"Post-Test Deck (SharePoint)", url:"https://liveateduapus.sharepoint.com/:p:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B9123F56E-F095-4F72-9D43-1AF63C962137%7D&file=CRO_AMU_LP_Next%20Gen%20360%20Campaign_Desktop%2010893.pptx&action=edit&mobileredirect=true"},
       {label:"Report (all traffic)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_report.html"},
       {label:"Report (brand only)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_brand_report.html"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/808a1204-382a-45bc-810b-9de28c49f0e4?s=vyZoFMY83F4"}
     ]
   },
   {
-    id:"10893", lane:"Winners (Needs Dev Cleanup)", school:"AMU", channel:"LP",
+    id:"10893", lane:"Showcase", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (mobile) — /military-degrees/overview",
-    synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to brand search traffic. Across all mobile visitors the new copy lifted inquiries 10.6% at 97% confidence, a clear win. But on the brand-search audience this test was actually scoped to, inquiries were up only 8.7% at 86% confidence — short of our 90% bar — and completed applications fell 18%, which would make that segment a net negative. Because paid media is judged on inquiries and the scoped segment did not clear, it was recorded as inconclusive rather than a winner. Leadership decided on Oct 1 to ship the new copy anyway. Dev needs to hardcode the \"Command Your Future\" mobile copy and remove the Optimizely code; CRO should re-check completed applications on brand mobile traffic 2–4 weeks after launch.",
-    result:"Inconclusive", dates:"Ran Sept 15 – Sept 28, 2026 (14 days, paused Sept 29) · won on all traffic, short of the bar on the brand scope · shipping on a business decision (Oct 1) · awaiting dev cleanup",
+    synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to brand search traffic. Across all mobile visitors the new copy lifted inquiries 10.6% at 97% confidence, a clear win. But on the brand-search audience this test was actually scoped to, inquiries were up only 8.7% at 86% confidence — short of our 90% bar — and completed applications fell 18%, which would make that segment a net negative. Because paid media is judged on inquiries and the scoped segment did not clear, it was recorded as inconclusive rather than a winner. Leadership decided on Oct 1 to ship the new copy anyway. Dev finished the work on Oct 13: the mobile copy is hardcoded and the Optimizely script has been removed. Two things remain — notify the Paid Media team (drafted, not sent), and re-check completed applications on brand mobile traffic 2–4 weeks after launch.",
+    result:"Inconclusive", dates:"Ran Sept 15 – Sept 28, 2026 (14 days, paused Sept 29) · won on all traffic, short of the bar on the brand scope · shipped on a business decision (Oct 1) · dev cleanup completed Oct 13 · Paid Media notification still to send",
     urls:["https://start.amu.apus.edu/military-degrees/overview"],
     urlNote:"Mobile experience only, and only for trademark (brand) search traffic. The desktop experience is covered by the companion desktop test. Only about 25% of mobile sessions came from the two targeted campaigns — most of the rest was Facebook prospecting and Demand Gen, which this ticket did not scope.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218550388713477",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/5919027862700032/summary"},
+      {label:"Post-Test Deck (SharePoint)", url:"https://liveateduapus.sharepoint.com/:p:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B415FA01C-141A-48C0-B10C-62EE2758BF15%7D&file=CRO_AMU_LP_Next%20Gen%20360%20Campaign_Mobile%2010893.pptx&action=edit&mobileredirect=true"},
       {label:"Report (all traffic)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_mobile_report.html"},
       {label:"Report (brand only)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_mobile_brand_report.html"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/s/kmV9JYUF-HA"}
     ]
   },
   {
-    id:"11107", lane:"Winners (Needs Dev Cleanup)", school:"HON", channel:"LP",
+    id:"11107", lane:"Showcase", school:"HON", channel:"LP",
     name:"Homepage Hero Design — /nursing/overview",
-    synopsis:"Rebuilt the Hondros nursing overview landing page on the redesigned template that already worked on the Rasmussen pages, putting the inquiry form, the program choices and the reasons-to-enroll higher up the page so visitors have less to wade through. Half of visitors were sent to a separate copy of the page carrying the new design. It won: inquiries rose from 3.35% to 3.69% of visitors, a 10.1% lift, at 91.7% confidence — just over the 90% bar we use to call a result real. The winning version is v1_new_design_11107. Worth noting Optimizely's own engine was more cautious, showing +7.8% at only 15% confidence on thank-you-page visits, so the margin is narrow. No revenue figure is being credited because inquiries are the metric this test was judged on. Dev now needs to make the new design the permanent page and remove the split-URL test setup. The post-test deck has been delivered.",
-    result:"Winner", dates:"Ran Sept 22 – Oct 8, 2026 (16 days) · Winner: v1_new_design_11107 · RFI +10.1% at 91.7% confidence · awaiting dev cleanup",
+    synopsis:"Rebuilt the Hondros nursing overview landing page on the redesigned template that already worked on the Rasmussen pages, putting the inquiry form, the program choices and the reasons-to-enroll higher up the page so visitors have less to wade through. Half of visitors were sent to a separate copy of the page carrying the new design. It won: 410 inquiries from 11,104 people on the new design against 385 from 11,485 on the original, a 10.1% lift at 91.7% confidence — just over the 90% bar we use to call a result real. The winning version is v1_new_design_11107. Worth noting Optimizely's own engine was more cautious, so the margin is narrow. No revenue figure is being credited because inquiries are the metric this test was judged on. The rollout is done: on Oct 8 the new design was promoted to be the permanent page and the old variation URL now points at it. The post-test deck is written; what remains is circulating it and finishing the write-up tasks (analysis due Oct 23, share findings due Oct 29).",
+    result:"Winner", dates:"Ran Sept 22 – Oct 8, 2026 (16 days) · Winner: v1_new_design_11107 · RFI +10.1% at 91.7% confidence · rolled out Oct 8 · deck written, distribution and findings write-up in progress",
     urls:[
       "https://start.hondros.edu/nursing/overview",
       "https://start.hondros.edu/nursing/overview-11107"
     ],
-    urlNote:"First URL is the control, second is the variation page that won. A staging copy at hcneducation.com/nursing/overview-11107 is still in development and is not public traffic.",
+    urlNote:"First URL is the control, second is the variation page that won and has now been promoted to control. A staging copy at hcneducation.com/nursing/overview-11107 is not public traffic. Reported figures are person-based (users); earlier visit-based numbers differ, so do not mix the two.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218368364963970",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25370260077/experiments/6436448545538048/variations"},
@@ -251,22 +254,10 @@ const TESTS = [
     ]
   },
   {
-    id:"10904", lane:"Losers (Dev Cleanup)", school:"APU", channel:"PW",
-    name:"Form Placement New Design — Homepage (ADHOC)",
-    synopsis:"Tried moving the request-info form and CTAs higher up the APU homepage (three layouts). The original page won — every new layout reduced inquiries. Control stays; variation code needs to be removed from the homepage.",
-    result:"Loser", dates:"Ran Jun 1 – Jun 22, 2026",
-    urls:["https://www.apu.apus.edu/"],
-    asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1215281505116141",
-    extra:[
-      {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25265062280/experiments/5467617113145344/api_names"},
-      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/293a585d-125c-4ff1-80e0-6ef27869cd59/page/p_nag6ivvu1d?s=sCtBvwwSz8M"}
-    ]
-  },
-  {
     id:"10916", lane:"Losers (Dev Cleanup)", school:"AMU", channel:"PW",
     name:"Form Pre-Population — Various URLs",
-    synopsis:"Pre-filled the degree level and program fields on request-info forms across 10 AMU program pages (split-URL test: Sports & Health Sciences, Intelligence Studies, Cybersecurity, MBA, Space Studies, Emergency & Disaster Mgmt, Nursing, Homeland Security, and more). Ended inconclusive — inquiries up only +1.9% at 57% confidence. Keeping the standard forms; 10 split-URL experiments need cleanup.",
-    result:"Inconclusive", dates:"Ran Jun 4 – Jul 9, 2026",
+    synopsis:"Pre-filled the degree level and program fields on request-info forms across 10 AMU program pages (split-URL test: Sports & Health Sciences, Intelligence Studies, Cybersecurity, MBA, Space Studies, Emergency & Disaster Mgmt, Nursing, Homeland Security, and more). Ended inconclusive — inquiries up only +1.9% at 57% confidence. The standard forms are staying. On cleanup: the Optimizely code was removed on Oct 13, and the follow-on push to the live site is due Oct 15 but has not been confirmed as finished, so this stays in cleanup until it is verified. One caution for whoever does it — the work covers the pre-population program pages only; the AMU homepage snippet must be left alone because live test 10926 depends on it.",
+    result:"Inconclusive", dates:"Ran Jun 4 – Jul 9, 2026 · Optimizely removal done Oct 13 · push to production due Oct 15, not yet confirmed",
     urls:[
       "https://www.amu.apus.edu/online-bachelor-degrees/bachelor-of-science-in-sports-and-health-sciences/",
       "https://www.amu.apus.edu/online-masters-programs/master-of-arts-in-intelligence-studies/",
@@ -283,7 +274,8 @@ const TESTS = [
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1215339045140438",
     extra:[
       {label:"Optimizely Project", url:"https://app.optimizely.com/v2/projects/25247321696/experiments"},
-      {label:"Results Report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10916_form_prepopulation_report.html"}
+      {label:"Results Report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10916_form_prepopulation_report.html"},
+      {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/3ac8c72d-cceb-4a5b-94e6-ab44f9237b43/page/p_nag6ivvu1d?s=ssLPY7mTwQQ"}
     ]
   }
 ];
