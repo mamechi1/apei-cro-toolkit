@@ -1831,6 +1831,31 @@
 "https://github.com/mamechi1/apei-cro-experiments/blob/main/2026/RAS%20-LP-ADHOC%20Image%20Test/Executive%20Summary/CRO_RAS_LP_Template%20Test_Nursing%20Page%20%2810464%29.pdf"
 ],
 "files_url": "https://github.com/mamechi1/apei-cro-experiments/tree/main/2026/RAS%20-LP-ADHOC%20Image%20Test"
+},
+{
+"year": "2026",
+"test_id": "10926",
+"school": "AMU",
+"channel": "PW",
+"test_type": "Form",
+"test_name": "CRO | AMU | PW | MultiStep Form | homepage (10926)",
+"page": "https://www.amu.apus.edu/",
+"start": "2026-10-08",
+"end": "2026-10-22",
+"kpi": "RFIs",
+"outcome": "Inconclusive",
+"outcome_detail": "75.9% one-sided worse (exposure users, clean 10/10 to 10/18; approved 10/19). Previous 10/19 session readout 92% is diagnostic only. Data through 10/18; ticket end 10/22",
+"lift": "-10.65%",
+"description": "Multi-step RFI form on the AMU homepage vs the long form. Variation page: https://www.amu.apus.edu/home-10926/",
+"next_steps": "Keep the control long form.",
+"report_url": "https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10926_multistep_form_report.html",
+"asana_url": "https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218089694417807",
+"files": "2026/10926/",
+"source": "Experiments 2026 folder",
+"decks": [
+"https://github.com/mamechi1/apei-cro-experiments/blob/main/2026/10926/CRO_AMU_PW_MultiStep%20Form_homepage%20%2810926%29.pdf"
+],
+"files_url": "https://github.com/mamechi1/apei-cro-experiments/tree/main/2026/10926"
 }
 ]
 }
