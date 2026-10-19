@@ -156,13 +156,13 @@
       "school": "AMU",
       "channel": "PW",
       "testId": "10926",
-      "window": "Oct 8 - Oct 8, 2026",
+      "window": "Oct 8 - Oct 18, 2026",
       "year": 2026,
       "status": "Running",
-      "leading": "V1 v1_multi_step_form_10926 (1 day of data - directional only)",
-      "rfiLift": "+1.4%",
-      "sig": "50.9%",
-      "revenue": 1296868,
+      "leading": "Control v0_control_10926 (V1 trailing)",
+      "rfiLift": "-11.0%",
+      "sig": "19.9%",
+      "revenue": -663277,
       "added": "2026-10-09"
     }
   ]
