@@ -181,6 +181,8 @@ def main():
     dateSource: {E(cfg.get('dateSource','Asana: Live Date -> End Date'))},
     lastUpdated: {E(now + ' · GA4 pull (property ' + cfg['property'] + ')')},
     legacyNote: "",
+    decisionNote: {E(cfg.get('decisionNote',''))},
+    appMeasured: {'false' if str(cfg.get('appEvent','')).lower().startswith('n/a') else 'true'},
     dailySessions: {E(dailySessions)},
     dailyLabels: {E(labels)},
     dailyStart: {E(cfg['dateStart'])}
