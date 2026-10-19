@@ -163,7 +163,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "October 15, 2026";
+const LAST_UPDATED = "October 19, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -179,7 +179,7 @@ const TESTS = [
     id:"10926", lane:"Live", school:"AMU", channel:"PW",
     name:"MultiStep Form — Homepage",
     synopsis:"Replaces the long request-info form on the AMU homepage with a shorter form that asks for a few details at a time across several steps. The idea is that breaking it up feels like less work, so more people finish it and we get more inquiries. It runs as a split-URL test, meaning half of visitors are sent to a separate copy of the homepage that carries the new form. A tracking problem that double-counted the Continue and Back buttons was fixed on Oct 9, so the first two days of data are being thrown out and clean reporting starts Oct 10. That means a full two weeks of trustworthy data is not available to review until Oct 24, even though the planned end date is Oct 22. No results read has been posted yet; the test keeps running.",
-    result:null, dates:"Live since Oct 8, 2026 · day 8 · planned end Oct 22, 2026 · Oct 8–9 excluded, clean data starts Oct 10 · first full 14-day read available Oct 24 · no read posted yet",
+    result:null, dates:"Live since Oct 8, 2026 · day 12 · planned end Oct 22, 2026 · Oct 8–9 excluded, clean data starts Oct 10 · first full 14-day read available Oct 24 · no read posted yet",
     urls:[
       "https://www.amu.apus.edu/",
       "https://www.amu.apus.edu/home-10926/"
@@ -193,7 +193,7 @@ const TESTS = [
     ]
   },
   {
-    id:"11044B", lane:"Showcase", school:"RAS", channel:"PW",
+    id:"11044B", lane:"Losers (Dev Cleanup)", school:"RAS", channel:"PW",
     name:"RFI Form Placement — Homepage",
     synopsis:"Moved the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sat directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking was that people would see the form sooner and fill it in rather than scrolling past it. It did not work out that way. Over Sept 28 – Oct 13 the original page drew 246 inquiries from 16,665 visits (1.48%) against 227 from 16,356 visits (1.39%) for the moved-form version — about 6% fewer inquiries — with completed applications also slightly lower (125 vs 118). That gap is not large enough to call a proven loss, so the result is being recorded as inconclusive and the original page stays. Next step: stakeholders sign off on the closeout, then the experiment gets switched off. Note the experiment has not actually been stopped yet, and the earlier reads that showed the variation ahead used a different set of visitors and should not be mixed with these numbers.",
     result:"Inconclusive", dates:"Ran Sept 29 – Oct 14, 2026 · RFI approximately -6.0% (1.48% control vs 1.39% variation), not a proven loss · keeping control · awaiting stakeholder sign-off before shutdown",
@@ -206,7 +206,7 @@ const TESTS = [
     ]
   },
   {
-    id:"10893", lane:"Showcase", school:"AMU", channel:"LP",
+    id:"10893", lane:"Losers (Dev Cleanup)", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (desktop) — /military-degrees/overview",
     synopsis:"Swapped the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point was to check the new campaign look would not cost us inquiries before it rolls out across the paid landing pages. Final answer: it did not clearly help or hurt. On the brand-search audience the test was scoped to, the full new hero was up 2.1% on inquiries — nowhere near the 90% confidence we need to call a win — and two of the three versions actually lost inquiries. Leadership decided on Oct 1 to ship the new creative anyway, on the grounds that it did no measurable harm and the campaign is moving forward regardless. No revenue lift is being credited. Dev finished the work on Oct 13: the new hero and copy are hardcoded and the Optimizely script has been removed. The only thing left is telling the Paid Media team the test is done — a note has been drafted but not yet sent.",
     result:"Inconclusive", dates:"Ran Sept 14 – Sept 28, 2026 (15 days, paused Sept 29) · no 90% winner · shipped on a business decision (Oct 1) · dev cleanup completed Oct 13 · Paid Media notification still to send",
@@ -222,7 +222,7 @@ const TESTS = [
     ]
   },
   {
-    id:"10893", lane:"Showcase", school:"AMU", channel:"LP",
+    id:"10893", lane:"Losers (Dev Cleanup)", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (mobile) — /military-degrees/overview",
     synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to brand search traffic. Across all mobile visitors the new copy lifted inquiries 10.6% at 97% confidence, a clear win. But on the brand-search audience this test was actually scoped to, inquiries were up only 8.7% at 86% confidence — short of our 90% bar — and completed applications fell 18%, which would make that segment a net negative. Because paid media is judged on inquiries and the scoped segment did not clear, it was recorded as inconclusive rather than a winner. Leadership decided on Oct 1 to ship the new copy anyway. Dev finished the work on Oct 13: the mobile copy is hardcoded and the Optimizely script has been removed. Two things remain — notify the Paid Media team (drafted, not sent), and re-check completed applications on brand mobile traffic 2–4 weeks after launch.",
     result:"Inconclusive", dates:"Ran Sept 15 – Sept 28, 2026 (14 days, paused Sept 29) · won on all traffic, short of the bar on the brand scope · shipped on a business decision (Oct 1) · dev cleanup completed Oct 13 · Paid Media notification still to send",
@@ -238,7 +238,7 @@ const TESTS = [
     ]
   },
   {
-    id:"11107", lane:"Showcase", school:"HON", channel:"LP",
+    id:"11107", lane:"Winners (Needs Dev Cleanup)", school:"HON", channel:"LP",
     name:"Homepage Hero Design — /nursing/overview",
     synopsis:"Rebuilt the Hondros nursing overview landing page on the redesigned template that already worked on the Rasmussen pages, putting the inquiry form, the program choices and the reasons-to-enroll higher up the page so visitors have less to wade through. Half of visitors were sent to a separate copy of the page carrying the new design. It won: 410 inquiries from 11,104 people on the new design against 385 from 11,485 on the original, a 10.1% lift at 91.7% confidence — just over the 90% bar we use to call a result real. The winning version is v1_new_design_11107. Worth noting Optimizely's own engine was more cautious, so the margin is narrow. No revenue figure is being credited because inquiries are the metric this test was judged on. The rollout is done: on Oct 8 the new design was promoted to be the permanent page and the old variation URL now points at it. The post-test deck is written; what remains is circulating it and finishing the write-up tasks (analysis due Oct 23, share findings due Oct 29).",
     result:"Winner", dates:"Ran Sept 22 – Oct 8, 2026 (16 days) · Winner: v1_new_design_11107 · RFI +10.1% at 91.7% confidence · rolled out Oct 8 · deck written, distribution and findings write-up in progress",
