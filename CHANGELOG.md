@@ -1,6 +1,13 @@
 # Changelog
 
 ## 2026-10-19 — v2026.10.19
+- AMU 10926 MultiStep Form closed out: final decision Inconclusive (approved 10/19), -10.65% RFI at 75.9% one-sided worse on
+  exposure users, clean window 10/10 to 10/18 (10/08 to 10/09 excluded for duplicate form tracking). The Asana ticket window is
+  10/08 to 10/22; data coverage is complete through 10/18, so the report covers Oct 8 – Oct 18 and its pill reads "Data coverage".
+  The 10/19 audience-session readout (-16.58% at 92%) is kept in the decision note as a previous diagnostic only. This one page
+  was built with a local, unpublished label patch (date pill label; significance shown as the probability the variation beats
+  control). The shared skill sources in skills/ are unchanged.
+- reports.json: 10926 -> Complete, window Oct 8 - Oct 18; revenue = modeled RFI-path projection (-$271,868), credited lift $0.
 - report_template.html: Hondros renders as Hondros. Added `HON` to the JS `SCHOOL_BRAND` map
   ('H' / HONDROS / COLLEGE OF NURSING) and an `html[data-school="HON"]` palette. The palette is a
   neutral navy/light-blue set chosen for legibility, not an official Hondros brand spec. Before this,
