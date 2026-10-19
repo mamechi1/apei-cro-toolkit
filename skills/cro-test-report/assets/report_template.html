@@ -46,6 +46,12 @@ html[data-school="AMU"]{
   --gold:#ffc600; --gold-soft:#ffe699; --yellow-spark:#ffc600;
   --bar-green:#d9a800; --bar-green-dark:#8f6f00;
 }
+html[data-school="HON"]{ /* neutral Hondros palette: navy + light blue; not an official brand spec */
+  --green-dark:#1f3a5f; --green-deep:#142740; --green-mid:#3b5b85;
+  --lime:#8fb8de; --lime-soft:#c3daef; --sage:#b8c4d1; --sage-bg:#5a7391;
+  --gold:#8fb8de; --gold-soft:#dce9f5; --yellow-spark:#8fb8de;
+  --bar-green:#5b8ec0; --bar-green-dark:#2f5d8a;
+}
 html[data-school="APU"]{
   --green-dark:#0d0d0d; --green-deep:#000000; --green-mid:#3f3f3f;
   --lime:#00e5e5; --lime-soft:#8ff2f2; --sage:#bdbdbd; --sage-bg:#454545;
@@ -164,6 +170,7 @@ table.ds tfoot td.num{text-align:right}
 .filter.fsel select{border:none;background:none;font-family:inherit;font-size:12px;color:#1a73e8;font-weight:700;cursor:pointer;max-width:220px}
 .filter.fsel select:focus{outline:none}
 .segbadge{display:inline-block;background:#fdf3dc;border:1px solid #eeda9e;color:#7a5d0e;font-size:10.5px;font-weight:600;border-radius:5px;padding:3px 8px;margin-left:10px;text-transform:none;letter-spacing:0;vertical-align:middle}
+.decision-note{background:#eef3fb;border:1px solid #c8d4ee;color:#26385a;border-radius:8px;padding:10px 14px;font-size:12.5px;line-height:1.5;margin:0 0 14px}
 .nodata-note{background:#fff7f0;border:1px solid #f3d9bd;color:#8a5a1d;border-radius:8px;padding:10px 14px;font-size:12px;margin-top:12px}
 .score .val.nd{color:#c2c6c0;font-size:20px}
 </style>
@@ -1016,8 +1023,8 @@ function audienceScores(aud, compareAud){
     ${scoreCard("Bounce rate",fmtPct(q.bounce),"",Math.round(q.bounce*100))}
     ${scoreCard("RFI Submit",fmt(q.rfi),rfiDelta,q.rfi)}
     ${scoreCard("RFI Submit CVR%",fmtPct(q.rfiCvr),"",Math.round(q.rfiCvr*1000))}
-    ${scoreCard("App Complete",fmt(q.app),"",q.app)}
-    ${scoreCard("App Complete CVR%",fmtPct(q.appCvr),"",Math.round(q.appCvr*1000))}
+    ${scoreCard("App Complete",APP_MEASURED?fmt(q.app):"N/A",APP_MEASURED?"":`<div class="note">not measured</div>`,q.app)}
+    ${scoreCard("App Complete CVR%",APP_MEASURED?fmtPct(q.appCvr):"N/A","",Math.round(q.appCvr*1000))}
     ${revCard}
   </div>`;
 }
@@ -1035,6 +1042,8 @@ const CALC_ASSUMPTIONS = {
     RASPW:{R2L:0.43414317887122,  L2E:0.0668629375204448, A2L:0.660644968647357, A2E:0.0912487083697639}
   }
 };
+const APP_MEASURED = DATA.meta.appMeasured!==false;
+function revenueModeled(){ return !!(CALC_ASSUMPTIONS.seg[calcSegKey()]&&CALC_ASSUMPTIONS.REV[(DATA.meta.school||"RAS").toUpperCase()]); }
 function calcSegKey(){ return (DATA.meta.school||"RAS").toUpperCase()+(DATA.meta.channel||"LP").toUpperCase(); }
 function revenue1yr(c,v,totalSessions){
   const A=CALC_ASSUMPTIONS.seg[calcSegKey()], REV=CALC_ASSUMPTIONS.REV[(DATA.meta.school||"RAS").toUpperCase()];
@@ -1081,7 +1090,7 @@ function sigSummary(ctrlAud, varAud){
   const revLine = rev?` &nbsp;·&nbsp; <b class="${rev.total>=0?'win':'flat'}">${fmtMoney(rev.total)}</b> projected 1-yr incremental revenue if shipped`:"";
   return `<div class="sigbox">
     <span style="display:inline-block;background:var(--gold-soft);border-radius:4px;padding:1px 8px;font-size:11px;font-weight:700;color:#5b4a12;margin-bottom:6px">★ LEADING VARIANT — ${shortVarName(varAud)}</span><br>
-    ${verdict(rfi,"RFI Submit CVR")} &nbsp;·&nbsp; ${verdict(app,"App Complete CVR")}${revLine}${scope}
+    ${verdict(rfi,"RFI Submit CVR")} &nbsp;·&nbsp; ${(APP_MEASURED&&isFinite(app.lift)&&isFinite(app.conf))?verdict(app,"App Complete CVR"):'<b class="flat">App Complete: not measured</b>'}${revLine||(revenueModeled()?"":' &nbsp;·&nbsp; <b class="flat">Revenue: not modeled</b>')}${scope}
     <span class="small">Two-proportion z-test, variation vs. control, sessions as denominator. Ship rule: ≥90% one-sided confidence.</span>
   </div>`;
 }
@@ -1117,7 +1126,7 @@ function renderABTests(){
       if(!q){ tbl+=`<tr><td>${a.name}</td>${'<td class="num" style="color:#c2c6c0">No data</td>'.repeat(9)}</tr>`; return; }
       T.sessions+=q.sessions;T.users+=q.users;T.rfi+=q.rfi;T.app+=q.app;
       const isCtrl = qs.indexOf(qs.find(x=>x.a===a))===(window.__ctrlIdx??0);
-      let liftCell='<td class="num" style="color:var(--text-soft)">Control</td><td class="num">—</td>', revCell='<td class="num">—</td>', lead='';
+      let liftCell='<td class="num" style="color:var(--text-soft)">Control</td><td class="num">—</td>', revCell=revenueModeled()?'<td class="num">—</td>':'<td class="num" style="color:var(--text-soft)">Not modeled</td>', lead='';
       if(!isCtrl && cq && cq.rfiCvr>0){
         const d=((q.rfiCvr-cq.rfiCvr)/cq.rfiCvr)*100;
         const z=zTest(cq.rfi,cq.sessions,q.rfi,q.sessions);
@@ -1132,19 +1141,20 @@ function renderABTests(){
         <td class="num">${cellBar(q.rfi,maxRfi,"limegrad",70)}</td>
         <td class="num"><div class="cellbar"><span>${fmtPct(q.rfiCvr)}</span><span class="bar" style="width:${Math.max(4,q.rfiCvr*9)}px"></span></div></td>
         ${liftCell}
-        <td class="num">${cellBar(q.app,maxApp,"gold",60)}</td>
-        <td class="num"><div class="cellbar"><span>${fmtPct(q.appCvr)}</span><span class="bar pale" style="width:${Math.max(4,q.appCvr*22)}px"></span></div></td>
+        ${APP_MEASURED?`<td class="num">${cellBar(q.app,maxApp,"gold",60)}</td>
+        <td class="num"><div class="cellbar"><span>${fmtPct(q.appCvr)}</span><span class="bar pale" style="width:${Math.max(4,q.appCvr*22)}px"></span></div></td>`:'<td class="num" style="color:var(--text-soft)">N/A</td><td class="num" style="color:var(--text-soft)">N/A</td>'}
         ${revCell}</tr>`;
     });
     tbl+=`</tbody><tfoot><tr><td>Grand total</td><td class="num">${fmt(T.sessions)}</td><td class="num">${fmt(T.users)}</td>
         <td class="num">${fmt(T.rfi)}</td><td class="num">${T.sessions?fmtPct(T.rfi/T.sessions*100):"–"}</td><td class="num"></td><td class="num"></td>
-        <td class="num">${fmt(T.app)}</td><td class="num">${T.sessions?fmtPct(T.app/T.sessions*100):"–"}</td><td class="num"></td></tr></tfoot></table>`;
+        <td class="num">${APP_MEASURED?fmt(T.app):"N/A"}</td><td class="num">${!APP_MEASURED?"N/A":(T.sessions?fmtPct(T.app/T.sessions*100):"–")}</td><td class="num"></td></tr></tfoot></table>`;
     if(!anyFilterActive()) tbl = tbl.replace("Grand total</td>","Grand total</td>"); // totals note: audiences may overlap
-    tbl += `<div class="pager" style="justify-content:flex-start">Audience totals may differ slightly from sitewide totals (audiences can overlap). Lift, Sig. and 1-Yr Revenue are vs. the selected Control audience. Revenue = CRO Incremental Calculator methodology (segment ${calcSegKey()}, $${Math.round(CALC_ASSUMPTIONS.REV[(DATA.meta.school||"RAS").toUpperCase()]).toLocaleString()}/enrollment), recomputed on the current filter view.</div>`;
+    tbl += `<div class="pager" style="justify-content:flex-start">Audience totals may differ slightly from sitewide totals (audiences can overlap). Lift, Sig. and 1-Yr Revenue are vs. the selected Control audience. ${revenueModeled()?`Revenue = CRO Incremental Calculator methodology (segment ${calcSegKey()}, $${Math.round(CALC_ASSUMPTIONS.REV[(DATA.meta.school||"RAS").toUpperCase()]).toLocaleString()}/enrollment), recomputed on the current filter view.`:`1-Yr Revenue: not modeled (no revenue model for segment ${calcSegKey()}).`}${APP_MEASURED?"":" App Complete: not measured (no application event in GA4)."}</div>`;
   }
 
   $$("#page-abtests").innerHTML = `
     ${globalFilters(true)}
+    ${DATA.meta.decisionNote?`<div class="decision-note">${DATA.meta.decisionNote}</div>`:""}
     ${card("A/B Test Results by Audience Name", tbl + sigSummary(A.audiences[ctrlIdx].name, bestName || A.audiences[varIdx].name))}
     <div class="aud-bar"><b>Select a Control Audience:</b>
       <select id="ctrlSel">${audOptions}</select></div>
@@ -1242,8 +1252,8 @@ function renderAcquisition(){
         ${scoreCard("Bounce rate",fmtPct(q.bounce),"",Math.round(q.bounce*100))}
         ${scoreCard("RFI Submit",fmt(q.rfi),"",q.rfi)}
         ${scoreCard("RFI Submit CVR%",fmtPct(q.rfiCvr),"",Math.round(q.rfiCvr*1000))}
-        ${scoreCard("App Complete",fmt(q.app),"",q.app)}
-        ${scoreCard("App Complete CVR%",fmtPct(q.appCvr),"",Math.round(q.appCvr*1000))}
+        ${scoreCard("App Complete",APP_MEASURED?fmt(q.app):"N/A","",q.app)}
+        ${scoreCard("App Complete CVR%",APP_MEASURED?fmtPct(q.appCvr):"N/A","",Math.round(q.appCvr*1000))}
       </div>`)})()}
     ${card("Top Landing Pages"+LEGACY, lp)}
     <div class="grid c3">
@@ -1325,7 +1335,8 @@ document.querySelectorAll(".nav button").forEach(b=>{
 const SCHOOL_BRAND={
   RAS:{letter:"R",name:"RASMUSSEN",sub:"UNIVERSITY"},
   AMU:{letter:"AMU",name:"AMERICAN MILITARY",sub:"UNIVERSITY"},
-  APU:{letter:"APU",name:"AMERICAN PUBLIC",sub:"UNIVERSITY"}};
+  APU:{letter:"APU",name:"AMERICAN PUBLIC",sub:"UNIVERSITY"},
+  HON:{letter:"H",name:"HONDROS",sub:"COLLEGE OF NURSING"}};
 (function(){
   const sc=(DATA.meta.school||"RAS").toUpperCase();
   document.documentElement.dataset.school = SCHOOL_BRAND[sc]?sc:"RAS";
