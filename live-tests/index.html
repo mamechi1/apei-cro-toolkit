@@ -176,10 +176,10 @@ const LANES = [
 
 const TESTS = [
   {
-    id:"10926", lane:"Live", school:"AMU", channel:"PW",
+    id:"10926", lane:"Recommend Ending", school:"AMU", channel:"PW",
     name:"MultiStep Form — Homepage",
-    synopsis:"Replaces the long request-info form on the AMU homepage with a shorter form that asks for a few details at a time across several steps. The idea is that breaking it up feels like less work, so more people finish it and we get more inquiries. It runs as a split-URL test, meaning half of visitors are sent to a separate copy of the homepage that carries the new form. A tracking problem that double-counted the Continue and Back buttons was fixed on Oct 9, so the first two days of data are being thrown out and clean reporting starts Oct 10. That means a full two weeks of trustworthy data is not available to review until Oct 24, even though the planned end date is Oct 22. No results read has been posted yet; the test keeps running.",
-    result:null, dates:"Live since Oct 8, 2026 · day 12 · planned end Oct 22, 2026 · Oct 8–9 excluded, clean data starts Oct 10 · first full 14-day read available Oct 24 · no read posted yet",
+    synopsis:"Replaces the long request-info form on the AMU homepage with a shorter form that asks for a few details at a time across several steps. The idea is that breaking it up feels like less work, so more people finish it and we get more inquiries. It runs as a split-URL test, meaning half of visitors are sent to a separate copy of the homepage that carries the new form. A tracking problem that double-counted the Continue and Back buttons was fixed on Oct 9, so the first two days of data were thrown out and the official start is Oct 10. The test is still running and has been moved to Recommend Ending; no end date is set and there is no final decision. An interim read through Oct 18 has the new form trailing on inquiries (-10.65% at 75.9% one-sided confidence), which is below the 90% bar.",
+    result:null, dates:"Official start Oct 10, 2026 (initial launch Oct 8; Oct 8–9 excluded) · still running · no end date set · interim read through Oct 18 (not final)",
     urls:[
       "https://www.amu.apus.edu/",
       "https://www.amu.apus.edu/home-10926/"
@@ -189,6 +189,7 @@ const TESTS = [
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25247321696/experiments/6375094669279232/variations"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/s/jhrZar2CL2c"},
+      {label:"Interim report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10926_multistep_form_report.html"},
       {label:"Final Test Pages (SharePoint)", url:"https://liveateduapus.sharepoint.com/:x:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B50E0E8D0-7BCA-43B2-89A4-372C123E7F8B%7D&file=10464_OnOff_Page_Selection_20260901.xlsx&action=default&mobileredirect=true"}
     ]
   },
