@@ -1,6 +1,12 @@
 # Changelog
 
 ## 2026-10-19 — v2026.10.19
+- CORRECTION (supersedes the AMU 10926 closeout bullet below): 10926 has NOT ended. It is still running and sits in
+  Recommend Ending; there is no final decision. Official start is 10/10 (the initial 10/08 launch and all 10/08 to 10/09 data
+  are excluded from every query). The report at the same URL is now an INTERIM build for Oct 10 – Oct 18 (latest complete
+  day): exposure users -10.65% RFI at 75.9% one-sided worse; tables are an audience-session diagnostic for the same window.
+  reports.json: 10926 -> Running, window Oct 10 - Oct 18. live-tests: 10926 moved to Recommend Ending with the official start.
+  The earlier closeout build remains in git history.
 - AMU 10926 MultiStep Form closed out: final decision Inconclusive (approved 10/19), -10.65% RFI at 75.9% one-sided worse on
   exposure users, clean window 10/10 to 10/18 (10/08 to 10/09 excluded for duplicate form tracking). The Asana ticket window is
   10/08 to 10/22; data coverage is complete through 10/18, so the report covers Oct 8 – Oct 18 and its pill reads "Data coverage".
