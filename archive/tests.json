@@ -1622,8 +1622,15 @@
 "outcome": "Inconclusive",
 "outcome_detail": "57.4% significance",
 "lift": "+1.9%",
+"next_steps": "Keep the control forms.",
 "report_url": "https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10916_form_prepopulation_report.html",
-"source": "Report hub"
+"asana_url": "https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1215339045140438",
+"files": "2026/10916/",
+"source": "Report hub",
+"decks": [
+"https://github.com/mamechi1/apei-cro-experiments/blob/main/2026/10916/CRO_AMU_PW_Form%20Pre-Population_Various%20URLs%20%2810916%29.pdf"
+],
+"files_url": "https://github.com/mamechi1/apei-cro-experiments/tree/main/2026/10916"
 },
 {
 "year": "2026",
@@ -1693,13 +1700,50 @@
 "test_id": "10893",
 "school": "AMU",
 "channel": "LP",
-"test_type": "Campaign",
-"test_name": "AMU | LP | Next Gen 360 Campaign (10893)",
+"test_type": "Campaign (desktop)",
+"test_name": "CRO | AMU | LP | Next Gen 360 Campaign | /military-degrees/overview (10893)",
+"page": "https://start.amu.apus.edu/military-degrees/overview",
 "start": "2026-09-14",
+"end": "2026-09-29",
 "kpi": "RFIs",
-"outcome": "Running",
-"report_url": "https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_report.html",
-"source": "Report hub"
+"outcome": "Inconclusive",
+"outcome_detail": "Desktop, targeted brand campaigns (settled data through 09/28): New_Hero_v2 RFI +2.05% at 55.7% one-sided. Approved 10/01 for business rollout; implementation confirmed 10/13; $0 credited lift",
+"lift": "+2.05%",
+"description": "Desktop hero image and copy replaced with the Next Gen 360 campaign creative. Decision scope: trademark search campaigns.",
+"next_steps": "New_Hero_v2 approved 10/01 for business rollout (not a 90% winner); implementation confirmed 10/13. Retest new copy later.",
+"report_url": "https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_brand_report.html",
+"asana_url": "https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218157278585178",
+"files": "2026/10893/desktop/",
+"source": "Report hub; Experiments 2026 folder",
+"decks": [
+"https://github.com/mamechi1/apei-cro-experiments/blob/main/2026/10893/desktop/CRO_AMU_LP_Next%20Gen%20360%20Campaign_Desktop%2010893.pdf"
+],
+"files_url": "https://github.com/mamechi1/apei-cro-experiments/tree/main/2026/10893/desktop"
+},
+{
+"year": "2026",
+"test_id": "10893",
+"school": "AMU",
+"channel": "LP",
+"test_type": "Campaign (mobile)",
+"test_name": "CRO | AMU | LP | Next Gen 360 Campaign (mobile) | /military-degrees/overview (10893)",
+"page": "https://start.amu.apus.edu/military-degrees/overview",
+"start": "2026-09-15",
+"end": "2026-09-29",
+"kpi": "RFIs",
+"outcome": "Inconclusive",
+"outcome_detail": "Mobile, targeted brand campaigns (settled data through 09/28): New_Copy RFI +8.73% at 85.8% one-sided, App -18.44%. Approved 10/01 for business rollout; implementation confirmed 10/13; $0 credited lift",
+"lift": "+8.73%",
+"description": "Mobile hero copy replaced with the Next Gen 360 campaign copy. Decision scope: trademark search campaigns.",
+"next_steps": "New_Copy approved 10/01 for business rollout (not a 90% winner); implementation confirmed 10/13. Check brand mobile App Complete 2 to 4 weeks after 10/13.",
+"report_url": "https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_mobile_brand_report.html",
+"asana_url": "https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218550388713477",
+"files": "2026/10893/mobile/",
+"source": "Report hub; Experiments 2026 folder",
+"decks": [
+"https://github.com/mamechi1/apei-cro-experiments/blob/main/2026/10893/mobile/CRO_AMU_LP_Next%20Gen%20360%20Campaign_Mobile%2010893.pdf"
+],
+"files_url": "https://github.com/mamechi1/apei-cro-experiments/tree/main/2026/10893/mobile"
 },
 {
 "year": "2026",
@@ -1716,22 +1760,52 @@
 },
 {
 "year": "2026",
+"test_id": "11044B",
+"school": "RAS",
+"channel": "PW",
+"test_type": "Placement",
+"test_name": "CRO | RAS | PW | RFI Form Placement | homepage (11044B)",
+"page": "https://www.rasmussen.edu/",
+"start": "2026-09-29",
+"end": "2026-10-14",
+"kpi": "RFIs",
+"outcome": "Inconclusive",
+"outcome_detail": "72.0% one-sided worse (exposure users); GA4 audiences still labeled Degree Finder Higher, renamed 10/11",
+"lift": "-7.78%",
+"description": "Move the RFI form above Campus Programs on the new RAS homepage.",
+"next_steps": "Keep the control layout.",
+"report_url": "https://mamechi1.github.io/apei-cro-toolkit/reports/2026/ras_11044b_rfi_form_placement_report.html",
+"asana_url": "https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218988707355171",
+"files": "2026/11044B/",
+"source": "Experiments 2026 folder",
+"decks": [
+"https://github.com/mamechi1/apei-cro-experiments/blob/main/2026/11044B/CRO_RAS_PW_RFI%20Form%20Placement_homepage%20%2811044B%29.pdf"
+],
+"files_url": "https://github.com/mamechi1/apei-cro-experiments/tree/main/2026/11044B"
+},
+{
+"year": "2026",
 "test_id": "11107",
 "school": "HON",
 "channel": "LP",
 "test_type": "Homepage Hero Design",
 "test_name": "CRO | HON | LP | Homepage Hero Design | /nursing/overview (11107)",
 "page": "https://start.hondros.edu/nursing/overview",
+"start": "2026-09-22",
+"end": "2026-10-08",
 "kpi": "RFIs",
-"outcome": "Running",
-"outcome_detail": "Live on the 2026 CRO APEI Board",
+"outcome": "Winner",
+"outcome_detail": "91.7% one-sided (exposure users); revenue not modeled for Hondros",
+"lift": "+10.1%",
 "description": "Hondros College of Nursing. Variation page: https://start.hondros.edu/nursing/overview-11107",
+"next_steps": "New design promoted to control 10/08.",
+"report_url": "https://mamechi1.github.io/apei-cro-toolkit/reports/2026/hon_11107_homepage_hero_design_report.html",
 "asana_url": "https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218368364963970",
 "files": "2026/11107/",
 "source": "Experiments 2026 folder",
 "decks": [
-        "https://github.com/mamechi1/apei-cro-experiments/blob/main/2026/11107/CRO_HON_LP_Homepage%20Hero%20Design_nursing-overview%20%2811107%29.pptx"
-      ],
+"https://github.com/mamechi1/apei-cro-experiments/blob/main/2026/11107/CRO_HON_LP_Homepage%20Hero%20Design_nursing-overview%20%2811107%29.pdf"
+],
 "files_url": "https://github.com/mamechi1/apei-cro-experiments/tree/main/2026/11107"
 },
 {
