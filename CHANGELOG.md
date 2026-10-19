@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-10-19 — v2026.10.19
+- report_template.html: Hondros renders as Hondros. Added `HON` to the JS `SCHOOL_BRAND` map
+  ('H' / HONDROS / COLLEGE OF NURSING) and an `html[data-school="HON"]` palette. The palette is a
+  neutral navy/light-blue set chosen for legibility, not an official Hondros brand spec. Before this,
+  the runtime script overrode the correct static header with RASMUSSEN UNIVERSITY and RAS green.
+- report_template.html: no more NaN for unmeasured or unmodeled metrics. When `DATA.meta.appMeasured`
+  is false, App Complete columns, totals and score cards read N/A and the sigbox reads
+  "App Complete: not measured". When the school/channel has no revenue model, the table shows
+  "Not modeled", the footnote says so, and the sigbox reads "Revenue: not modeled". This fixes the
+  "App Complete CVR: NaN%" and "$NaN/enrollment" issue noted in v2026.10.05.
+- report_template.html + build_report.py: optional `decisionNote` in config.json renders as a box
+  above the results table. Use it to state the approved final decision and cohort, and to label the
+  dashboard's filterable tables as an audience-session diagnostic, so the date-range pill stays short.
+  build_report.py also emits `appMeasured` (false when the config's appEvent starts with "n/a").
+- Rebuilt on the final Asana windows: HON 11107 (Sep 22 – Oct 8; final decision Winner, +10.1% at
+  91.7% one-sided on exposure users) and RAS 11044B (Sep 29 – Oct 14; final decision Inconclusive,
+  -7.78% at 72.0% one-sided worse on exposure users). Session-diagnostic numbers in the tables are not
+  the decision cohort; canonical funnel counts appear only in the decision note.
+- reports.json: 11107 -> Winner, 11044B -> Complete with the final windows. The four 10893 entries
+  now carry revenue 0 (credited lift) with leading text noting the 10/01 business-rollout approval,
+  10/13 implementation, and that report revenue figures are modeled projections only.
+
 ## 2026-10-05 — v2026.10.05
 - Scheduled refresh of both Live-column tests (automated run, no interactive confirmation).
   RAS 11044B RFI Form Placement extended to Sep 29 – Oct 4 (+0.9% RFI lift, 52.3% one-sided,
