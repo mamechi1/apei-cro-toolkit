@@ -163,7 +163,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "October 19, 2026";
+const LAST_UPDATED = "October 22, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -178,8 +178,8 @@ const TESTS = [
   {
     id:"10926", lane:"Recommend Ending", school:"AMU", channel:"PW",
     name:"MultiStep Form — Homepage",
-    synopsis:"Replaces the long request-info form on the AMU homepage with a shorter form that asks for a few details at a time across several steps. The idea is that breaking it up feels like less work, so more people finish it and we get more inquiries. It runs as a split-URL test, meaning half of visitors are sent to a separate copy of the homepage that carries the new form. A tracking problem that double-counted the Continue and Back buttons was fixed on Oct 9, so the first two days of data were thrown out and the official start is Oct 10. The test is still running and has been moved to Recommend Ending; no end date is set and there is no final decision. An interim read through Oct 18 has the new form trailing on inquiries (-10.65% at 75.9% one-sided confidence), which is below the 90% bar.",
-    result:null, dates:"Official start Oct 10, 2026 (initial launch Oct 8; Oct 8–9 excluded) · still running · no end date set · interim read through Oct 18 (not final)",
+    synopsis:"Replaces the long request-info form on the AMU homepage with a shorter form that asks for a few details at a time across several steps. The idea is that breaking it up feels like less work, so more people finish it and we get more inquiries. It runs as a split-URL test, meaning half of visitors are sent to a separate copy of the homepage that carries the new form. A tracking problem that double-counted the Continue and Back buttons was fixed on Oct 9, so the first two days of data were thrown out and the official start is Oct 10. The decision on Oct 21 was to leave the test running until the data has fully settled — it is not being paused, rolled out or given a final result yet. The latest interim read, Oct 10–20, has the new form behind on inquiries: 148 inquiries from 67,543 visits on the original against 129 from 67,248 visits on the new form, about 12.5% fewer, at 87% one-sided confidence. That is still under the 90% bar we use to call a result real, and the last couple of days of data had not fully settled. Next step: an interim review on Oct 23, then a fuller review on Oct 26 once the full Oct 10–23 window has settled.",
+    result:null, dates:"Official start Oct 10, 2026 (initial launch Oct 8; Oct 8–9 excluded) · still running · no end date set · interim read through Oct 20 (not final) · interim review Oct 23, fuller settled review Oct 26",
     urls:[
       "https://www.amu.apus.edu/",
       "https://www.amu.apus.edu/home-10926/"
@@ -190,75 +190,84 @@ const TESTS = [
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25247321696/experiments/6375094669279232/variations"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/s/jhrZar2CL2c"},
       {label:"Interim report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10926_multistep_form_report.html"},
+      {label:"Interim deck (SharePoint)", url:"https://liveateduapus.sharepoint.com/:p:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B7D8C21AE-24B1-4794-8F20-D1EF69D2F630%7D&file=CRO_AMU_PW_MultiStep%20Form_homepage%20(10926).pptx&action=edit&mobileredirect=true"},
+      {label:"SharePoint folder", url:"https://liveateduapus.sharepoint.com/sites/APEI-CRO-AMU/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FAPEI-CRO-AMU%2FShared%20Documents%2FCRO%20Tests%2F2026%2FAMU%2F10926&viewid=07ca2b4d-cfed-4dbb-814c-26c719da7608"},
       {label:"Final Test Pages (SharePoint)", url:"https://liveateduapus.sharepoint.com/:x:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B50E0E8D0-7BCA-43B2-89A4-372C123E7F8B%7D&file=10464_OnOff_Page_Selection_20260901.xlsx&action=default&mobileredirect=true"}
     ]
   },
   {
     id:"11044B", lane:"Losers (Dev Cleanup)", school:"RAS", channel:"PW",
     name:"RFI Form Placement — Homepage",
-    synopsis:"Moved the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sat directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking was that people would see the form sooner and fill it in rather than scrolling past it. It did not work out that way. Over Sept 28 – Oct 13 the original page drew 246 inquiries from 16,665 visits (1.48%) against 227 from 16,356 visits (1.39%) for the moved-form version — about 6% fewer inquiries — with completed applications also slightly lower (125 vs 118). That gap is not large enough to call a proven loss, so the result is being recorded as inconclusive and the original page stays. Next step: stakeholders sign off on the closeout, then the experiment gets switched off. Note the experiment has not actually been stopped yet, and the earlier reads that showed the variation ahead used a different set of visitors and should not be mixed with these numbers.",
-    result:"Inconclusive", dates:"Ran Sept 29 – Oct 14, 2026 · RFI approximately -6.0% (1.48% control vs 1.39% variation), not a proven loss · keeping control · awaiting stakeholder sign-off before shutdown",
+    synopsis:"Moved the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sat directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking was that people would see the form sooner and fill it in rather than scrolling past it. It did not work out that way. The test is now finished — it was paused on Oct 14 — and over its full run, Sept 29 to Oct 14, the original page drew 109 inquiries from 5,799 people against 95 from 5,481 on the moved-form version, about 7.8% fewer, at 72% one-sided confidence. That is well short of the 90% bar, so the result is recorded as inconclusive and the original page stays. What is left is dev cleanup: a production check on Oct 21 found the Optimizely script still loading on the Rasmussen homepage, so removal is not done. Because that snippet may be shared with other Rasmussen work, dev needs to agree what is safe to strip before touching it.",
+    result:"Inconclusive", dates:"Ran Sept 29 – Oct 14, 2026 · paused Oct 14 · RFI -7.78% at 72% one-sided confidence, not a proven loss · keeping control · Optimizely script still live on the homepage, removal scope to be agreed with dev",
     urls:["https://www.rasmussen.edu/"],
-    urlNote:"Built in Optimizely on the live homepage — there is no separate variation URL. Optimizely layer 5824636963782656, variation 4544796302245888. The experiment was still running as of this update.",
+    urlNote:"Built in Optimizely on the live homepage — there is no separate variation URL. Optimizely layer 5824636963782656, variation 4544796302245888. Figures above are person-based (exposed users) for the final window; earlier visit-based reads differ and should not be mixed with them.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218988707355171",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25237572343/experiments/6167136647774208/summary"},
+      {label:"Post-Test Deck (SharePoint)", url:"https://liveateduapus.sharepoint.com/:p:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B7B3D1CDB-5E14-402E-B78B-271150ACDF2E%7D&file=CRO_RAS_PW_RFI%20Form%20Placement_homepage%20(11044B).pptx&action=edit&mobileredirect=true"},
+      {label:"Results Report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/ras_11044b_rfi_form_placement_report.html"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/d79aa611-42da-49cf-b6fc-e5d4c81ff576/page/p_b156f7tmmd?s=sKxyFrq5ihg"}
     ]
   },
   {
     id:"10893", lane:"Losers (Dev Cleanup)", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (desktop) — /military-degrees/overview",
-    synopsis:"Swapped the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point was to check the new campaign look would not cost us inquiries before it rolls out across the paid landing pages. Final answer: it did not clearly help or hurt. On the brand-search audience the test was scoped to, the full new hero was up 2.1% on inquiries — nowhere near the 90% confidence we need to call a win — and two of the three versions actually lost inquiries. Leadership decided on Oct 1 to ship the new creative anyway, on the grounds that it did no measurable harm and the campaign is moving forward regardless. No revenue lift is being credited. Dev finished the work on Oct 13: the new hero and copy are hardcoded and the Optimizely script has been removed. The only thing left is telling the Paid Media team the test is done — a note has been drafted but not yet sent.",
-    result:"Inconclusive", dates:"Ran Sept 14 – Sept 28, 2026 (15 days, paused Sept 29) · no 90% winner · shipped on a business decision (Oct 1) · dev cleanup completed Oct 13 · Paid Media notification still to send",
+    synopsis:"Swapped the desktop hero image and headline on AMU's military degrees landing page for the new Next Gen 360 campaign creative, shown only to people who searched for AMU by name. The point was to check the new campaign look would not cost us inquiries before it rolls out across the paid landing pages. Final answer: it did not clearly help or hurt. On the brand-search audience the test was scoped to, the full new hero was up 2.1% on inquiries — nowhere near the 90% confidence we need to call a win — and two of the three versions actually lost inquiries. Leadership decided on Oct 1 to ship the new creative anyway, on the grounds that it did no measurable harm and the campaign is moving forward regardless. No revenue lift is being credited. Dev finished the work on Oct 13: the new hero and copy are hardcoded and the Optimizely script has been removed, and the experiment was confirmed paused on Oct 21. The one thing still open is the Paid Media team notice — it has not been confirmed as sent and resolved with reporting, so this card stays in cleanup until that is evidenced.",
+    result:"Inconclusive", dates:"Ran Sept 14 – Sept 28, 2026 (15 days, paused Sept 29) · no 90% winner · shipped on a business decision (Oct 1) · dev cleanup completed Oct 13 · Paid Media notice still to be confirmed",
     urls:["https://start.amu.apus.edu/military-degrees/overview"],
     urlNote:"Desktop experience only, and only for trademark (brand) search traffic. The mobile experience is covered by the companion mobile test. Only about 42% of desktop sessions actually came from the two targeted campaigns — the biggest leak was Bing brand search.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218157278585178",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/6024783245082624/variations"},
-      {label:"Post-Test Deck (SharePoint)", url:"https://liveateduapus.sharepoint.com/:p:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B9123F56E-F095-4F72-9D43-1AF63C962137%7D&file=CRO_AMU_LP_Next%20Gen%20360%20Campaign_Desktop%2010893.pptx&action=edit&mobileredirect=true"},
+      {label:"Post-Test Deck (SharePoint)", url:"https://liveateduapus.sharepoint.com/:p:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7BB63F8669-F9D6-453E-B155-72CA0B8B9226%7D&file=CRO_AMU_LP_Next%20Gen%20360%20Campaign_Desktop%2010893.pptx&action=edit&mobileredirect=true"},
       {label:"Report (all traffic)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_report.html"},
       {label:"Report (brand only)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_brand_report.html"},
+      {label:"SharePoint folder", url:"https://liveateduapus.sharepoint.com/sites/APEI-CRO-AMU/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FAPEI-CRO-AMU%2FShared%20Documents%2FCRO%20Tests%2F2026%2FAMU%2F10893%2Fdesktop&viewid=07ca2b4d-cfed-4dbb-814c-26c719da7608"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/808a1204-382a-45bc-810b-9de28c49f0e4?s=vyZoFMY83F4"}
     ]
   },
   {
     id:"10893", lane:"Losers (Dev Cleanup)", school:"AMU", channel:"LP",
     name:"Next Gen 360 Campaign (mobile) — /military-degrees/overview",
-    synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to brand search traffic. Across all mobile visitors the new copy lifted inquiries 10.6% at 97% confidence, a clear win. But on the brand-search audience this test was actually scoped to, inquiries were up only 8.7% at 86% confidence — short of our 90% bar — and completed applications fell 18%, which would make that segment a net negative. Because paid media is judged on inquiries and the scoped segment did not clear, it was recorded as inconclusive rather than a winner. Leadership decided on Oct 1 to ship the new copy anyway. Dev finished the work on Oct 13: the mobile copy is hardcoded and the Optimizely script has been removed. Two things remain — notify the Paid Media team (drafted, not sent), and re-check completed applications on brand mobile traffic 2–4 weeks after launch.",
-    result:"Inconclusive", dates:"Ran Sept 15 – Sept 28, 2026 (14 days, paused Sept 29) · won on all traffic, short of the bar on the brand scope · shipped on a business decision (Oct 1) · dev cleanup completed Oct 13 · Paid Media notification still to send",
+    synopsis:"The mobile half of the Next Gen 360 check: new campaign hero copy on the same AMU military degrees landing page, again limited to brand search traffic. Across all mobile visitors the new copy lifted inquiries 10.6% at 97% confidence, a clear win. But on the brand-search audience this test was actually scoped to, inquiries were up only 8.7% at 86% confidence — short of our 90% bar — and completed applications fell 18%, which would make that segment a net negative. Because paid media is judged on inquiries and the scoped segment did not clear, it was recorded as inconclusive rather than a winner. Leadership decided on Oct 1 to ship the new copy anyway. Dev finished the work on Oct 13: the mobile copy is hardcoded and the Optimizely script has been removed, and the experiment was confirmed paused on Oct 21. Two things remain — confirm the Paid Media team notice has landed and squares with reporting, and re-check completed applications on brand mobile traffic, a look-back due somewhere between Oct 27 and Nov 10.",
+    result:"Inconclusive", dates:"Ran Sept 15 – Sept 28, 2026 (14 days, paused Sept 29) · won on all traffic, short of the bar on the brand scope · shipped on a business decision (Oct 1) · dev cleanup completed Oct 13 · Paid Media notice to confirm · applications look-back Oct 27 – Nov 10",
     urls:["https://start.amu.apus.edu/military-degrees/overview"],
     urlNote:"Mobile experience only, and only for trademark (brand) search traffic. The desktop experience is covered by the companion desktop test. Only about 25% of mobile sessions came from the two targeted campaigns — most of the rest was Facebook prospecting and Demand Gen, which this ticket did not scope.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218550388713477",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25399330018/experiments/5919027862700032/summary"},
-      {label:"Post-Test Deck (SharePoint)", url:"https://liveateduapus.sharepoint.com/:p:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B415FA01C-141A-48C0-B10C-62EE2758BF15%7D&file=CRO_AMU_LP_Next%20Gen%20360%20Campaign_Mobile%2010893.pptx&action=edit&mobileredirect=true"},
+      {label:"Post-Test Deck (SharePoint)", url:"https://liveateduapus.sharepoint.com/:p:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7BA65D85BD-C36F-4CE8-9859-3DDCFD9D78F1%7D&file=CRO_AMU_LP_Next%20Gen%20360%20Campaign_Mobile%2010893.pptx&action=edit&mobileredirect=true"},
       {label:"Report (all traffic)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_mobile_report.html"},
       {label:"Report (brand only)", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10893_next_gen_360_campaign_mobile_brand_report.html"},
+      {label:"SharePoint folder", url:"https://liveateduapus.sharepoint.com/sites/APEI-CRO-AMU/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FAPEI-CRO-AMU%2FShared%20Documents%2FCRO%20Tests%2F2026%2FAMU%2F10893%2Fmobile&viewid=07ca2b4d-cfed-4dbb-814c-26c719da7608"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/s/kmV9JYUF-HA"}
     ]
   },
   {
     id:"11107", lane:"Winners (Needs Dev Cleanup)", school:"HON", channel:"LP",
     name:"Homepage Hero Design — /nursing/overview",
-    synopsis:"Rebuilt the Hondros nursing overview landing page on the redesigned template that already worked on the Rasmussen pages, putting the inquiry form, the program choices and the reasons-to-enroll higher up the page so visitors have less to wade through. Half of visitors were sent to a separate copy of the page carrying the new design. It won: 410 inquiries from 11,104 people on the new design against 385 from 11,485 on the original, a 10.1% lift at 91.7% confidence — just over the 90% bar we use to call a result real. The winning version is v1_new_design_11107. Worth noting Optimizely's own engine was more cautious, so the margin is narrow. No revenue figure is being credited because inquiries are the metric this test was judged on. The rollout is done: on Oct 8 the new design was promoted to be the permanent page and the old variation URL now points at it. The post-test deck is written; what remains is circulating it and finishing the write-up tasks (analysis due Oct 23, share findings due Oct 29).",
-    result:"Winner", dates:"Ran Sept 22 – Oct 8, 2026 (16 days) · Winner: v1_new_design_11107 · RFI +10.1% at 91.7% confidence · rolled out Oct 8 · deck written, distribution and findings write-up in progress",
+    synopsis:"Rebuilt the Hondros nursing overview landing page on the redesigned template that already worked on the Rasmussen pages, putting the inquiry form, the program choices and the reasons-to-enroll higher up the page so visitors have less to wade through. Half of visitors were sent to a separate copy of the page carrying the new design. It won: 410 inquiries from 11,104 people on the new design against 385 from 11,485 on the original, a 10.1% lift at 91.7% confidence — just over the 90% bar we use to call a result real. The winning version is v1_new_design_11107. Worth noting Optimizely's own engine was more cautious, so the margin is narrow. No revenue figure is being credited because inquiries are the metric this test was judged on. The technical work is finished: on Oct 8 the new design was promoted to be the permanent page, and a production check on Oct 21 confirmed the old variation URL now redirects to the live page with no Optimizely script left on it. The results write-up is also done. The only thing left is circulating the findings, due Oct 29 — once that is sent this card can go straight to Done.",
+    result:"Winner", dates:"Ran Sept 22 – Oct 8, 2026 (16 days) · Winner: v1_new_design_11107 · RFI +10.1% at 91.7% confidence · rolled out Oct 8, production cleanup verified Oct 21 · analysis complete · only findings distribution remains (due Oct 29)",
     urls:[
       "https://start.hondros.edu/nursing/overview",
       "https://start.hondros.edu/nursing/overview-11107"
     ],
-    urlNote:"First URL is the control, second is the variation page that won and has now been promoted to control. A staging copy at hcneducation.com/nursing/overview-11107 is not public traffic. Reported figures are person-based (users); earlier visit-based numbers differ, so do not mix the two.",
+    urlNote:"First URL is the control, second is the variation page that won and has now been promoted to control — it redirects to the live page. A staging copy at hcneducation.com/nursing/overview-11107 is not public traffic. Reported figures are person-based (users); earlier visit-based numbers differ, so do not mix the two.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1218368364963970",
     extra:[
       {label:"Optimizely", url:"https://app.optimizely.com/v2/projects/25370260077/experiments/6436448545538048/variations"},
+      {label:"Post-Test Deck (SharePoint)", url:"https://liveateduapus.sharepoint.com/:p:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B03F2373E-B38C-4AE8-A8A6-84F94C241D87%7D&file=CRO_HON_LP_Homepage%20Hero%20Design_nursing-overview%20(11107).pptx&action=edit&mobileredirect=true"},
+      {label:"Results Report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/hon_11107_homepage_hero_design_report.html"},
+      {label:"SharePoint folder", url:"https://liveateduapus.sharepoint.com/sites/APEI-CRO-AMU/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FAPEI-CRO-AMU%2FShared%20Documents%2FCRO%20Tests%2F2026%2FHondros%2F11107&viewid=07ca2b4d-cfed-4dbb-814c-26c719da7608"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/b3ffb241-a3e7-436b-84ec-8954325b571e/page/p_nag6ivvu1d?s=hWs32dcZi9w"}
     ]
   },
   {
     id:"10916", lane:"Losers (Dev Cleanup)", school:"AMU", channel:"PW",
     name:"Form Pre-Population — Various URLs",
-    synopsis:"Pre-filled the degree level and program fields on request-info forms across 10 AMU program pages (split-URL test: Sports & Health Sciences, Intelligence Studies, Cybersecurity, MBA, Space Studies, Emergency & Disaster Mgmt, Nursing, Homeland Security, and more). Ended inconclusive — inquiries up only +1.9% at 57% confidence. The standard forms are staying. On cleanup: the Optimizely code was removed on Oct 13, and the follow-on push to the live site is due Oct 15 but has not been confirmed as finished, so this stays in cleanup until it is verified. One caution for whoever does it — the work covers the pre-population program pages only; the AMU homepage snippet must be left alone because live test 10926 depends on it.",
-    result:"Inconclusive", dates:"Ran Jun 4 – Jul 9, 2026 · Optimizely removal done Oct 13 · push to production due Oct 15, not yet confirmed",
+    synopsis:"Pre-filled the degree level and program fields on request-info forms across 10 AMU program pages (Sports & Health Sciences, Intelligence Studies, Cybersecurity, MBA, Space Studies, Emergency & Disaster Mgmt, Associate Cybersecurity, Nursing, Cybersecurity Studies and Homeland Security). Ended inconclusive — inquiries up only +1.9% at 57% confidence — so the standard forms are staying. All ten experiments were confirmed paused on Oct 21, last changed back in July. A read-only check of all ten pages the same day found every page serving its normal content and form with no Optimizely script present, which is the outcome we want. One wrinkle: on the Associate Cybersecurity page the old pre-fill value for degree level no longer matches the current form options, which backs up a known mismatch in the records but is not a reason to revisit a retired test. The open item is paperwork rather than code — a \"push to production\" task is still sitting open and nobody has confirmed whether any deployment work actually remains, so this stays in cleanup until that is answered. Whoever picks it up: the scope is the pre-population program pages only, and the AMU homepage snippet must be left alone because live test 10926 depends on it.",
+    result:"Inconclusive", dates:"Ran Jun 4 – Jul 9, 2026 · all 10 experiments confirmed paused Oct 21 · Optimizely removal complete and verified in production Oct 21 · open \"push to production\" task still to be clarified",
     urls:[
       "https://www.amu.apus.edu/online-bachelor-degrees/bachelor-of-science-in-sports-and-health-sciences/",
       "https://www.amu.apus.edu/online-masters-programs/master-of-arts-in-intelligence-studies/",
@@ -271,11 +280,13 @@ const TESTS = [
       "https://www.amu.apus.edu/online-masters-programs/master-of-science-in-cybersecurity-studies/",
       "https://www.amu.apus.edu/online-bachelor-degrees/bachelor-of-arts-in-homeland-security/"
     ],
-    urlNote:"These are the 10 control pages. Each one had a matching variation page in a split-URL experiment — those variation URLs are listed in the QA sheet linked on the Asana card.",
+    urlNote:"These are the 10 pages in the test. There were never separate variation pages — the variation was the same page path with tfa_14 and tfa_18 query parameters appended to pre-fill the form, so there is no stray page or redirect to delete. The historical parameter values are listed in the QA sheet on the Asana card; check the actual Optimizely configuration before treating any of them as current.",
     asana:"https://app.asana.com/1/1104986434757437/project/1214706069876945/task/1215339045140438",
     extra:[
       {label:"Optimizely Project", url:"https://app.optimizely.com/v2/projects/25247321696/experiments"},
+      {label:"Post-Test Deck (SharePoint)", url:"https://liveateduapus.sharepoint.com/:p:/r/sites/APEI-CRO-AMU/_layouts/15/Doc.aspx?sourcedoc=%7B2B625D93-4E1B-46BE-ABEA-384786E46F65%7D&file=CRO_AMU_PW_Form%20Pre-Population_Various%20URLs%20(10916).pptx&action=edit&mobileredirect=true"},
       {label:"Results Report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/amu_10916_form_prepopulation_report.html"},
+      {label:"SharePoint folder", url:"https://liveateduapus.sharepoint.com/sites/APEI-CRO-AMU/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FAPEI-CRO-AMU%2FShared%20Documents%2FCRO%20Tests%2F2026%2FAMU%2F10916&viewid=07ca2b4d-cfed-4dbb-814c-26c719da7608"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/3ac8c72d-cceb-4a5b-94e6-ab44f9237b43/page/p_nag6ivvu1d?s=ssLPY7mTwQQ"}
     ]
   }
