@@ -178,8 +178,8 @@ const TESTS = [
   {
     id:"10926", lane:"Recommend Ending", school:"AMU", channel:"PW",
     name:"MultiStep Form — Homepage",
-    synopsis:"Replaces the long request-info form on the AMU homepage with a shorter form that asks for a few details at a time across several steps. The idea is that breaking it up feels like less work, so more people finish it and we get more inquiries. It runs as a split-URL test, meaning half of visitors are sent to a separate copy of the homepage that carries the new form. A tracking problem that double-counted the Continue and Back buttons was fixed on Oct 9, so the first two days of data were thrown out and the official start is Oct 10. The test is still running and has not been paused, rolled out or given a final result. The picture has got worse and is now clear: over Oct 10–22 the original homepage drew 193 inquiries from 83,758 visits against 158 from 84,609 visits on the new form, about 19% fewer, at 98% one-sided confidence. Completed applications are also down, 246 against 218, about 12% fewer at 92%. Both now clear the 90% bar we use to call a result real, in the losing direction — earlier reads sat below it, so the reason for leaving the test running no longer holds. On the modelled numbers the new form is costing roughly $2.2M a year in inquiries and applications if it were kept. Next step: the fuller settled review of the complete Oct 10–23 window is due Oct 26, and the sensible outcome of it is to stop the test and keep the original long form.",
-    result:null, dates:"Official start Oct 10, 2026 (initial launch Oct 8; Oct 8–9 excluded) · still running, day 13+ · no end date set · latest read Oct 10–22: RFI -18.96% at 98%, applications -12.27% at 92% · settled review due Oct 26",
+    synopsis:"Tests a multi-step request-info form against the original long form on the AMU homepage. The official clean-data start is Oct 10; Oct 8–9 are excluded because of the tracking issue fixed Oct 9. The settled Oct 10–23 audience report, pulled Oct 26, records 89,292 control sessions with 200 RFI events and 268 completed-application events, versus 90,715 variation sessions with 169 RFIs and 237 applications. RFI event rate is 16.83% lower at 96.14% nominal directional one-sided calculator significance; application event rate is 12.95% lower at 94.05%. These audience sessions include repeat visits and are not independent people. A separate exposed-user diagnostic is also lower: RFI -3.49% at 61.44%, applications -9.79% at 87.67%; neither clears 90%. The two cohorts must not be pooled or treated as equivalent. Bot and thank-you counting validation remains unresolved. Recommendation: end the test and retain the original long form, pending Michael/Tim approval. No actual stop, final result, rollout or realized revenue effect is recorded. The Oct 26 automated comment covers Oct 10–25 and includes unsettled days, so it is not this settled checkpoint.",
+    result:null, dates:"Official start Oct 10, 2026 · Running / Recommend Ending · no actual end date · settled Oct 10–23 checkpoint prepared Oct 26 · RFI -16.83%, nominal 96.14%; Apps -12.95%, nominal 94.05% · decision pending",
     urls:[
       "https://www.amu.apus.edu/",
       "https://www.amu.apus.edu/home-10926/"
@@ -198,7 +198,7 @@ const TESTS = [
   {
     id:"11044B", lane:"Losers (Dev Cleanup)", school:"RAS", channel:"PW",
     name:"RFI Form Placement — Homepage",
-    synopsis:"Moved the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sat directly under the Pursue Excellence Online block instead of below Campus Programs. The thinking was that people would see the form sooner and fill it in rather than scrolling past it. It did not work out that way. The test is now finished — it was paused on Oct 14 — and over its full run, Sept 29 to Oct 14, the original page drew 109 inquiries from 5,799 people against 95 from 5,481 on the moved-form version, about 7.8% fewer, at 72% one-sided confidence. That is well short of the 90% bar, so the result is recorded as inconclusive and the original page stays. What is left is dev cleanup: a production check on Oct 21 found the Optimizely script still loading on the Rasmussen homepage, so removal is not done. Because that snippet may be shared with other Rasmussen work, dev needs to agree what is safe to strip before touching it.",
+    synopsis:"Moved the request-info form section (\"Take the Next Step / Talk to Us\") higher up the new Rasmussen homepage, so it sat directly under the Pursue Excellence Online block instead of below Campus Programs. The test was paused Oct 14. Over Sept 29–Oct 14, control recorded 109 inquiries from 5,799 exposed users versus 95 from 5,481 on the moved-form version: RFI -7.78% at 72% one-sided calculator confidence, below 90%. The result remains Inconclusive and control stays. A fresh Oct 26 browser check still finds the Optimizely script on the Rasmussen homepage. Keep development cleanup open until the shared snippet scope and required removal are confirmed; do not remove code needed by other Rasmussen work.",
     result:"Inconclusive", dates:"Ran Sept 29 – Oct 14, 2026 · paused Oct 14 · RFI -7.78% at 72% one-sided confidence, not a proven loss · keeping control · Optimizely script still live on the homepage, removal scope to be agreed with dev",
     urls:["https://www.rasmussen.edu/"],
     urlNote:"Built in Optimizely on the live homepage — there is no separate variation URL. Optimizely layer 5824636963782656, variation 4544796302245888. Figures above are person-based (exposed users) for the final window; earlier visit-based reads differ and should not be mixed with them.",
@@ -209,6 +209,16 @@ const TESTS = [
       {label:"Results Report", url:"https://mamechi1.github.io/apei-cro-toolkit/reports/2026/ras_11044b_rfi_form_placement_report.html"},
       {label:"Data Studio Report", url:"https://datastudio.google.com/u/0/reporting/d79aa611-42da-49cf-b6fc-e5d4c81ff576/page/p_b156f7tmmd?s=sKxyFrq5ihg"}
     ]
+  },
+  {
+    id:"VAL", lane:"Live", school:"RAS", channel:"LP",
+    name:"A/A Test (VAL) — diagnostic",
+    synopsis:"Protected statistical diagnostic owned by Valentina. Michael explicitly directed on Oct 21 that it stay running while she investigates. It is separate from the competitor campaign-targeting A/A and from RAS homepage 11044B. Preserve its snippet and both diagnostic URLs during cleanup. This entry records the required running state and last confirmed platform state; no fresh Optimizely status audit or stop decision was made Oct 26.",
+    result:null, dates:"Required running diagnostic · last direct status verification Oct 21 · no approved stop date",
+    urls:["https://info.rasmussen.edu/vrome-control","https://info.rasmussen.edu/vrome-variant"],
+    urlNote:"Keep these diagnostic pages and their required snippet protected. Do not repurpose or remove them as part of completed-test cleanup.",
+    asana:"https://app.asana.com/1/1104986434757437/project/1215604264747689/task/1219631673758091",
+    extra:[{label:"Optimizely diagnostic", url:"https://app.optimizely.com/v2/projects/25320110923/experiments/6706467368075264/variations"}]
   }
 ];
 
