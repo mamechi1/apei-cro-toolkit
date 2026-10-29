@@ -163,7 +163,7 @@
 <div class="toast" id="toast">Copied to clipboard</div>
 
 <script>
-const LAST_UPDATED = "October 26, 2026";
+const LAST_UPDATED = "October 29, 2026";
 
 const LANES = [
   {key:"Live", color:"var(--live)", hint:"Running right now — do not touch these pages without checking with CRO"},
@@ -178,8 +178,8 @@ const TESTS = [
   {
     id:"10926", lane:"Recommend Ending", school:"AMU", channel:"PW",
     name:"MultiStep Form — Homepage",
-    synopsis:"Tests a multi-step request-info form against the original long form on the AMU homepage. The official clean-data start is Oct 10; Oct 8–9 are excluded because of the tracking issue fixed Oct 9. The settled Oct 10–23 audience report, pulled Oct 26, records 89,292 control sessions with 200 RFI events and 268 completed-application events, versus 90,715 variation sessions with 169 RFIs and 237 applications. RFI event rate is 16.83% lower at 96.14% nominal directional one-sided calculator significance; application event rate is 12.95% lower at 94.05%. These audience sessions include repeat visits and are not independent people. A separate exposed-user diagnostic is also lower: RFI -3.49% at 61.44%, applications -9.79% at 87.67%; neither clears 90%. The two cohorts must not be pooled or treated as equivalent. Bot and thank-you counting validation remains unresolved. Recommendation: end the test and retain the original long form, pending Michael/Tim approval. No actual stop, final result, rollout or realized revenue effect is recorded. The Oct 26 automated comment covers Oct 10–25 and includes unsettled days, so it is not this settled checkpoint.",
-    result:null, dates:"Official start Oct 10, 2026 · Running / Recommend Ending · no actual end date · settled Oct 10–23 checkpoint prepared Oct 26 · RFI -16.83%, nominal 96.14%; Apps -12.95%, nominal 94.05% · decision pending",
+    synopsis:"Tests a multi-step request-info form against the original long form on the AMU homepage. The official clean-data start is Oct 10; Oct 8–9 are excluded because of the tracking issue fixed Oct 9. The settled Oct 10–23 audience report, pulled Oct 26, records 89,292 control sessions with 200 RFI events and 268 completed-application events, versus 90,715 variation sessions with 169 RFIs and 237 applications. RFI event rate is 16.83% lower at 96.14% nominal directional one-sided calculator significance; application event rate is 12.95% lower at 94.05%. These audience sessions include repeat visits and are not independent people. A separate exposed-user diagnostic is also lower: RFI -3.49% at 61.44%, applications -9.79% at 87.67%; neither clears 90%. The two cohorts must not be pooled or treated as equivalent. Bot and thank-you counting validation remains unresolved. Recommendation: end the test and retain the original long form. Michael approved that recommendation and it was sent to Tim on Oct 26, so the test is still running while his decision is pending. The latest automated read on Oct 28 (18 days) shows 117,844 control sessions with 246 RFI events and 312 applications, versus 119,172 variation sessions with 219 RFIs and 300 applications — RFI 11.97% lower at 92% nominal, applications 4.92% lower at 73% — but it includes days that have not finished settling, so the Oct 10–23 checkpoint above stays the decision basis. No actual stop, final result, rollout or realized revenue effect is recorded.",
+    result:null, dates:"Official start Oct 10, 2026 · Running / Recommend Ending · no actual end date · settled Oct 10–23 checkpoint: RFI -16.83%, nominal 96.14%; Apps -12.95%, nominal 94.05% · recommendation to end approved by Michael and sent to Tim Oct 26 · awaiting Tim’s decision · latest unsettled Oct 28 read: RFI -11.97% at 92%",
     urls:[
       "https://www.amu.apus.edu/",
       "https://www.amu.apus.edu/home-10926/"
@@ -213,7 +213,7 @@ const TESTS = [
   {
     id:"VAL", lane:"Live", school:"RAS", channel:"LP",
     name:"A/A Test (VAL) — diagnostic",
-    synopsis:"Protected statistical diagnostic owned by Valentina. Michael explicitly directed on Oct 21 that it stay running while she investigates. It is separate from the competitor campaign-targeting A/A and from RAS homepage 11044B. Preserve its snippet and both diagnostic URLs during cleanup. This entry records the required running state and last confirmed platform state; no fresh Optimizely status audit or stop decision was made Oct 26.",
+    synopsis:"Protected statistical diagnostic owned by Valentina. Michael explicitly directed on Oct 21 that it stay running while she investigates. It is separate from the competitor campaign-targeting A/A and from RAS homepage 11044B. Preserve its snippet and both diagnostic URLs during cleanup. This entry records the required running state and last confirmed platform state; no fresh Optimizely status audit or stop decision was made Oct 29.",
     result:null, dates:"Required running diagnostic · last direct status verification Oct 21 · no approved stop date",
     urls:["https://info.rasmussen.edu/vrome-control","https://info.rasmussen.edu/vrome-variant"],
     urlNote:"Keep these diagnostic pages and their required snippet protected. Do not repurpose or remove them as part of completed-test cleanup.",
