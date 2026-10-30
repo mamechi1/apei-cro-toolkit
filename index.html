@@ -36,7 +36,8 @@ body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:v
 .badge{font-size:10.5px;font-weight:800;letter-spacing:.6px;border-radius:4px;padding:2px 8px}
 .b-RAS{background:var(--ras);color:var(--ras-acc)} .b-AMU{background:var(--amu);color:var(--amu-acc)} .b-APU{background:var(--apu);color:var(--apu-acc)}
 .b-chan{background:#e8eaed;color:#3c4043} .b-year{background:#e8eaed;color:#3c4043}
-.b-status-Running{background:#e6f4ea;color:var(--pos)} .b-status-Complete{background:#e8eaed;color:#5f6368} .b-status-Winner{background:#fef7e0;color:#b06000}
+.b-status-Running{background:#e6f4ea;color:var(--pos)} .b-status-Complete{background:#e8eaed;color:#5f6368} .b-status-Winner{background:#fef7e0;color:#b06000} .b-status-IdeaOnhold{background:#f3e8fd;color:#8e24aa}
+.card .title{font-size:16px;font-weight:700;color:var(--text)} .note{font-size:12px;color:var(--soft,#5f6368);margin-top:6px;max-width:420px;text-align:right}
 .stats{text-align:right;min-width:200px}
 .stats .rev{font-size:20px;font-weight:800}
 .stats .rev.pos{color:var(--pos)} .stats .rev.neg{color:var(--neg)}
@@ -76,6 +77,10 @@ footer{max-width:1150px;margin:30px auto 40px;padding:0 20px;font-size:11px;colo
 const F={school:"All",channel:"All",year:"All",q:""};
 let R=[];
 const money=x=>(x<0?"-$":"$")+Math.abs(Math.round(x)).toLocaleString();
+// Entries with no report file are placeholders (e.g. an idea on hold that never launched): no link, no metrics, not counted as reports.
+const isReport=r=>!!r.file;
+const cls=s=>String(s).replace(/[^A-Za-z]/g,"");
+const heldNote=n=>n?` · ${n} idea${n===1?"":"s"} on hold`:"";
 
 function chips(el,key,values){
   const box=document.getElementById(el);
@@ -97,29 +102,31 @@ function render(){
     (F.year==="All"||String(r.year)===F.year)&&
     (!q||`${r.title} ${r.testId} ${r.file} ${r.leading||""}`.toLowerCase().includes(q))
   ).sort((a,b)=>(b.added||"").localeCompare(a.added||""));
-  document.getElementById("count").textContent=`${rows.length} report${rows.length===1?"":"s"}`;
+  const nr=rows.filter(isReport).length;
+  document.getElementById("count").textContent=`${nr} report${nr===1?"":"s"}${heldNote(rows.length-nr)}`;
   document.getElementById("list").innerHTML = rows.length? rows.map(r=>`
     <div class="card">
       <div>
-        <a class="title" href="${r.file}">${r.title}</a>
+        ${isReport(r)?`<a class="title" href="${r.file}">${r.title}</a>`:`<span class="title">${r.title}</span>`}
         <div class="meta"><span>RH# ${r.testId}</span><span>${r.window||""}</span><span>added ${r.added||""}</span></div>
         <div class="badges">
           <span class="badge b-${r.school}">${r.school}</span>
           <span class="badge b-chan">${r.channel}</span>
           <span class="badge b-year">${r.year}</span>
-          ${r.status?`<span class="badge b-status-${r.status}">${r.status.toUpperCase()}</span>`:""}
+          ${r.status?`<span class="badge b-status-${cls(r.status)}">${r.status.toUpperCase()}</span>`:""}
         </div>
       </div>
       <div class="stats">
-        ${r.revenue!=null?`<div class="rev ${r.revenue>=0?'pos':'neg'}">${money(r.revenue)}</div><div class="lift">1-yr revenue · RFI ${r.rfiLift||"–"} @ ${r.sig||"–"} sig</div>`:""}
-        ${r.leading?`<div class="lead"><span>★ ${r.leading}</span></div>`:""}
+        ${isReport(r)&&r.revenue!=null?`<div class="rev ${r.revenue>=0?'pos':'neg'}">${money(r.revenue)}</div><div class="lift">1-yr revenue · RFI ${r.rfiLift||"–"} @ ${r.sig||"–"} sig</div>`:""}
+        ${isReport(r)&&r.leading?`<div class="lead"><span>★ ${r.leading}</span></div>`:""}
+        ${r.note?`<div class="note">${r.note}</div>`:""}
       </div>
     </div>`).join("") : `<div class="empty">No reports match these filters.</div>`;
 }
 document.getElementById("fSearch").addEventListener("input",e=>{F.q=e.target.value;render();});
 fetch("reports.json").then(r=>r.json()).then(d=>{
   R=d.reports||[];
-  document.getElementById("stamp").textContent=`${R.length} reports · manifest updated ${R.map(r=>r.added).sort().pop()||""}`;
+  document.getElementById("stamp").textContent=`${R.filter(isReport).length} reports${heldNote(R.length-R.filter(isReport).length)} · manifest updated ${R.map(r=>r.added).sort().pop()||""}`;
   render();
 }).catch(()=>{
   document.getElementById("list").innerHTML='<div class="empty">Could not load reports.json — if you opened this file directly from disk, that\'s expected; it works once served from GitHub Pages.</div>';

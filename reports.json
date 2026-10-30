@@ -16,18 +16,15 @@
       "added": "2026-09-25"
     },
     {
-      "file": "reports/2026/ras_11044_ai_effectiveness_report.html",
-      "title": "AI Effectiveness A/B Test Report",
+      "file": "",
+      "title": "AI Effectiveness (Idea / On hold, not launched)",
       "school": "RAS",
       "channel": "PW",
       "testId": "11044",
-      "window": "Sep 22 - Sep 22, 2026",
+      "window": "Not launched",
       "year": 2026,
-      "status": "Complete",
-      "leading": "V1 v1_AI_Removed_11044",
-      "rfiLift": "-100.0%",
-      "sig": "2.8%",
-      "revenue": -917286,
+      "status": "Idea / On hold",
+      "note": "Not launched. Michael confirmed on Oct 30, 2026 that this test has not gone live; it is an idea on hold. No results, winner or revenue. The one-day Sep 22 build was removed from this index and stays in git history.",
       "added": "2026-09-23"
     },
     {
