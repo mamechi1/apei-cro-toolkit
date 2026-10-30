@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-10-30: v2026.10.30
+- CORRECTION: RAS | PW | AI Effectiveness (11044) has NOT gone live (Michael, 10/30). It is now an
+  **Idea / On hold**: no actual start or end, no final outcome or winner, no results or revenue.
+- reports.json: the 11044 entry is now an unlinked placeholder (status "Idea / On hold", window
+  "Not launched"). The "Complete", one-day Sep 22 window, -100.0% RFI, 2.8% sig and -$917,286 claims
+  were removed from the index. The report file and earlier manifest stay in git history.
+- index.html (hub): entries without a report file render without a link or metrics and are not
+  counted as reports; status badges use a sanitized class (adds `b-status-IdeaOnhold`).
+- archive: tests.json 11044 row synced from apei-cro-experiments/tests.csv (outcome "Idea / On hold").
+  archive/index.html adds the outcome as a filter chip and badge, shows "Not launched", and excludes
+  ideas on hold from test counts, the year table, Running and final-result KPIs. 2026 now reads 18
+  tests (was 19); all-years 96 tests plus 1 idea on hold.
+- Freshness: the hub and archive now fetch reports.json / tests.json with a timestamp query and
+  `cache: "no-store"`, so a correction shows on the next load instead of after the cache expires.
+
 ## 2026-10-19 — v2026.10.19
 - CORRECTION (supersedes the AMU 10926 closeout bullet below): 10926 has NOT ended. It is still running and sits in
   Recommend Ending; there is no final decision. Official start is 10/10 (the initial 10/08 launch and all 10/08 to 10/09 data

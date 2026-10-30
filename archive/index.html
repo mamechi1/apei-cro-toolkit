@@ -46,7 +46,7 @@ body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:v
 .count{font-size:12px;color:var(--soft)}
 select{border:1px solid var(--border);border-radius:8px;padding:5px 8px;font-size:12.5px;background:#fff;color:var(--text)}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.05);border-left:5px solid var(--border)}
-.card.o-Winner{border-left-color:var(--pos)} .card.o-Loser{border-left-color:var(--neg)} .card.o-Inconclusive{border-left-color:#f9ab00} .card.o-Running{border-left-color:#1a73e8}
+.card.o-Winner{border-left-color:var(--pos)} .card.o-Loser{border-left-color:var(--neg)} .card.o-Inconclusive{border-left-color:#f9ab00} .card.o-Running{border-left-color:#1a73e8} .card.o-IdeaOnhold{border-left-color:#8e24aa}
 .card:hover{box-shadow:0 3px 10px rgba(0,0,0,.09)}
 .top{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
 .title{font-size:15.5px;font-weight:700;color:var(--dark);overflow-wrap:anywhere}
@@ -55,7 +55,7 @@ select{border:1px solid var(--border);border-radius:8px;padding:5px 8px;font-siz
 .badges{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
 .badge{font-size:10.5px;font-weight:800;letter-spacing:.6px;border-radius:4px;padding:2px 8px;background:#e8eaed;color:#3c4043}
 .b-RAS{background:var(--ras);color:var(--ras-acc)} .b-AMU{background:var(--amu);color:var(--amu-acc)} .b-APU,.b-APUS{background:var(--apu);color:var(--apu-acc)} .b-HON{background:#003a70;color:#ffc72c}
-.b-Winner{background:#e6f4ea;color:var(--pos)} .b-Loser{background:#fce8e6;color:var(--neg)} .b-Inconclusive{background:#fef7e0;color:var(--warn)} .b-Running{background:#e8f0fe;color:#1a73e8} .b-Noresult{background:#f1f3f4;color:#5f6368}
+.b-Winner{background:#e6f4ea;color:var(--pos)} .b-Loser{background:#fce8e6;color:var(--neg)} .b-Inconclusive{background:#fef7e0;color:var(--warn)} .b-Running{background:#e8f0fe;color:#1a73e8} .b-Noresult{background:#f1f3f4;color:#5f6368} .b-IdeaOnhold{background:#f3e8fd;color:#8e24aa}
 .stats{text-align:right;min-width:180px}
 .stats .rev{font-size:20px;font-weight:800}
 .stats .rev.pos{color:var(--pos)} .stats .rev.neg{color:var(--neg)}
@@ -116,8 +116,14 @@ To update: edit tests.csv in apei-cro-experiments, run <code>python tools/build_
 
 <script>
 const F={year:"All",school:"All",channel:"All",outcome:"All",q:"",sort:"date"};
-const OUT=["Winner","Loser","Inconclusive","Running","No result"];
-const COL={"Winner":"#1e8e3e","Loser":"#d93025","Inconclusive":"#f9ab00","Running":"#1a73e8","No result":"#bdc1c6"};
+const OUT=["Winner","Loser","Inconclusive","Running","No result","Idea / On hold"];
+const COL={"Winner":"#1e8e3e","Loser":"#d93025","Inconclusive":"#f9ab00","Running":"#1a73e8","No result":"#bdc1c6","Idea / On hold":"#8e24aa"};
+// Never launched: listed for reference, but not counted as tests, results or revenue.
+const NOT_RUN=new Set(["Idea / On hold"]);
+const tested=rows=>rows.filter(r=>!NOT_RUN.has(r.outcome));
+const held=rows=>rows.length-tested(rows).length;
+const heldNote=n=>n?` · ${n} idea${n===1?"":"s"} on hold (not counted)`:"";
+const cls=o=>String(o).replace(/[^A-Za-z]/g,"");
 let T=[];
 const num=v=>v===undefined||v===""||isNaN(+v)?null:+v;
 const money=x=>(x<0?"-$":"$")+Math.abs(Math.round(x)).toLocaleString();
@@ -132,7 +138,7 @@ function kpis(rows){
   const done=rows.filter(r=>["Winner","Loser","Inconclusive"].includes(r.outcome));
   const w=rows.filter(r=>r.outcome==="Winner").length;
   document.getElementById("kpis").innerHTML=[
-    ["Tests",rows.length,`${done.length} with a final result`],
+    ["Tests",tested(rows).length,`${done.length} with a final result${heldNote(held(rows))}`],
     ["Winners",w,done.length?`${Math.round(100*w/done.length)}% win rate`:""],
     ["Revenue from winners",money(winRev(rows)),"projected first year","pos"],
     ["Losers / Inconclusive",`${rows.filter(r=>r.outcome==="Loser").length} / ${rows.filter(r=>r.outcome==="Inconclusive").length}`,"learnings banked"]
@@ -141,7 +147,7 @@ function kpis(rows){
 function years(){
   const ys=[...new Set(T.map(r=>r.year))].sort().reverse();
   document.getElementById("years").innerHTML=`<table><tr><th>Year</th><th>Tests</th><th>Winners</th><th>Losers</th><th>Inconclusive</th><th>Result mix</th><th>Revenue from winners</th></tr>${
-    ys.map(y=>{const rs=T.filter(r=>r.year===y);const n=rs.length;
+    ys.map(y=>{const rs=tested(T.filter(r=>r.year===y));const n=rs.length;
       return `<tr data-y="${y}"><td><b>${y}</b></td><td class="num">${n}</td><td class="num">${rs.filter(r=>r.outcome==="Winner").length}</td><td class="num">${rs.filter(r=>r.outcome==="Loser").length}</td><td class="num">${rs.filter(r=>r.outcome==="Inconclusive").length}</td>
       <td><div class="bar">${OUT.map(o=>{const c=rs.filter(r=>r.outcome===o).length;return c?`<i title="${o}: ${c}" style="width:${100*c/n}%;background:${COL[o]}"></i>`:""}).join("")}</div></td>
       <td class="num"><b>${money(winRev(rs))}</b></td></tr>`}).join("")}</table>`;
@@ -164,17 +170,17 @@ function card(r){
   const page=r.page&&r.page.startsWith("http")?`<a href="${esc(r.page)}" target="_blank" rel="noopener">${esc(r.page.replace(/^https?:\/\//,"").replace(/\/$/,""))}</a>`:esc(r.page||"");
   const extra=[r.annualized_rfi&&`${(+r.annualized_rfi).toLocaleString()} RFIs`,r.annualized_enrollments&&`${r.annualized_enrollments} enrollments`,r.annualized_apps&&`${r.annualized_apps} apps`].filter(Boolean).join(" · ");
   const notes=[r.description&&`<p><b>What we tested:</b> ${esc(r.description)}</p>`,r.next_steps&&`<p><b>Outcome / next steps:</b> ${esc(r.next_steps)}</p>`].filter(Boolean).join("");
-  return `<div class="card o-${r.outcome.replace(" ","")}">
+  return `<div class="card o-${cls(r.outcome)}">
     <div class="top">
       <div style="flex:1;min-width:260px">
         <div class="title">${esc(r.test_name)}</div>
-        <div class="meta">${r.test_id?`<span>RH# ${esc(r.test_id)}</span>`:""}<span>${r.start?esc(r.start)+(r.end?` to ${esc(r.end)}`:r.outcome==="Running"?" to running":""):(r.outcome==="Running"?"Live now":esc(r.end||""))}</span>${r.kpi?`<span>KPI: ${esc(r.kpi)}</span>`:""}${page?`<span>${page}</span>`:""}</div>
+        <div class="meta">${r.test_id?`<span>RH# ${esc(r.test_id)}</span>`:""}<span>${NOT_RUN.has(r.outcome)?"Not launched":r.start?esc(r.start)+(r.end?` to ${esc(r.end)}`:r.outcome==="Running"?" to running":""):(r.outcome==="Running"?"Live now":esc(r.end||""))}</span>${r.kpi?`<span>KPI: ${esc(r.kpi)}</span>`:""}${page?`<span>${page}</span>`:""}</div>
         <div class="badges">
           ${r.school?`<span class="badge b-${esc(r.school)}">${esc(r.school)}</span>`:""}
           ${r.channel?`<span class="badge">${esc(r.channel)}</span>`:""}
           <span class="badge">${esc(r.year)}</span>
           ${r.test_type?`<span class="badge">${esc(r.test_type)}</span>`:""}
-          <span class="badge b-${r.outcome.replace(" ","")}">${r.outcome.toUpperCase()}</span>
+          <span class="badge b-${cls(r.outcome)}">${esc(r.outcome.toUpperCase())}</span>
         </div>
       </div>
       <div class="stats">
@@ -202,14 +208,14 @@ function render(){
           :F.sort==="id"?(a,b)=>(+b.test_id||0)-(+a.test_id||0)
           :(a,b)=>(b.start||"").localeCompare(a.start||""));
   kpis(rows);
-  document.getElementById("count").textContent=`${rows.length} test${rows.length===1?"":"s"}${F.year!=="All"||F.school!=="All"||F.channel!=="All"||F.outcome!=="All"||q?" match these filters":""}`;
+  document.getElementById("count").textContent=`${tested(rows).length} test${tested(rows).length===1?"":"s"}${heldNote(held(rows))}${F.year!=="All"||F.school!=="All"||F.channel!=="All"||F.outcome!=="All"||q?" match these filters":""}`;
   document.getElementById("list").innerHTML=rows.length?rows.map(card).join(""):`<div class="empty">No tests match these filters.</div>`;
 }
 document.getElementById("fSearch").addEventListener("input",e=>{F.q=e.target.value;render();});
 document.getElementById("fSort").addEventListener("change",e=>{F.sort=e.target.value;render();});
-fetch("tests.json",{cache:"no-cache"}).then(r=>r.json()).then(d=>{
+fetch("tests.json?v="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(d=>{
   T=(d.tests||[]).map(r=>({...r,outcome:r.outcome||"No result"}));
-  document.getElementById("stamp").textContent=`${T.length} tests`;
+  document.getElementById("stamp").textContent=`${tested(T).length} tests${heldNote(held(T))}`;
   years(); render();
 }).catch(()=>{
   document.getElementById("list").innerHTML='<div class="empty">Could not load tests.json. If you opened this file from disk that is expected; it works once served from GitHub Pages.</div>';

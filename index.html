@@ -124,7 +124,7 @@ function render(){
     </div>`).join("") : `<div class="empty">No reports match these filters.</div>`;
 }
 document.getElementById("fSearch").addEventListener("input",e=>{F.q=e.target.value;render();});
-fetch("reports.json").then(r=>r.json()).then(d=>{
+fetch("reports.json?v="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(d=>{
   R=d.reports||[];
   document.getElementById("stamp").textContent=`${R.filter(isReport).length} reports${heldNote(R.length-R.filter(isReport).length)} · manifest updated ${R.map(r=>r.added).sort().pop()||""}`;
   render();

@@ -1752,11 +1752,10 @@
 "channel": "PW",
 "test_type": "Homepage",
 "test_name": "RAS | PW | AI Effectiveness (11044)",
-"start": "2026-09-22",
 "kpi": "RFIs",
-"outcome": "Running",
-"report_url": "https://mamechi1.github.io/apei-cro-toolkit/reports/2026/ras_11044_ai_effectiveness_report.html",
-"source": "Report hub"
+"outcome": "Idea / On hold",
+"outcome_detail": "Not launched. Michael confirmed on 10/30/2026 that this test has not gone live; it is an idea on hold. No start, end, result, winner or revenue. The earlier Running status, 09/22 start and one-day report link were removed (kept in git history).",
+"source": "Report hub; corrected 2026-10-30 (Michael: not launched)"
 },
 {
 "year": "2026",
