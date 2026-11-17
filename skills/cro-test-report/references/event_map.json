@@ -1,5 +1,5 @@
 {
-  "_comment": "Per-school (and per-channel where they differ) GA4 conversion event mapping. VERIFIED = confirmed against live data. On first run for an unverified school, run the event-discovery query (ga4_queries.md) and confirm with the user before building the report.",
+  "_comment": "Per-school (and per-channel where they differ) GA4 conversion event mapping. VERIFIED = confirmed against live data. On first run for an unverified school, run the event-discovery query (ga4_queries.md) and confirm with the user before building the report. Event names and hostname scopes are provenance: any all-host scope or multi-event completion union (e.g., 10926 PW long+short RFI completion events) must be explicitly labeled and applied consistently across the traffic, conversion, and daily queries — never mixed silently with hostname-only sessions.",
   "RAS": {
     "property": "253925809",
     "hostname": "info.rasmussen.edu",

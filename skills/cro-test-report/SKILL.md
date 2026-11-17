@@ -1,29 +1,51 @@
 ---
 name: cro-test-report
 description: >-
-  Generate the interactive A/B Test Report dashboard for APEI CRO tests — the
-  Data Studio replacement. Given an Asana test task (or a whole board column),
-  pulls the test window and Optimizely IDs from Asana, pulls segmented traffic
+  Generate the interactive segmented A/B test diagnostic dashboard for APEI CRO
+  tests. Given an Asana test task (or a whole board column), pulls the approved
+  test window and Optimizely IDs from Asana, pulls segmented traffic
   and conversion data from GA4 (via the GA MCP), and produces one
   self-contained HTML report per test with working Device / Campaign /
   New-Returning filters, audience selectors, and a live significance readout
-  at APEI's 90% one-sided ship rule. Use this whenever the user asks for a
+  at APEI's 90% one-sided ship rule. The Data Studio approved cohort remains
+  the experiment readout of record; this report is the session-level diagnostic
+  that runs alongside it. Use this whenever the user asks for a
   "running test report", "test report", "test dashboard", "CRO report for the
   tests in the Live column", "get a report for test 10464", "how is the homepage test
-  doing", names a test on the 2026 CRO APEI Board (RAS/AMU/APU), or mentions
-  replacing/recreating a Data Studio test report — even if they don't say
-  "skill" or "dashboard" explicitly. NOT for post-test revenue projections
-  (that's cro-incremental-calculator) or pre-launch sizing (cro-mde).
+  doing", or names a test on the 2026 CRO APEI Board (RAS/AMU/APU) — even if
+  they don't say "skill" or "dashboard" explicitly. NOT for post-test revenue
+  projections (that's cro-incremental-calculator) or pre-launch sizing (cro-mde).
 ---
 
 # CRO Test Report
 
-Replaces the Data Studio per-test dashboards. One self-contained HTML file per test:
+The segmented GA4 diagnostic that runs alongside the Data Studio approved readout.
+One self-contained HTML file per test:
 A/B Tests tab (default, with significance), Overview, Acquisition, Click Tracking and
 Form Tracking tabs (the last two auto-hide until Phase-2 queries exist). All filters are
 real — every scorecard, table, and the z-test recompute from an embedded fact table.
 
 **Pipeline per test:** Asana task → dates + IDs → GA4 pulls → `build_report.py` → HTML.
+
+## Source of truth and metric basis (Nov 13, 2026 direction)
+
+- **Data Studio (the approved cohort) is the source of truth for the experiment
+  readout.** The primary rate is the **user-based CVR** from the approved DS cohort;
+  the session-based view is secondary and always explicitly labeled as such.
+- **This report is a segmented, session-level diagnostic** built from GA4 underlying
+  data. It never supersedes the DS approved cohort. Label it "segmented session
+  diagnostic" in the recap and keep it separate from approved aggregate readout
+  comments.
+- **Optimizely runs alongside as the independent check**: exposed users and unique
+  conversions as a sanity check on the DS cohort, plus experiment metadata and
+  delivery state. Divergence is surfaced, not silently reconciled.
+- **Pending numerator gate (unresolved):** the exact user-based numerator is still
+  being confirmed — the current DS "RFI / users" figure may be RFI *event counts* ÷
+  users rather than *distinct converting users* ÷ users. Until it is resolved: state
+  every rate's exact numerator and denominator; never present a users-denominator
+  rate as a distinct-converter probability; never feed unique-converter probabilities
+  into the incremental calculator; and never relabel previously delivered
+  session-based snapshots.
 
 ## Bundled files
 
@@ -57,12 +79,20 @@ real — every scorecard, table, and the z-test recompute from an embedded fact 
 
 ## Date rule (authoritative)
 
-- Window = Asana **Live Date → End Date**.
-- **End Date empty → Live Date → yesterday** (today − 1; never include the partial
-  current day).
+- Window = the **approved clean test window**: verified Asana **Live Date → End Date**.
+- For a verified running experiment with End Date empty, end on the latest complete
+  eligible day in the GA4 property timezone, applying the workstream's documented
+  settling delay (**10926: 48 elapsed hours since that day ended**, via the
+  calculator's `window_policy.py`). Yesterday alone does not establish eligibility;
+  never include the partial current day.
+- A paused/concluded experiment with no verified End Date is blocked — never extend
+  its window through yesterday. A final End Date that is not yet settled waits; do
+  not truncate it and call the result final.
 - Live Date empty → ask the user; do not infer from Optimizely or GA.
-- Never use a Data Studio report's date range — DS ranges have included weeks of
-  post-test data before.
+- When reading Data Studio, **filter DS to this approved window** — a DS report's
+  default date range is not a window authority. If the DS approved cohort's stated
+  window or cohort definition conflicts with the Asana window, state the conflict
+  explicitly and stop for a decision; never silently prefer either side.
 
 ## GA4 pull
 
@@ -73,10 +103,11 @@ abDaily) with:
   then update event_map.json);
 - audience match token = page-path fragment + `(<RH#>)`, e.g. `"overview (10464)"` —
   never the RH# alone;
-- the Asana date window.
+- the approved clean test window (Date rule above).
 
 Access hierarchy: **GA MCP → direct Data API (PowerShell fallback in ga4_queries.md)
-→ Claude in Chrome.** Windsor.ai is retired — never reference or attempt it.
+→ Codex (internal browser) with GA4 open.** Claude stays MCP-only and never drives a
+browser. Windsor.ai is retired — never reference or attempt it.
 Zero audiences returned → Optimizely audience-name fallback (see ga4_queries.md).
 Personalization audiences of the same test are included as extra variation rows.
 
@@ -90,8 +121,8 @@ Personalization audiences of the same test are included as extra variation rows.
 3. `python3 scripts/build_report.py --config config.json --pull pull.json --out
    <school>_<testId>_<slug>_report.html`
 4. The script prints per-audience aggregates. **Verify before delivering:** sessions
-   per arm are plausible vs. Optimizely, RFI/App non-zero, control listed first.
-   If the verification gate exits non-zero, fix the cause — never ship anyway.
+   per arm are plausible vs. Optimizely's exposed users, RFI/App non-zero, control
+   listed first. If the verification gate exits non-zero, fix the cause — never ship anyway.
 
 ## Deliver
 
@@ -99,6 +130,12 @@ Personalization audiences of the same test are included as extra variation rows.
 - Chat recap per test: window (+ source), sessions per arm, RFI CVR lift + one-sided
   confidence vs. the 90% ship rule, App Complete direction, and any notable segment
   (e.g., mobile-driven lift) found by toggling the device filter mentally from the facts.
+  Label the recap **"segmented session diagnostic"** and note that the DS approved
+  cohort (user-based CVR) remains the readout of record.
+- Interim and final business outcomes stay separate: an interim diagnostic never
+  states a final business outcome, and no revenue is credited here — revenue modeling
+  lives in cro-incremental-calculator, and overlapping tests never double-credit the
+  same revenue.
 - The user maintains a GitHub Pages report hub — after delivering the file, prepare the
   publish payload (HTML + reports.json entry + commit message) per
   `references/report_hub.md`.
@@ -111,5 +148,7 @@ Personalization audiences of the same test are included as extra variation rows.
   approximate under filters. Don't "fix" it by re-pulling per-combination.
 - Report scope = the test's audiences, not the whole site (~sitewide is 25× larger;
   a giant sessions number means the audience filter was dropped).
-- If numbers differ from an old Data Studio report, check the date window first —
-  that's the usual reason, and Asana wins.
+- If numbers differ from Data Studio, expect two causes and state both: the window
+  (filter DS to the approved clean window) and the metric basis (users vs sessions;
+  event counts vs unique converters). Label each figure's basis; surface conflicts
+  explicitly instead of reconciling by force.

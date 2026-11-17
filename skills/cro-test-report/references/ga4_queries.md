@@ -5,14 +5,23 @@ the school hostname AND `audienceName CONTAINS` the audience match token
 (default: the page-path + `(<RH#>)` fragment, e.g. `"overview (10464)"` — page path
 included because RH#s are NOT unique across tests).
 
-Date range = Asana test window (Live Date → End Date, else Live Date → yesterday).
+Date range = the approved clean test window: verified Live Date through a settled End
+Date, or the latest eligible complete day for a verified running experiment (apply the
+workstream's settling rule — 10926: 48 settled hours after the day ends, property
+timezone, via the calculator's `window_policy.py`). A stopped test needs its actual
+stop timestamp and a clean End Date; never extend it through yesterday.
+
+GA4 is the underlying data layer. The Data Studio approved cohort (user-based CVR)
+remains the experiment readout of record; these pulls build the segmented
+session-level diagnostic, and every output built from them must be labeled as such.
 
 ## Access hierarchy (in order — never Windsor.ai, it is retired)
 1. **GA MCP** (`google-analytics:run_report`) — primary.
 2. **Direct Data API** — proven fallback when the MCP is down. The user's ADC token
    works: see the PowerShell block at the bottom. Ask the user to run it and upload
-   the JSON (or run it yourself if you have shell access on the user's machine).
-3. **Claude in Chrome** with GA4 open — last resort for a 4-dimension cross-tab; slow.
+   the JSON (Claude stays MCP-only — never run it via shell on the user's machine).
+3. **Codex (internal browser)** with GA4 open — last resort for a 4-dimension
+   cross-tab; slow. Claude never drives a browser.
 
 If the MCP times out (4-min no-response), do NOT keep retrying — go to fallback 2
 and tell the user their MCP needs a restart/log check. Known failure modes from
